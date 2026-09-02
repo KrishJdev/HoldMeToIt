@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HoldMeToIt — Discord Study Challenge</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    :root {
+      --bg: #0a0a0c;
+      --card: #131316;
+      --card-hover: #18181c;
+      --border: #24242a;
+      --border-light: #32323a;
+      --text: #f3f3f6;
+      --text-muted: #94949e;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    .num {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-sm antialiased pb-12">
+
+  <!-- ================= TOP NAVIGATION ================= -->
+  <header class="border-b border-[var(--border)] bg-[#0d0d10] sticky top-0 z-30">
+    <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
+      
+      <!-- Brand -->
+      <div class="flex items-center gap-3">
+        <div class="w-7 h-7 bg-neutral-100 text-neutral-900 rounded font-bold text-xs flex items-center justify-center font-mono">
+          H
+        </div>
+        <div>
+          <span class="font-bold text-sm tracking-tight text-white">HoldMeToIt</span>
+          <span class="text-xs text-[var(--text-muted)] ml-2 hidden sm:inline">Discord Study Challenge</span>
+        </div>
+      </div>
+
+      <!-- Mode Switcher & Profile -->
+      <div class="flex items-center gap-3 text-xs">
+        
+        <!-- Toggle: Member vs Mod -->
+        <div class="flex items-center border border-[var(--border)] rounded bg-black/40 p-0.5">
+          <button id="btnRoleMember" onclick="setRole('member')" class="px-2.5 py-1 rounded bg-neutral-800 text-white font-medium">
+            Member View
+          </button>
+          <button id="btnRoleMod" onclick="setRole('mod')" class="px-2.5 py-1 rounded text-[var(--text-muted)] hover:text-white">
+            Mod / Host
+          </button>
+        </div>
+
+        <!-- User Identity -->
+        <div class="flex items-center gap-2 pl-3 border-l border-[var(--border)]">
+          <div class="w-6 h-6 rounded bg-neutral-800 flex items-center justify-center font-mono text-[11px] font-bold text-neutral-300">
+            AX
+          </div>
+          <div class="hidden sm:block text-left">
+            <div class="font-semibold text-neutral-200">Axxxeon</div>
+            <div class="text-[10px] text-[var(--text-muted)]">Team Bees</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <main class="max-w-5xl mx-auto px-4 py-6 space-y-6">
+
+    <!-- ================= 1. THE BIG MATCH SCOREBOARD ================= -->
+    <div class="border border-[var(--border)] bg-[var(--card)] rounded-xl p-5 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--border)] pb-3 mb-4">
+        <div>
+          <h1 class="text-base font-bold text-white">Weekly Team Study Battle</h1>
+          <p class="text-xs text-[var(--text-muted)] mt-0.5">Tuesday → Monday · Teams compete on combined hours</p>
+        </div>
+        <div class="text-xs text-[var(--text-muted)] bg-neutral-900 px-2.5 py-1 rounded border border-[var(--border)] self-start sm:self-auto">
+          ⏳ Ends Monday night · <strong class="text-neutral-200">Day 5 of 7</strong>
+        </div>
+      </div>
+
+      <!-- Two Teams Head-to-Head -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        
+        <!-- Team 1: Bees -->
+        <div class="border border-[var(--border-light)] bg-[#17171c] rounded-lg p-4 relative">
+          <div class="flex items-center justify-between text-xs text-[var(--text-muted)] mb-1">
+            <span class="font-bold text-neutral-300 uppercase tracking-wide">TEAM 1: BEES</span>
+            <span class="text-emerald-400 font-medium text-[11px] bg-emerald-950/60 border border-emerald-800/60 px-1.5 py-0.5 rounded">👑 Leading (+10.5h)</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="score-bees" class="text-3xl font-extrabold text-white num">98.4</span>
+            <span class="text-xs text-[var(--text-muted)] font-mono">hours studied</span>
+          </div>
+          <div class="text-[11px] text-[var(--text-muted)] mt-2">
+            13 members · Top contributor: <span class="text-neutral-200">KyleTheFox18 (22.5h)</span>
+          </div>
+        </div>
+
+        <!-- Team 2: Butterflies -->
+        <div class="border border-[var(--border)] bg-[#101013] rounded-lg p-4">
+          <div class="flex items-center justify-between text-xs text-[var(--text-muted)] mb-1">
+            <span class="font-bold text-neutral-300 uppercase tracking-wide">TEAM 2: BUTTERFLIES</span>
+            <span class="text-[var(--text-muted)] text-[11px]">Trailing by 10.5h</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span id="score-butterflies" class="text-3xl font-extrabold text-neutral-300 num">87.9</span>
+            <span class="text-xs text-[var(--text-muted)] font-mono">hours studied</span>
+          </div>
+          <div class="text-[11px] text-[var(--text-muted)] mt-2">
+            14 members · Top contributor: <span class="text-neutral-200">Ray &lt;3 (19.3h)</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ================= 2. MEMBER VIEW: LOG YOUR HOURS & GOALS ================= -->
+    <div id="section-member" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <!-- CARD A: LOG YOUR HOURS (WHAT TO ENTER WHERE) -->
+      <div class="border border-[var(--border)] bg-[var(--card)] rounded-xl p-5 flex flex-col justify-between">
+        <div>
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-sm font-bold text-white">Log Your Study Hours</h2>
+            <span class="text-xs font-mono text-neutral-400 bg-neutral-900 border border-[var(--border)] px-2 py-0.5 rounded">
+              Goal: <strong class="text-white num">70.0h</strong>
+            </span>
+          </div>
+          <p class="text-xs text-[var(--text-muted)] mb-4">
+            Track via YPT or timer, then submit your daily time here.
+          </p>
+
+          <!-- Current Progress Meter -->
+          <div class="bg-neutral-950 border border-[var(--border)] rounded-lg p-3.5 mb-5">
+            <div class="flex justify-between text-xs mb-1.5">
+              <span class="text-neutral-400">Your Progress This Week:</span>
+              <span class="font-bold text-white num" id="user-progress-label">11.6h / 70.0h (16%)</span>
+            </div>
+            <div class="w-full bg-neutral-900 h-2.5 rounded-full overflow-hidden border border-neutral-800">
+              <div id="user-progress-bar" class="bg-neutral-200 h-full rounded-full transition-all" style="width: 16.6%;"></div>
+            </div>
+            <div class="text-[11px] text-[var(--text-muted)] mt-2 flex justify-between">
+              <span>Daily Pace: <strong class="text-neutral-200 num">10.0h/day</strong></span>
+              <span>Remaining: <strong class="text-neutral-200 num" id="user-remaining-label">58.4h</strong></span>
+            </div>
+          </div>
+
+          <!-- THE ENTRY FORM (SUPER INTUITIVE) -->
+          <form onsubmit="handleLogHours(event)" class="space-y-3 bg-neutral-900/60 border border-[var(--border)] p-4 rounded-lg">
+            <div class="text-xs font-bold text-neutral-300 uppercase tracking-wider mb-2">
+              Enter Today's Hours:
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <!-- Select Day -->
+              <div>
+                <label class="block text-[11px] text-neutral-400 mb-1">Select Day</label>
+                <select id="logDaySelect" class="w-full bg-neutral-950 border border-[var(--border-light)] rounded px-2.5 py-1.5 text-xs text-neutral-200 focus:outline-none focus:border-neutral-400">
+                  <option value="wed">Wednesday (Today)</option>
+                  <option value="tue">Tuesday</option>
+                  <option value="thu">Thursday</option>
+                  <option value="fri">Friday</option>
+                  <option value="sat">Saturday</option>
+                  <option value="sun">Sunday</option>
+                  <option value="mon">Monday</option>
+                </select>
+              </div>
+
+              <!-- Enter Duration -->
+              <div>
+                <label class="block text-[11px] text-neutral-400 mb-1">Hours Studied</label>
+                <input type="number" step="0.1" min="0" max="24" id="logHoursInput" placeholder="e.g. 5.5" required class="w-full bg-neutral-950 border border-[var(--border-light)] rounded px-2.5 py-1.5 text-xs text-white num focus:outline-none focus:border-neutral-400">
+              </div>
+            </div>
+
+            <!-- Subject / Optional Note -->
+            <div>
+              <label class="block text-[11px] text-neutral-400 mb-1">Subject or Topic (Optional)</label>
+              <input type="text" id="logSubjectInput" placeholder="e.g. Algorithms homework, Chapter 3 revision..." class="w-full bg-neutral-950 border border-[var(--border-light)] rounded px-2.5 py-1.5 text-xs text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-neutral-400">
+            </div>
+
+            <button type="submit" class="w-full py-2 bg-neutral-200 hover:bg-white text-neutral-900 font-bold rounded text-xs transition mt-2 shadow-sm">
+              + Add to My Hours & Team Score
+            </button>
+          </form>
+
+        </div>
+
+        <!-- 7-Day Quick Glance Under Form -->
+        <div class="mt-4 pt-3 border-t border-[var(--border)] flex justify-between text-center font-mono text-[11px]">
+          <div class="px-1"><span class="text-[10px] text-neutral-500 block">TUE</span><strong class="text-neutral-300 num" id="day-val-tue">11.6h</strong></div>
+          <div class="px-1"><span class="text-[10px] text-neutral-500 block">WED</span><strong class="text-neutral-300 num" id="day-val-wed">0.0h</strong></div>
+          <div class="px-1"><span class="text-[10px] text-neutral-500 block">THU</span><span class="text-neutral-600">-</span></div>
+          <div class="px-1"><span class="text-[10px] text-neutral-500 block">FRI</span><span class="text-neutral-600">-</span></div>
+          <div class="px-1"><span class="text-[10px] text-neutral-500 block">SAT</span><span class="text-neutral-600">-</span></div>
+          <div class="px-1"><span class="text-[10px] text-neutral-500 block">SUN</span><span class="text-neutral-600">-</span></div>
+          <div class="px-1"><span class="text-[10px] text-neutral-500 block">MON</span><span class="text-neutral-600">-</span></div>
+        </div>
+      </div>
+
+      <!-- CARD B: YOUR WEEKLY GOALS (CHECKLIST & DECLARATION) -->
+      <div class="border border-[var(--border)] bg-[var(--card)] rounded-xl p-5 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-sm font-bold text-white">Your Weekly Goals (To-Do List)</h2>
+            <span class="text-xs text-amber-300/80 bg-amber-950/40 border border-amber-800/50 px-2 py-0.5 rounded text-[11px]">
+              ⚠️ Mandatory Rule #4
+            </span>
+          </div>
+          <p class="text-xs text-[var(--text-muted)] mb-4">
+            You must complete both your declared hours AND these goals to avoid the server's Punishment PFP.
+          </p>
+
+          <!-- Interactive Goals List -->
+          <div class="space-y-2.5" id="goalsList">
+            
+            <label class="flex items-start gap-3 p-2.5 border border-[var(--border)] bg-neutral-950 rounded-lg cursor-pointer hover:border-neutral-700 transition">
+              <input type="checkbox" checked onchange="handleGoalToggle(this)" class="mt-0.5 w-4 h-4 rounded bg-neutral-900 border-neutral-700">
+              <span class="text-xs line-through text-neutral-500">Solve 30 Tree & Graph coding questions</span>
+            </label>
+
+            <label class="flex items-start gap-3 p-2.5 border border-[var(--border)] bg-neutral-950 rounded-lg cursor-pointer hover:border-neutral-700 transition">
+              <input type="checkbox" checked onchange="handleGoalToggle(this)" class="mt-0.5 w-4 h-4 rounded bg-neutral-900 border-neutral-700">
+              <span class="text-xs line-through text-neutral-500">Operating Systems Virtual Memory reading</span>
+            </label>
+
+            <label class="flex items-start gap-3 p-2.5 border border-[var(--border)] bg-neutral-950 rounded-lg cursor-pointer hover:border-neutral-700 transition">
+              <input type="checkbox" checked onchange="handleGoalToggle(this)" class="mt-0.5 w-4 h-4 rounded bg-neutral-900 border-neutral-700">
+              <span class="text-xs line-through text-neutral-500">Finish auth module backend pull request</span>
+            </label>
+
+            <label class="flex items-start gap-3 p-2.5 border border-[var(--border-light)] bg-neutral-950 rounded-lg cursor-pointer hover:border-neutral-500 transition">
+              <input type="checkbox" onchange="handleGoalToggle(this)" class="mt-0.5 w-4 h-4 rounded bg-neutral-900 border-neutral-700">
+              <span class="text-xs text-neutral-200">5-page research summary for elective class</span>
+            </label>
+
+          </div>
+
+          <!-- Add New Goal Item -->
+          <form onsubmit="handleAddGoal(event)" class="mt-4 flex gap-2">
+            <input type="text" id="goalInputText" placeholder="Add a new study goal..." class="flex-1 bg-neutral-950 border border-[var(--border-light)] rounded px-3 py-1.5 text-xs text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-neutral-400">
+            <button type="submit" class="px-3 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded font-semibold text-xs transition shrink-0">
+              + Add
+            </button>
+          </form>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-[var(--border)] flex items-center justify-between text-xs">
+          <span class="text-[var(--text-muted)]">Goals Status:</span>
+          <span id="goalsStatusBadge" class="font-semibold text-amber-300">1 of 4 Incomplete</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================= 3. CLEAN, INTUITIVE LEADERBOARD TABLE ================= -->
+    <div class="border border-[var(--border)] bg-[var(--card)] rounded-xl overflow-hidden shadow-sm">
+      
+      <!-- Table Header & Simple Filter -->
+      <div class="p-4 border-b border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-sm font-bold text-white">Community Standings</h2>
+          <p class="text-xs text-[var(--text-muted)]">Check where everyone stands against their declared targets</p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="flex items-center border border-[var(--border)] rounded bg-black/40 p-0.5 text-xs">
+          <button id="tabAll" onclick="filterTable('all')" class="px-3 py-1 rounded bg-neutral-800 text-white font-medium">All (27)</button>
+          <button id="tabBees" onclick="filterTable('Bees')" class="px-3 py-1 rounded text-[var(--text-muted)] hover:text-white">Team Bees (13)</button>
+          <button id="tabButt" onclick="filterTable('Butterflies')" class="px-3 py-1 rounded text-[var(--text-muted)] hover:text-white">Team Butterflies (14)</button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="border-b border-[var(--border)] bg-neutral-950/60 text-[var(--text-muted)] text-[11px] uppercase tracking-wider">
+              <th class="py-3 px-4">Member</th>
+              <th class="py-3 px-4">Team</th>
+              <th class="py-3 px-4 text-right">Hours Logged</th>
+              <th class="py-3 px-4 text-right">Declared Goal</th>
+              <th class="py-3 px-4 w-32">Progress</th>
+              <th class="py-3 px-4 text-center">Weekly Goals</th>
+              <th class="py-3 px-4 text-center">Status</th>
+            </tr>
+          </thead>
+          <tbody id="standingsTableBody" class="divide-y divide-[var(--border)] text-neutral-300">
+            <!-- Dynamically populated rows -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- ================= 4. MOD / HOST CONTROLS (ONLY VISIBLE IN MOD VIEW) ================= -->
+    <div id="section-mod" class="hidden space-y-6">
+      
+      <!-- Mod Action A: Quick CSV Ingestion -->
+      <div class="border border-[var(--border)] bg-[var(--card)] rounded-xl p-5">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-sm font-bold text-white">Host Tool: Import YPT Study Logs</h2>
+          <span class="text-xs text-neutral-400 bg-neutral-900 border border-[var(--border)] px-2 py-0.5 rounded">Admin Only</span>
+        </div>
+        <p class="text-xs text-[var(--text-muted)] mb-4">
+          Drop your community YPT export file to automatically update all members' hours and team scores in 1 second.
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center gap-3">
+          <button onclick="simulateCSVImport()" class="w-full sm:w-auto px-4 py-2 bg-neutral-200 hover:bg-white text-neutral-950 font-bold rounded text-xs transition flex items-center justify-center gap-2">
+            <span>⚡</span> Load & Import Today's YPT Records (14 Rows)
+          </button>
+          <button onclick="openDiscordModal()" class="w-full sm:w-auto px-4 py-2 border border-[var(--border-light)] hover:bg-neutral-800 text-neutral-200 font-semibold rounded text-xs transition">
+            📢 Post Standings Update to Discord
+          </button>
+        </div>
+      </div>
+
+      <!-- Mod Action B: Punishment PFP Enforcement List -->
+      <div class="border border-red-900/40 bg-[#140f10] rounded-xl p-5">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-sm font-bold text-red-300">⚠️ Punishment PFP Watchlist (Rule #5)</h2>
+          <span class="text-xs text-red-400 bg-red-950 border border-red-800 px-2 py-0.5 rounded">Action Required</span>
+        </div>
+        <p class="text-xs text-neutral-400 mb-4">
+          Members currently failing their declared hours or weekly goals. Send reminders or enforce the server's Punishment PFP.
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-red-900/30 text-neutral-400 text-[11px]">
+                <th class="py-2.5 px-3">Member</th>
+                <th class="py-2.5 px-3">Team</th>
+                <th class="py-2.5 px-3">Missing Hours</th>
+                <th class="py-2.5 px-3">Goals Completed?</th>
+                <th class="py-2.5 px-3">Assigned Penalty</th>
+                <th class="py-2.5 px-3 text-right">Host Action</th>
+              </tr>
+            </thead>
+            <tbody id="punishmentTableBody" class="divide-y divide-neutral-800 text-neutral-300">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ================= DISCORD WEBHOOK MODAL ================= -->
+  <div id="discordModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
+    <div class="bg-[var(--card)] border border-[var(--border)] max-w-md w-full rounded-xl p-5 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+        <span class="font-bold text-white text-sm">Discord Announcement Preview</span>
+        <button onclick="closeDiscordModal()" class="text-neutral-400 hover:text-white">✕</button>
+      </div>
+
+      <div class="bg-neutral-950 p-3 rounded border border-neutral-800 font-mono text-xs text-neutral-300 space-y-2">
+        <div class="text-emerald-400 font-bold">🏆 Study Battle Update (Day 5/7)</div>
+        <div><strong>Team Bees:</strong> 98.4h (Leader)</div>
+        <div><strong>Team Butterflies:</strong> 87.9h (-10.5h)</div>
+        <div class="border-t border-neutral-800 pt-2 text-[11px] text-neutral-400">
+          ⚠️ <strong>Punishment PFP Notice:</strong> 3 members currently behind target. Check website to submit remaining hours.
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeDiscordModal()" class="px-3 py-1.5 border border-[var(--border)] text-xs text-neutral-300 hover:text-white rounded">Close</button>
+        <button onclick="sendDiscordPing()" class="px-3 py-1.5 bg-neutral-200 text-neutral-900 font-bold text-xs rounded hover:bg-white">Send to Discord Webhook</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 bg-neutral-900 text-white border border-neutral-700 px-3 py-2 rounded shadow-lg text-xs transition-opacity opacity-0 pointer-events-none"></div>
+
+  <!-- ================= LOGIC SCRIPT ================= -->
+  <script>
+    // State matching community spreadsheet data
+    let currentRole = 'member';
+    let currentFilter = 'all';
+
+    const participants = [
+      { name: 'Axxxeon', team: 'Bees', actual: 11.6, target: 70, goalsDone: false },
+      { name: 'KyleTheFox18', team: 'Bees', actual: 22.5, target: 63, goalsDone: true },
+      { name: 'Papple', team: 'Bees', actual: 16.7, target: 42, goalsDone: false },
+      { name: 'Khione', team: 'Bees', actual: 7.0, target: 50, goalsDone: true },
+      { name: 'morgan', team: 'Bees', actual: 6.6, target: 39, goalsDone: true },
+      { name: 'reaous', team: 'Bees', actual: 11.2, target: 61, goalsDone: true },
+      { name: 'Shadow', team: 'Bees', actual: 10.4, target: 30, goalsDone: true },
+      { name: 'Caf Fin Grl', team: 'Bees', actual: 3.2, target: 18, goalsDone: true },
+      { name: 'Cafy', team: 'Bees', actual: 3.8, target: 35, goalsDone: true },
+      { name: 'Jelly_rabbit', team: 'Bees', actual: 3.7, target: 36, goalsDone: true },
+      { name: 'Oroni', team: 'Bees', actual: 1.6, target: 35, goalsDone: false },
+      { name: 'beibe', team: 'Bees', actual: 0.0, target: 20, goalsDone: false },
+      { name: 'Afnan cs', team: 'Bees', actual: 0.0, target: 55, goalsDone: false },
+
+      { name: 'Ray <3', team: 'Butterflies', actual: 19.3, target: 57, goalsDone: true },
+      { name: 'shayue', team: 'Butterflies', actual: 13.5, target: 50, goalsDone: true },
+      { name: 'ori520', team: 'Butterflies', actual: 11.9, target: 56, goalsDone: true },
+      { name: 'Afnan', team: 'Butterflies', actual: 9.8, target: 84, goalsDone: true },
+      { name: 'nero', team: 'Butterflies', actual: 6.0, target: 42, goalsDone: true },
+      { name: 'Lizi', team: 'Butterflies', actual: 5.3, target: 28, goalsDone: true },
+      { name: 'Dai', team: 'Butterflies', actual: 4.8, target: 42, goalsDone: true },
+      { name: 'Eloise', team: 'Butterflies', actual: 4.4, target: 21, goalsDone: true },
+      { name: 'Krish (NrgSlayer)', team: 'Butterflies', actual: 4.2, target: 28, goalsDone: true },
+      { name: 'Gufi', team: 'Butterflies', actual: 3.5, target: 33, goalsDone: true },
+      { name: 'adira', team: 'Butterflies', actual: 3.1, target: 21, goalsDone: true },
+      { name: 'Aftab', team: 'Butterflies', actual: 2.3, target: 18, goalsDone: true },
+      { name: 'Hashi', team: 'Butterflies', actual: 0.0, target: 32, goalsDone: false },
+      { name: 'nananananana', team: 'Butterflies', actual: 0.0, target: 48, goalsDone: false }
+    ];
+
+    const punishments = [
+      { name: 'Papple', team: 'Bees', deficit: '25.3h to goal', goals: 'Incomplete', penalty: 'Server Punishment PFP' },
+      { name: 'beibe', team: 'Bees', deficit: '20.0h (0h logged)', goals: 'No goals set', penalty: 'Server Punishment PFP' },
+      { name: 'Hashi', team: 'Butterflies', deficit: '32.0h (0h logged)', goals: 'Incomplete', penalty: 'Server Punishment PFP' }
+    ];
+
+    // Role switcher
+    function setRole(role) {
+      currentRole = role;
+      document.getElementById('btnRoleMember').className = role === 'member'
+        ? 'px-2.5 py-1 rounded bg-neutral-800 text-white font-medium'
+        : 'px-2.5 py-1 rounded text-[var(--text-muted)] hover:text-white';
+      
+      document.getElementById('btnRoleMod').className = role === 'mod'
+        ? 'px-2.5 py-1 rounded bg-neutral-800 text-white font-medium'
+        : 'px-2.5 py-1 rounded text-[var(--text-muted)] hover:text-white';
+
+      document.getElementById('section-mod').classList.toggle('hidden', role !== 'mod');
+      showToast(`Switched to ${role === 'member' ? 'Member' : 'Host / Mod'} view`);
+    }
+
+    // Render Table
+    function renderTable() {
+      const tbody = document.getElementById('standingsTableBody');
+      tbody.innerHTML = '';
+
+      let list = participants;
+      if (currentFilter !== 'all') {
+        list = list.filter(p => p.team === currentFilter);
+      }
+
+      list.sort((a, b) => b.actual - a.actual);
+
+      list.forEach((p, idx) => {
+        const pct = Math.min(100, Math.round((p.actual / p.target) * 100));
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-neutral-900/40 transition';
+
+        const isUser = p.name === 'Axxxeon';
+
+        tr.innerHTML = `
+          <td class="py-3 px-4 font-semibold ${isUser ? 'text-white font-bold' : 'text-neutral-200'}">
+            ${p.name} ${isUser ? '<span class="text-[10px] text-neutral-400 bg-neutral-800 px-1 py-0.5 rounded ml-1">You</span>' : ''}
+          </td>
+          <td class="py-3 px-4 text-[var(--text-muted)]">${p.team}</td>
+          <td class="py-3 px-4 text-right num font-bold text-white">${p.actual.toFixed(1)}h</td>
+          <td class="py-3 px-4 text-right num text-[var(--text-muted)]">${p.target}h</td>
+          <td class="py-3 px-4">
+            <div class="w-full bg-neutral-900 h-2 rounded-full overflow-hidden border border-neutral-800">
+              <div class="bg-neutral-300 h-full rounded-full" style="width: ${pct}%;"></div>
+            </div>
+            <span class="text-[10px] text-[var(--text-muted)] num mt-0.5 block">${pct}%</span>
+          </td>
+          <td class="py-3 px-4 text-center">
+            ${p.goalsDone ? '<span class="text-emerald-400 text-xs font-semibold">✓ Done</span>' : '<span class="text-neutral-500 text-xs">Pending</span>'}
+          </td>
+          <td class="py-3 px-4 text-center">
+            ${pct >= 25 ? '<span class="text-neutral-400 text-[11px]">On Pace</span>' : '<span class="text-amber-400/90 text-[11px] font-medium">Needs Hours</span>'}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterTable(filter) {
+      currentFilter = filter;
+      const tAll = document.getElementById('tabAll');
+      const tB = document.getElementById('tabBees');
+      const tButt = document.getElementById('tabButt');
+
+      [tAll, tB, tButt].forEach(b => b.className = 'px-3 py-1 rounded text-[var(--text-muted)] hover:text-white');
+      if (filter === 'all') tAll.className = 'px-3 py-1 rounded bg-neutral-800 text-white font-medium';
+      if (filter === 'Bees') tB.className = 'px-3 py-1 rounded bg-neutral-800 text-white font-medium';
+      if (filter === 'Butterflies') tButt.className = 'px-3 py-1 rounded bg-neutral-800 text-white font-medium';
+
+      renderTable();
+    }
+
+    // Render Punishments
+    function renderPunishments() {
+      const tbody = document.getElementById('punishmentTableBody');
+      tbody.innerHTML = '';
+
+      punishments.forEach((item, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="py-2.5 px-3 font-semibold text-white">${item.name}</td>
+          <td class="py-2.5 px-3 text-neutral-400">${item.team}</td>
+          <td class="py-2.5 px-3 num text-red-300">${item.deficit}</td>
+          <td class="py-2.5 px-3 text-neutral-400">${item.goals}</td>
+          <td class="py-2.5 px-3 text-neutral-300">${item.penalty}</td>
+          <td class="py-2.5 px-3 text-right">
+            <button onclick="pardonMember(${idx})" class="px-2 py-0.5 border border-neutral-700 hover:bg-neutral-800 rounded text-[10px] mr-1">Pardon</button>
+            <button onclick="notifyMember(${idx})" class="px-2 py-0.5 bg-red-950 border border-red-800 text-red-300 hover:bg-red-900 rounded text-[10px]">Ping PFP</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function pardonMember(idx) {
+      showToast(`Pardoned ${punishments[idx].name}`);
+      punishments.splice(idx, 1);
+      renderPunishments();
+    }
+
+    function notifyMember(idx) {
+      showToast(`Discord reminder sent to ${punishments[idx].name} for Punishment PFP!`);
+    }
+
+    // Form Handling: Log Hours
+    function handleLogHours(e) {
+      e.preventDefault();
+      const hours = parseFloat(document.getElementById('logHoursInput').value);
+      const day = document.getElementById('logDaySelect').value;
+      if (isNaN(hours) || hours <= 0) return;
+
+      // Update User in list
+      const user = participants.find(p => p.name === 'Axxxeon');
+      user.actual += hours;
+
+      // Update UI
+      const dayEl = document.getElementById(`day-val-${day}`);
+      if (dayEl) dayEl.textContent = `${hours.toFixed(1)}h`;
+
+      const pct = Math.min(100, Math.round((user.actual / user.target) * 100));
+      document.getElementById('user-progress-bar').style.width = `${pct}%`;
+      document.getElementById('user-progress-label').textContent = `${user.actual.toFixed(1)}h / ${user.target}h (${pct}%)`;
+      document.getElementById('user-remaining-label').textContent = `${Math.max(0, user.target - user.actual).toFixed(1)}h`;
+
+      // Update Team score
+      const beesScoreEl = document.getElementById('score-bees');
+      const currentBees = parseFloat(beesScoreEl.textContent);
+      beesScoreEl.textContent = (currentBees + hours).toFixed(1);
+
+      document.getElementById('logHoursInput').value = '';
+      document.getElementById('logSubjectInput').value = '';
+
+      renderTable();
+      showToast(`+${hours}h added to your total and Team Bees!`);
+    }
+
+    // Goal Toggle
+    function handleGoalToggle(chk) {
+      const span = chk.nextElementSibling;
+      if (chk.checked) {
+        span.className = 'text-xs line-through text-neutral-500';
+      } else {
+        span.className = 'text-xs text-neutral-200';
+      }
+      updateGoalsCount();
+    }
+
+    function handleAddGoal(e) {
+      e.preventDefault();
+      const input = document.getElementById('goalInputText');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const container = document.getElementById('goalsList');
+      const label = document.createElement('label');
+      label.className = 'flex items-start gap-3 p-2.5 border border-[var(--border-light)] bg-neutral-950 rounded-lg cursor-pointer hover:border-neutral-500 transition';
+      label.innerHTML = `
+        <input type="checkbox" onchange="handleGoalToggle(this)" class="mt-0.5 w-4 h-4 rounded bg-neutral-900 border-neutral-700">
+        <span class="text-xs text-neutral-200">${text}</span>
+      `;
+      container.appendChild(label);
+      input.value = '';
+      updateGoalsCount();
+      showToast('New goal added');
+    }
+
+    function updateGoalsCount() {
+      const all = document.querySelectorAll('#goalsList input[type="checkbox"]');
+      let done = 0;
+      all.forEach(c => { if (c.checked) done++; });
+      const badge = document.getElementById('goalsStatusBadge');
+      if (done === all.length) {
+        badge.className = 'font-semibold text-emerald-400';
+        badge.textContent = 'All Goals Complete! 🎉';
+      } else {
+        badge.className = 'font-semibold text-amber-300';
+        badge.textContent = `${all.length - done} of ${all.length} Incomplete`;
+      }
+    }
+
+    // CSV Simulation
+    function simulateCSVImport() {
+      showToast('Ingesting 14 YPT logs from today...');
+      setTimeout(() => {
+        participants.forEach(p => {
+          if (p.name !== 'Axxxeon') p.actual += 1.5;
+        });
+        document.getElementById('score-bees').textContent = '104.2';
+        document.getElementById('score-butterflies').textContent = '94.8';
+        renderTable();
+        showToast('✓ YPT logs imported! Leaderboard and team totals updated.');
+      }, 600);
+    }
+
+    // Discord Modal
+    function openDiscordModal() { document.getElementById('discordModal').classList.remove('hidden'); }
+    function closeDiscordModal() { document.getElementById('discordModal').classList.add('hidden'); }
+    function sendDiscordPing() {
+      closeDiscordModal();
+      showToast('Standings announcement posted to Discord #study-announcements!');
+    }
+
+    // Toast
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.opacity = '1';
+      setTimeout(() => { t.style.opacity = '0'; }, 3000);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderTable();
+      renderPunishments();
+    });
+  </script>
+</body>
+</html>
