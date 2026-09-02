@@ -1,422 +1,346 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HoldMeToIt — Gamified Study Accountability & Challenge Management Platform</title>
+  <title>HoldMeToIt — Functional Wireframe (v0.1)</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
-    /* Custom utility animations & styling */
-    @keyframes pulse-subtle {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.75; }
+    :root {
+      --bg: #09090b;
+      --surface: #121215;
+      --surface-subtle: #18181b;
+      --border: #27272a;
+      --border-strong: #3f3f46;
+      --text: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --text-dim: #71717a;
     }
-    .animate-pulse-subtle {
-      animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     }
-    .discord-blurple {
-      background-color: #5865F2;
+    input, select, textarea, button {
+      font-family: inherit;
     }
-    .discord-dark {
-      background-color: #313338;
+    /* Monospace tabular numerals */
+    .num {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-variant-numeric: tabular-nums;
     }
-    .discord-darker {
-      background-color: #2b2d31;
+    /* Simple wireframe borders */
+    .wf-border {
+      border: 1px solid var(--border);
     }
-    .discord-darkest {
-      background-color: #1e1f22;
-    }
-    /* Scrollbar styling */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(156, 163, 175, 0.3);
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(156, 163, 175, 0.5);
+    .wf-border-strong {
+      border: 1px solid var(--border-strong);
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased transition-colors duration-200">
+<body class="min-h-screen text-xs sm:text-sm antialiased selection:bg-neutral-800 selection:text-neutral-100">
 
-  <!-- ================= TOP APP BAR & PERSONA SWITCHER ================= -->
-  <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-900/80 border-b border-slate-800 transition-colors">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+  <!-- ================= TOP WIREFRAME HEADER ================= -->
+  <header class="wf-border border-t-0 border-x-0 bg-[#0c0c0e] sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
       
-      <!-- Brand & Active Challenge Selector -->
+      <!-- Brand & Project Identity -->
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-2 cursor-pointer" onclick="switchMainTab('dashboard')">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-amber-500 flex items-center justify-center shadow-lg shadow-indigo-500/20 text-white font-bold text-xl">
-            ⚡
+          <div class="w-6 h-6 wf-border bg-neutral-900 flex items-center justify-center font-mono font-bold text-xs text-neutral-200">
+            H
           </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-indigo-400 via-purple-300 to-amber-300 bg-clip-text text-transparent">HoldMeToIt</span>
-              <span class="px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider rounded bg-indigo-950 text-indigo-400 border border-indigo-800/60">PoC v1.0</span>
-            </div>
-            <p class="text-[11px] text-slate-400 hidden sm:block">Gamified Community Study Arena</p>
-          </div>
+          <span class="font-mono font-bold text-sm tracking-wider uppercase text-neutral-100">HOLDMETOIT</span>
+          <span class="font-mono text-[10px] text-neutral-400 bg-neutral-900 px-1.5 py-0.5 wf-border">WIREFRAME_POC</span>
         </div>
 
-        <!-- Season Selector Dropdown -->
-        <div class="hidden md:flex items-center text-xs bg-slate-800/80 border border-slate-700/60 rounded-lg px-3 py-1.5 gap-2 text-slate-300">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-          <span class="font-medium text-white">Season 1: Duo Battle (JEE/NEET)</span>
-          <span class="text-slate-500 font-mono">Day 5/14</span>
+        <div class="hidden md:flex items-center gap-2 font-mono text-[11px] text-neutral-400 pl-4 border-l border-neutral-800">
+          <span>SEASON: <strong>JEE/NEET-01</strong></span>
+          <span class="text-neutral-700">/</span>
+          <span>MODE: <strong>DUO (N=2)</strong></span>
+          <span class="text-neutral-700">/</span>
+          <span>CYCLE: <strong>DAY 5/14</strong></span>
         </div>
       </div>
 
-      <!-- Navigation Tabs (Dynamic based on Persona) -->
-      <nav id="participantNav" class="flex items-center gap-1 sm:gap-2">
-        <button onclick="switchMainTab('dashboard')" id="nav-dashboard" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all bg-indigo-600 text-white shadow-sm shadow-indigo-600/30">
-          Cockpit
+      <!-- Center Nav Links -->
+      <nav id="participantNav" class="flex items-center font-mono text-xs">
+        <button onclick="switchMainTab('dashboard')" id="nav-dashboard" class="px-3 py-1.5 bg-neutral-200 text-neutral-900 font-semibold wf-border">
+          COCKPIT
         </button>
-        <button onclick="switchMainTab('leaderboard')" id="nav-leaderboard" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800">
-          Leaderboard & Wall
-        </button>
-      </nav>
-
-      <nav id="adminNav" class="hidden flex items-center gap-1 sm:gap-2">
-        <button onclick="switchAdminTab('import')" id="admin-nav-import" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all bg-amber-600 text-white shadow-sm shadow-amber-600/30">
-          CSV Ingestion
-        </button>
-        <button onclick="switchAdminTab('roster')" id="admin-nav-roster" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800">
-          Override Grid
-        </button>
-        <button onclick="switchAdminTab('wizard')" id="admin-nav-wizard" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800">
-          New Challenge
+        <button onclick="switchMainTab('leaderboard')" id="nav-leaderboard" class="px-3 py-1.5 text-neutral-400 hover:text-neutral-200 wf-border border-l-0">
+          LEADERBOARD
         </button>
       </nav>
 
-      <!-- Right Actions: Persona Switcher, Discord Pill & Theme -->
-      <div class="flex items-center gap-2 sm:gap-3">
-        
-        <!-- Interactive Persona Mode Switcher -->
-        <div class="bg-slate-900 border border-slate-700/80 p-1 rounded-xl flex items-center gap-1 shadow-inner text-xs">
-          <button id="btnParticipantMode" onclick="setPersona('participant')" class="px-2.5 py-1 rounded-lg font-semibold transition-all bg-indigo-600 text-white shadow-sm flex items-center gap-1.5">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-            <span class="hidden sm:inline">Grinder View</span>
+      <nav id="adminNav" class="hidden flex items-center font-mono text-xs">
+        <button onclick="switchAdminTab('import')" id="admin-nav-import" class="px-3 py-1.5 bg-neutral-200 text-neutral-900 font-semibold wf-border">
+          CSV_INGESTION
+        </button>
+        <button onclick="switchAdminTab('roster')" id="admin-nav-roster" class="px-3 py-1.5 text-neutral-400 hover:text-neutral-200 wf-border border-l-0">
+          OVERRIDE_GRID
+        </button>
+        <button onclick="switchAdminTab('wizard')" id="admin-nav-wizard" class="px-3 py-1.5 text-neutral-400 hover:text-neutral-200 wf-border border-l-0">
+          NEW_CHALLENGE
+        </button>
+      </nav>
+
+      <!-- Persona Switcher & Identity -->
+      <div class="flex items-center gap-3 font-mono text-xs">
+        <div class="flex items-center wf-border p-0.5 bg-neutral-950">
+          <button id="btnParticipantMode" onclick="setPersona('participant')" class="px-2 py-1 text-[11px] bg-neutral-800 text-white font-medium">
+            GRINDER
           </button>
-          <button id="btnAdminMode" onclick="setPersona('admin')" class="px-2.5 py-1 rounded-lg font-semibold transition-all text-slate-400 hover:text-white flex items-center gap-1.5">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            <span class="hidden sm:inline">Host Console</span>
+          <button id="btnAdminMode" onclick="setPersona('admin')" class="px-2 py-1 text-[11px] text-neutral-400 hover:text-white">
+            HOST
           </button>
         </div>
 
-        <!-- Discord OAuth Profile Indicator -->
-        <div class="flex items-center gap-2 pl-2 border-l border-slate-800">
-          <div class="relative">
-            <img id="userAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Avatar" class="w-8 h-8 rounded-full ring-2 ring-indigo-500/50 object-cover">
-            <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-slate-950"></span>
-          </div>
-          <div class="hidden lg:block text-left text-xs">
-            <div class="font-semibold text-slate-200 flex items-center gap-1">
-              <span>Rohan Sharma</span>
-              <span class="text-[10px] px-1 bg-discord-blurple/20 text-indigo-300 rounded font-mono">#0421</span>
-            </div>
-            <div id="userRoleBadge" class="text-[10px] text-indigo-400 font-medium">Grinder (Team Duo #1)</div>
-          </div>
+        <div class="hidden sm:flex items-center gap-2 pl-3 border-l border-neutral-800 text-neutral-400">
+          <span class="w-5 h-5 rounded-none bg-neutral-800 flex items-center justify-center text-[10px] text-neutral-300 font-mono">RS</span>
+          <span id="userRoleBadge" class="text-[11px]">@rohan · Team 01</span>
         </div>
-
       </div>
 
     </div>
   </header>
 
-  <!-- ================= SUB-NOTIFICATION / PROTOTYPE DEMO RIBBON ================= -->
-  <div class="bg-indigo-950/50 border-b border-indigo-900/40 text-xs px-4 py-2 text-indigo-300 flex items-center justify-between gap-4">
+  <!-- ================= SUB-BAR: WIREFRAME CONTROLS ================= -->
+  <div class="wf-border border-t-0 border-x-0 bg-[#0e0e11] px-4 py-2 text-neutral-400 font-mono text-[11px] flex items-center justify-between gap-4">
     <div class="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">
-      <span class="font-bold uppercase tracking-wider text-amber-400 bg-amber-950/80 px-2 py-0.5 rounded border border-amber-800/60 text-[10px]">Interactive Prototype</span>
-      <span>💡 Try switching between <strong>Grinder View</strong> and <strong>Host Console</strong>, or run the <strong>Live CSV Ingestion</strong> to watch the leaderboard recalculate!</span>
+      <span class="text-neutral-200 font-semibold">[SPEC_MODE]</span>
+      <span class="hidden sm:inline">Bare-bones architecture wireframe. Use top toggle to inspect Grinder vs Host views.</span>
     </div>
-    <div class="flex items-center gap-2 shrink-0">
-      <button onclick="resetDemoData()" class="text-slate-400 hover:text-white underline text-[11px]">Reset Demo State</button>
-      <button onclick="openDiscordModal()" class="px-2.5 py-1 bg-discord-blurple hover:bg-indigo-600 text-white rounded text-[11px] font-medium flex items-center gap-1.5 transition">
-        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-        Discord Broadcast
-      </button>
+    <div class="flex items-center gap-3 shrink-0">
+      <button onclick="openDiscordModal()" class="hover:text-neutral-100 underline">[VIEW_DISCORD_PAYLOAD]</button>
+      <button onclick="resetDemoData()" class="hover:text-neutral-100 underline">[RESET_STATE]</button>
     </div>
   </div>
 
-  <!-- ================= MAIN CONTENT WRAPPER ================= -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <!-- ================= MAIN CONTAINER ================= -->
+  <main class="max-w-7xl mx-auto px-4 py-6">
 
     <!-- ============================================================= -->
     <!-- VIEW 1: PARTICIPANT COCKPIT (/dashboard)                      -->
     <!-- ============================================================= -->
     <section id="view-dashboard" class="space-y-6">
       
-      <!-- Welcome & Challenge Header Banner -->
-      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-900/60 via-purple-900/40 to-slate-900 border border-indigo-700/40 p-6 shadow-xl">
-        <div class="absolute -right-12 -top-12 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+      <!-- Challenge Metadata Bar -->
+      <div class="wf-border p-4 bg-[#121215] flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="font-mono text-[11px] text-neutral-400 uppercase tracking-wider mb-1">
+            ACTIVE_SEASON / CHALLENGE_ID: #001
+          </div>
+          <h1 class="text-lg sm:text-xl font-bold text-neutral-100">JEE/NEET Grinders Season 1</h1>
+          <div class="font-mono text-xs text-neutral-400 mt-1">
+            TEAM: <span class="text-neutral-200">Quantum Leap</span> · PARTNER: <span class="text-neutral-200">Priya Verma</span> · TARGET: <span class="text-neutral-200 num">35.0h/wk</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-6 font-mono text-xs border-t md:border-t-0 border-neutral-800 pt-3 md:pt-0">
           <div>
-            <div class="flex items-center gap-2 mb-1">
-              <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                Active Season
-              </span>
-              <span class="text-xs text-slate-400 font-mono">Duo Battle · $N=2$ Mode</span>
-            </div>
-            <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">JEE/NEET Grinders Season 1</h1>
-            <p class="text-sm text-slate-300 mt-1 max-w-xl">
-              Partner: <strong class="text-amber-300">Priya Verma</strong> · Team: <strong class="text-indigo-300">Quantum Leap</strong> · Target: <strong>35.0 hrs / week</strong>
-            </p>
+            <div class="text-neutral-400 text-[10px] uppercase">Season Remaining</div>
+            <div class="text-neutral-100 font-bold num text-sm">9d 14h 22m</div>
           </div>
-
-          <!-- Quick Season Countdown -->
-          <div class="flex items-center gap-3 bg-slate-950/60 backdrop-blur border border-slate-800 p-3 rounded-xl">
-            <div class="text-center px-3 border-r border-slate-800">
-              <div class="text-xs text-slate-400 font-medium">Season Ends In</div>
-              <div class="text-lg font-black text-amber-400 font-mono">9d 14h</div>
-            </div>
-            <div class="text-center px-3">
-              <div class="text-xs text-slate-400 font-medium">Team Current Rank</div>
-              <div class="text-lg font-black text-indigo-400 font-mono">#1 Gold</div>
-            </div>
+          <div class="border-l border-neutral-800 pl-6">
+            <div class="text-neutral-400 text-[10px] uppercase">Current Standing</div>
+            <div class="text-neutral-100 font-bold text-sm">RANK #01 (GOLD)</div>
           </div>
         </div>
       </div>
 
-      <!-- 4 Core Metric KPI Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- 4 Primary Wireframe KPI Data Blocks -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 font-mono">
         
-        <!-- Card 1: Weekly Hours & Target Gauge -->
-        <div class="bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition p-5 rounded-2xl shadow-sm flex flex-col justify-between">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Weekly Target Progress</span>
-            <span class="p-1.5 bg-indigo-500/10 text-indigo-400 rounded-lg">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            </span>
-          </div>
-          <div class="flex items-baseline gap-2 mt-1">
-            <span id="kpi-logged-hours" class="text-3xl font-black text-white font-mono">28.5</span>
-            <span class="text-sm font-semibold text-slate-400 font-mono">/ 35.0 hrs</span>
-          </div>
-          <!-- Progress Bar with Percentage -->
-          <div class="mt-3">
-            <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
-              <div id="kpi-progress-bar" class="bg-gradient-to-r from-indigo-500 to-emerald-400 h-full rounded-full transition-all duration-500" style="width: 81.4%;"></div>
+        <!-- Tile 1: Weekly Progress -->
+        <div class="wf-border p-4 bg-[#121215] flex flex-col justify-between">
+          <div class="text-neutral-400 text-[11px] uppercase tracking-wider">WEEKLY_HOURS</div>
+          <div class="my-3">
+            <div class="flex items-baseline gap-1">
+              <span id="kpi-logged-hours" class="text-2xl font-bold text-neutral-100 num">28.5</span>
+              <span class="text-neutral-400 num">/ 35.0h</span>
             </div>
-            <div class="flex justify-between text-[11px] text-slate-400 mt-1.5 font-medium">
-              <span id="kpi-progress-pct" class="text-emerald-400 font-semibold">81.4% Done</span>
-              <span id="kpi-hours-remaining">6.5 hrs to goal</span>
+            <!-- Bare-bones segmented progress bar -->
+            <div class="w-full bg-neutral-900 h-2 mt-2 wf-border">
+              <div id="kpi-progress-bar" class="bg-neutral-300 h-full transition-all" style="width: 81.4%;"></div>
             </div>
+          </div>
+          <div class="flex justify-between text-[11px] text-neutral-400 pt-2 border-t border-neutral-800/80">
+            <span id="kpi-progress-pct" class="text-neutral-200">81.4% COMPLETED</span>
+            <span id="kpi-hours-remaining" class="num">6.5h REMAINING</span>
           </div>
         </div>
 
-        <!-- Card 2: Active Streak Flame -->
-        <div class="bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition p-5 rounded-2xl shadow-sm flex flex-col justify-between">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Active Daily Streak</span>
-            <span class="p-1.5 bg-amber-500/10 text-amber-400 rounded-lg">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.527.82-1.124 2.15-1.124 3.952 0 1.238.404 2.378 1.08 3.238a4.996 4.996 0 01-1.08 6.762c-2.4 1.6-4.5.3-5-1.2 0-.2-.1-.4-.2-.5a1 1 0 00-1.7 1.1c.9 2.5 3.7 4.4 7.2 3.1 3.5-1.3 5.3-4.6 4.8-7.7-.2-1.2-.8-2.2-1.5-3.1.5-.7 1.1-1.5 1.5-2.5.4-1.1.4-2.2.1-3.1a1 1 0 00-.919-.647z" clip-rule="evenodd"/></svg>
-            </span>
+        <!-- Tile 2: Streak -->
+        <div class="wf-border p-4 bg-[#121215] flex flex-col justify-between">
+          <div class="text-neutral-400 text-[11px] uppercase tracking-wider">CURRENT_STREAK</div>
+          <div class="my-3">
+            <div class="text-2xl font-bold text-neutral-100 num">12 <span class="text-xs font-normal text-neutral-400">CONSECUTIVE DAYS</span></div>
+            <div class="text-[11px] text-neutral-400 mt-1">Status: Active · Zero resets this season</div>
           </div>
-          <div class="flex items-baseline gap-2 mt-1">
-            <span class="text-3xl font-black text-amber-400 font-mono">12</span>
-            <span class="text-sm font-semibold text-slate-300">Days Active</span>
-          </div>
-          <div class="mt-3 text-xs text-slate-400 flex items-center gap-1.5">
-            <span class="text-amber-300 font-semibold">🔥 Top 5%</span> of community grinders.
+          <div class="text-[11px] text-neutral-400 pt-2 border-t border-neutral-800/80">
+            RECORD: 14 DAYS (TEAM PEAK)
           </div>
         </div>
 
-        <!-- Card 3: Grace Passes (Buffer Days) -->
-        <div class="bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition p-5 rounded-2xl shadow-sm flex flex-col justify-between">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Grace Passes Left</span>
-            <span class="p-1.5 bg-cyan-500/10 text-cyan-400 rounded-lg">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-            </span>
+        <!-- Tile 3: Grace Passes -->
+        <div class="wf-border p-4 bg-[#121215] flex flex-col justify-between">
+          <div class="text-neutral-400 text-[11px] uppercase tracking-wider">GRACE_PASSES (BUFFERS)</div>
+          <div class="my-3">
+            <div class="text-2xl font-bold text-neutral-100 num">01 <span class="text-xs font-normal text-neutral-400">/ 02 AVAILABLE</span></div>
+            <div class="text-[11px] text-neutral-400 mt-1">Pass #1 consumed on Tue (Preserved streak)</div>
           </div>
-          <div class="flex items-baseline gap-2 mt-1">
-            <span class="text-3xl font-black text-cyan-400 font-mono">1</span>
-            <span class="text-sm font-semibold text-slate-400 font-mono">/ 2 Remaining</span>
-          </div>
-          <div class="mt-3 text-xs text-slate-400 flex items-center justify-between">
-            <span class="text-cyan-300">1 Pass Used (Tue)</span>
-            <span class="text-[10px] text-slate-500 bg-slate-800 px-1.5 py-0.5 rounded">Prevents Penalty</span>
+          <div class="text-[11px] text-neutral-400 pt-2 border-t border-neutral-800/80">
+            RULE: 2 PASSES MAX / CYCLE
           </div>
         </div>
 
-        <!-- Card 4: Teammate Glance Card -->
-        <div class="bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition p-5 rounded-2xl shadow-sm flex flex-col justify-between">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Duo Partner Status</span>
-            <span class="p-1.5 bg-purple-500/10 text-purple-400 rounded-lg">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-            </span>
+        <!-- Tile 4: Teammate Status -->
+        <div class="wf-border p-4 bg-[#121215] flex flex-col justify-between">
+          <div class="text-neutral-400 text-[11px] uppercase tracking-wider">DUO_PARTNER_SYNC</div>
+          <div class="my-3">
+            <div class="text-sm font-bold text-neutral-200">PRIYA VERMA</div>
+            <div class="text-xs text-neutral-400 mt-0.5 num">36.0h Logged (+1.0h over goal)</div>
           </div>
-          <div class="flex items-center gap-3 mt-1">
-            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" alt="Priya" class="w-10 h-10 rounded-full object-cover ring-2 ring-purple-500/50">
-            <div>
-              <div class="text-sm font-bold text-white">Priya Verma</div>
-              <div class="text-xs text-purple-300 font-mono">36.0 hrs logged (+1.0h)</div>
-            </div>
-          </div>
-          <div class="mt-3 flex items-center justify-between text-xs">
-            <span class="text-emerald-400 font-medium">✓ Target Crushed</span>
-            <span class="text-slate-500 text-[10px]">Today: 7.0h</span>
+          <div class="text-[11px] text-neutral-300 pt-2 border-t border-neutral-800/80">
+            STATUS: [TARGET CRUSHED]
           </div>
         </div>
 
       </div>
 
-      <!-- Main Grid: 7-Day Chart & Daily Subject Quick Notes -->
+      <!-- Layout: 7-Day Chart & Daily Quick Log -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        <!-- Left: 7-Day Interactive Study Hours Chart -->
-        <div class="lg:col-span-2 bg-slate-900/90 border border-slate-800 p-6 rounded-2xl shadow-sm">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+        <!-- Left: 7-Day Clean Wireframe Study Distribution -->
+        <div class="lg:col-span-2 wf-border p-5 bg-[#121215]">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
             <div>
-              <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                <span>7-Day Study Distribution</span>
-                <span class="text-xs px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800">Actual vs Baseline</span>
-              </h2>
-              <p class="text-xs text-slate-400 mt-0.5">Daily Baseline Target: <strong class="text-slate-300 font-mono">5.0 hrs/day</strong></p>
+              <div class="font-mono text-xs font-bold uppercase tracking-wider text-neutral-200">7-Day Activity Distribution</div>
+              <div class="font-mono text-[11px] text-neutral-400">Baseline Target: 5.0h/day per member</div>
             </div>
-            <div class="flex items-center gap-4 text-xs">
-              <div class="flex items-center gap-1.5 text-slate-300">
-                <span class="w-3 h-3 rounded bg-indigo-500"></span> You
-              </div>
-              <div class="flex items-center gap-1.5 text-slate-300">
-                <span class="w-3 h-3 rounded bg-purple-400"></span> Partner
-              </div>
-              <div class="flex items-center gap-1.5 text-slate-400">
-                <span class="w-4 h-0.5 bg-amber-400/80"></span> Target (5h)
-              </div>
+            <div class="font-mono text-[11px] text-neutral-400 flex items-center gap-4">
+              <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-neutral-300 inline-block"></span> You</span>
+              <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-neutral-600 inline-block"></span> Partner</span>
+              <span class="flex items-center gap-1.5"><span class="w-4 h-0.5 bg-neutral-400 border border-dashed inline-block"></span> Target</span>
             </div>
           </div>
 
-          <!-- SVG Bar Chart -->
-          <div class="relative h-64 w-full flex items-end justify-between pt-8 pb-4 px-2 sm:px-6 border-b border-slate-800">
-            <!-- 5h Baseline Target Line -->
-            <div class="absolute left-0 right-0 top-24 border-b border-dashed border-amber-400/40 z-0 pointer-events-none">
-              <span class="absolute right-2 -top-4 text-[10px] text-amber-400 font-mono">Target: 5.0h</span>
+          <!-- Bare-bones Bar Chart Grid -->
+          <div class="relative h-56 w-full flex items-end justify-between pt-6 pb-2 px-2 sm:px-4 border-b border-neutral-800 font-mono text-[11px]">
+            
+            <!-- Dashed target benchmark line -->
+            <div class="absolute left-0 right-0 top-20 border-b border-dashed border-neutral-600 pointer-events-none">
+              <span class="absolute right-2 -top-4 text-[10px] text-neutral-400">5.0h BASELINE</span>
             </div>
 
-            <!-- Day 1: Mon -->
-            <div class="flex flex-col items-center gap-2 z-10 group cursor-pointer">
-              <div class="text-[10px] opacity-0 group-hover:opacity-100 transition text-indigo-300 font-mono">6.0h / 6.5h</div>
-              <div class="flex items-end gap-1.5 h-44">
-                <div class="w-4 sm:w-6 bg-indigo-500 hover:bg-indigo-400 rounded-t transition-all" style="height: 60%;" title="You: 6.0h"></div>
-                <div class="w-4 sm:w-6 bg-purple-400 hover:bg-purple-300 rounded-t transition-all" style="height: 65%;" title="Partner: 6.5h"></div>
+            <!-- Mon -->
+            <div class="flex flex-col items-center gap-1.5 z-10">
+              <div class="text-[10px] text-neutral-400 num">6.0/6.5</div>
+              <div class="flex items-end gap-1 h-36">
+                <div class="w-4 sm:w-6 bg-neutral-300" style="height: 60%;" title="You: 6.0h"></div>
+                <div class="w-4 sm:w-6 bg-neutral-600" style="height: 65%;" title="Partner: 6.5h"></div>
               </div>
-              <span class="text-xs text-slate-400 font-medium">Mon</span>
+              <span class="text-neutral-400">MON</span>
             </div>
 
-            <!-- Day 2: Tue (Grace Pass Used) -->
-            <div class="flex flex-col items-center gap-2 z-10 group cursor-pointer">
-              <div class="text-[10px] text-cyan-400 font-mono">Grace 🛡️</div>
-              <div class="flex items-end gap-1.5 h-44">
-                <div class="w-4 sm:w-6 bg-cyan-500/50 hover:bg-cyan-400 rounded-t border border-cyan-400/40 transition-all" style="height: 25%;" title="You: 2.5h (Grace Used)"></div>
-                <div class="w-4 sm:w-6 bg-purple-400 hover:bg-purple-300 rounded-t transition-all" style="height: 55%;" title="Partner: 5.5h"></div>
+            <!-- Tue (Grace Used) -->
+            <div class="flex flex-col items-center gap-1.5 z-10">
+              <div class="text-[10px] text-neutral-400 num">[GRACE]</div>
+              <div class="flex items-end gap-1 h-36">
+                <div class="w-4 sm:w-6 bg-transparent wf-border-strong border-dashed" style="height: 25%;" title="You: 2.5h (Grace Buffer Used)"></div>
+                <div class="w-4 sm:w-6 bg-neutral-600" style="height: 55%;" title="Partner: 5.5h"></div>
               </div>
-              <span class="text-xs text-cyan-300 font-medium">Tue</span>
+              <span class="text-neutral-300 font-bold">TUE</span>
             </div>
 
-            <!-- Day 3: Wed -->
-            <div class="flex flex-col items-center gap-2 z-10 group cursor-pointer">
-              <div class="text-[10px] opacity-0 group-hover:opacity-100 transition text-indigo-300 font-mono">7.5h / 7.0h</div>
-              <div class="flex items-end gap-1.5 h-44">
-                <div class="w-4 sm:w-6 bg-indigo-500 hover:bg-indigo-400 rounded-t transition-all" style="height: 75%;" title="You: 7.5h"></div>
-                <div class="w-4 sm:w-6 bg-purple-400 hover:bg-purple-300 rounded-t transition-all" style="height: 70%;" title="Partner: 7.0h"></div>
+            <!-- Wed -->
+            <div class="flex flex-col items-center gap-1.5 z-10">
+              <div class="text-[10px] text-neutral-400 num">7.5/7.0</div>
+              <div class="flex items-end gap-1 h-36">
+                <div class="w-4 sm:w-6 bg-neutral-300" style="height: 75%;" title="You: 7.5h"></div>
+                <div class="w-4 sm:w-6 bg-neutral-600" style="height: 70%;" title="Partner: 7.0h"></div>
               </div>
-              <span class="text-xs text-slate-400 font-medium">Wed</span>
+              <span class="text-neutral-400">WED</span>
             </div>
 
-            <!-- Day 4: Thu -->
-            <div class="flex flex-col items-center gap-2 z-10 group cursor-pointer">
-              <div class="text-[10px] opacity-0 group-hover:opacity-100 transition text-indigo-300 font-mono">6.0h / 8.0h</div>
-              <div class="flex items-end gap-1.5 h-44">
-                <div class="w-4 sm:w-6 bg-indigo-500 hover:bg-indigo-400 rounded-t transition-all" style="height: 60%;" title="You: 6.0h"></div>
-                <div class="w-4 sm:w-6 bg-purple-400 hover:bg-purple-300 rounded-t transition-all" style="height: 80%;" title="Partner: 8.0h"></div>
+            <!-- Thu -->
+            <div class="flex flex-col items-center gap-1.5 z-10">
+              <div class="text-[10px] text-neutral-400 num">6.0/8.0</div>
+              <div class="flex items-end gap-1 h-36">
+                <div class="w-4 sm:w-6 bg-neutral-300" style="height: 60%;" title="You: 6.0h"></div>
+                <div class="w-4 sm:w-6 bg-neutral-600" style="height: 80%;" title="Partner: 8.0h"></div>
               </div>
-              <span class="text-xs text-slate-400 font-medium">Thu</span>
+              <span class="text-neutral-400">THU</span>
             </div>
 
-            <!-- Day 5: Fri (Today) -->
-            <div class="flex flex-col items-center gap-2 z-10 group cursor-pointer">
-              <div class="text-[10px] text-amber-300 font-mono font-bold">6.5h / 7.0h</div>
-              <div class="flex items-end gap-1.5 h-44">
-                <div id="chart-today-you" class="w-4 sm:w-6 bg-gradient-to-t from-indigo-600 to-indigo-400 rounded-t ring-2 ring-indigo-400/40 transition-all" style="height: 65%;" title="You: 6.5h"></div>
-                <div id="chart-today-partner" class="w-4 sm:w-6 bg-gradient-to-t from-purple-600 to-purple-400 rounded-t ring-2 ring-purple-400/40 transition-all" style="height: 70%;" title="Partner: 7.0h"></div>
+            <!-- Fri (Today) -->
+            <div class="flex flex-col items-center gap-1.5 z-10">
+              <div class="text-[10px] text-neutral-200 font-bold num">6.5/7.0</div>
+              <div class="flex items-end gap-1 h-36">
+                <div class="w-4 sm:w-6 bg-neutral-100" style="height: 65%;" title="You: 6.5h"></div>
+                <div class="w-4 sm:w-6 bg-neutral-500" style="height: 70%;" title="Partner: 7.0h"></div>
               </div>
-              <span class="text-xs text-amber-300 font-bold">Fri (Today)</span>
+              <span class="text-neutral-100 font-bold underline">FRI*</span>
             </div>
 
-            <!-- Day 6: Sat -->
-            <div class="flex flex-col items-center gap-2 z-10 group opacity-50">
-              <div class="text-[10px] font-mono text-slate-500">Upcoming</div>
-              <div class="flex items-end gap-1.5 h-44">
-                <div class="w-4 sm:w-6 bg-slate-800 rounded-t h-2 border-dashed border border-slate-700"></div>
-                <div class="w-4 sm:w-6 bg-slate-800 rounded-t h-2 border-dashed border border-slate-700"></div>
+            <!-- Sat -->
+            <div class="flex flex-col items-center gap-1.5 z-10 opacity-30">
+              <div class="text-[10px] text-neutral-400 num">-</div>
+              <div class="flex items-end gap-1 h-36">
+                <div class="w-4 sm:w-6 bg-neutral-800 h-1"></div>
+                <div class="w-4 sm:w-6 bg-neutral-800 h-1"></div>
               </div>
-              <span class="text-xs text-slate-500 font-medium">Sat</span>
+              <span class="text-neutral-400">SAT</span>
             </div>
 
-            <!-- Day 7: Sun -->
-            <div class="flex flex-col items-center gap-2 z-10 group opacity-50">
-              <div class="text-[10px] font-mono text-slate-500">Upcoming</div>
-              <div class="flex items-end gap-1.5 h-44">
-                <div class="w-4 sm:w-6 bg-slate-800 rounded-t h-2 border-dashed border border-slate-700"></div>
-                <div class="w-4 sm:w-6 bg-slate-800 rounded-t h-2 border-dashed border border-slate-700"></div>
+            <!-- Sun -->
+            <div class="flex flex-col items-center gap-1.5 z-10 opacity-30">
+              <div class="text-[10px] text-neutral-400 num">-</div>
+              <div class="flex items-end gap-1 h-36">
+                <div class="w-4 sm:w-6 bg-neutral-800 h-1"></div>
+                <div class="w-4 sm:w-6 bg-neutral-800 h-1"></div>
               </div>
-              <span class="text-xs text-slate-500 font-medium">Sun</span>
+              <span class="text-neutral-400">SUN</span>
             </div>
 
           </div>
 
-          <div class="mt-4 flex items-center justify-between text-xs text-slate-400">
-            <span>Combined Duo Total: <strong class="text-white font-mono">64.5 hrs</strong> (Weekly target: 70.0 hrs)</span>
-            <span class="text-emerald-400 font-medium">On Track for #1 Finish</span>
+          <div class="mt-3 flex items-center justify-between font-mono text-[11px] text-neutral-400">
+            <span>TEAM CUMULATIVE: <strong class="text-neutral-200 num">64.5h</strong> / 70.0h</span>
+            <span class="text-neutral-300">[ON_SCHEDULE]</span>
           </div>
         </div>
 
-        <!-- Right: Daily Study Notes & Quick Log -->
-        <div class="bg-slate-900/90 border border-slate-800 p-6 rounded-2xl shadow-sm flex flex-col justify-between">
+        <!-- Right: Daily Note Logger -->
+        <div class="wf-border p-5 bg-[#121215] flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between mb-3">
-              <h2 class="text-base font-bold text-white flex items-center gap-2">
-                <span>Daily Subject Notes</span>
-                <span class="text-[11px] text-slate-400 font-normal">Optional</span>
-              </h2>
-              <span class="text-xs text-indigo-400 font-mono">Day 5</span>
-            </div>
-            <p class="text-xs text-slate-400 mb-4">Attach context to your timer logs so your squad & host know what you conquered.</p>
-            
+            <div class="font-mono text-xs font-bold uppercase tracking-wider text-neutral-200 mb-1">Daily Log Note</div>
+            <p class="text-xs text-neutral-400 mb-3">Optional context attached to your timer record for audit trail.</p>
+
             <div class="space-y-3">
-              <textarea id="studyNotesInput" rows="3" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500" placeholder="e.g., Solved 35 JEE Advanced Rotational Mechanics PYQs and completed Organic Chem revision..."></textarea>
-              <button onclick="saveDailyNote()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2 shadow-sm shadow-indigo-600/20">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                Post Daily Log Note
+              <textarea id="studyNotesInput" rows="3" class="w-full bg-neutral-950 wf-border p-2.5 text-xs text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-neutral-400 font-mono" placeholder="Write topics covered (e.g. 35 PYQs Rotational Dynamics)..."></textarea>
+              <button onclick="saveDailyNote()" class="w-full py-2 bg-neutral-200 hover:bg-white text-neutral-950 font-mono text-xs font-bold transition">
+                SAVE_NOTE
               </button>
             </div>
 
-            <!-- Notes Feed History -->
-            <div class="mt-6">
-              <div class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Recent Team Notes</div>
-              <div id="notesFeed" class="space-y-2.5 max-h-48 overflow-y-auto pr-1">
-                <div class="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800 text-xs">
-                  <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1">
-                    <span class="font-semibold text-purple-300">Priya Verma (Partner)</span>
-                    <span class="font-mono text-slate-500">2h ago</span>
+            <div class="mt-5 border-t border-neutral-800 pt-4">
+              <div class="font-mono text-[11px] uppercase tracking-wider text-neutral-400 mb-2">Team Feed</div>
+              <div id="notesFeed" class="space-y-2 max-h-40 overflow-y-auto pr-1 text-xs">
+                <div class="p-2 wf-border bg-neutral-950 font-mono text-[11px]">
+                  <div class="flex justify-between text-neutral-400 mb-0.5">
+                    <span class="text-neutral-300 font-bold">@priya.verma</span>
+                    <span>2h ago</span>
                   </div>
-                  <p class="text-slate-300">"Crushed 4 chapters of Thermodynamics and 2 Full NEET Mock Papers (680/720 score!)."</p>
+                  <p class="text-neutral-400 font-sans">"Full NEET Mock Paper #4 (680 score) + Inorganic chem review."</p>
                 </div>
-                <div class="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800 text-xs">
-                  <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1">
-                    <span class="font-semibold text-indigo-300">Rohan Sharma (You)</span>
-                    <span class="font-mono text-slate-500">Yesterday</span>
+                <div class="p-2 wf-border bg-neutral-950 font-mono text-[11px]">
+                  <div class="flex justify-between text-neutral-400 mb-0.5">
+                    <span class="text-neutral-300 font-bold">@rohan.sharma</span>
+                    <span>Yesterday</span>
                   </div>
-                  <p class="text-slate-300">"Definite Integration PYQs + Coordinate Geometry revisions completed."</p>
+                  <p class="text-neutral-400 font-sans">"Definite Integration problem sets completed."</p>
                 </div>
               </div>
             </div>
@@ -428,152 +352,142 @@
     </section>
 
     <!-- ============================================================= -->
-    <!-- VIEW 2: CHALLENGE HUB & LEADERBOARD (/challenge/:id)          -->
+    <!-- VIEW 2: LEADERBOARD & ACCOUNTABILITY (/challenge/:id)         -->
     <!-- ============================================================= -->
     <section id="view-leaderboard" class="hidden space-y-6">
       
-      <!-- Leaderboard Header & Toggle Controls -->
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/90 border border-slate-800 p-5 rounded-2xl">
+      <!-- Leaderboard Header Controls -->
+      <div class="wf-border p-4 bg-[#121215] flex flex-col md:flex-row md:items-center justify-between gap-4 font-mono">
         <div>
-          <h1 class="text-2xl font-black text-white flex items-center gap-2">
-            <span>Standings & Wall of Accountability</span>
-            <span class="text-xs font-normal text-slate-400 bg-slate-800 px-2 py-0.5 rounded-full">Recalculated in Real-Time</span>
-          </h1>
-          <p class="text-xs text-slate-400 mt-1">
-            Season 1: Duo Battle · Minimum threshold: <strong class="text-slate-300">30.0 hrs/person</strong> · Cycle: <strong>Weekly</strong>
-          </p>
+          <div class="text-[11px] text-neutral-400 uppercase tracking-wider mb-0.5">LEADERBOARD_ENGINE</div>
+          <h1 class="text-base sm:text-lg font-bold text-neutral-100">Standings & Accountability Ledger</h1>
+          <div class="text-xs text-neutral-400 mt-0.5">Automated calculation · Zero spreadsheet intervention (Law L2)</div>
         </div>
 
-        <!-- Standings Toggle (Teams vs MVPs) & Search -->
-        <div class="flex flex-wrap items-center gap-3">
-          <div class="bg-slate-950 p-1 rounded-xl border border-slate-800 flex items-center text-xs">
-            <button id="btnToggleTeams" onclick="setLeaderboardMode('teams')" class="px-3 py-1.5 rounded-lg font-semibold bg-indigo-600 text-white shadow-sm transition">
-              Team Standings (Duos)
+        <div class="flex flex-wrap items-center gap-3 text-xs">
+          <!-- Standings mode toggle -->
+          <div class="flex items-center wf-border bg-neutral-950">
+            <button id="btnToggleTeams" onclick="setLeaderboardMode('teams')" class="px-3 py-1.5 bg-neutral-200 text-neutral-900 font-semibold">
+              TEAMS (DUOS)
             </button>
-            <button id="btnToggleSolo" onclick="setLeaderboardMode('solo')" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition">
-              Individual MVPs
+            <button id="btnToggleSolo" onclick="setLeaderboardMode('solo')" class="px-3 py-1.5 text-neutral-400 hover:text-neutral-200 border-l border-neutral-800">
+              INDIVIDUAL MVPs
             </button>
           </div>
 
-          <div class="relative">
-            <input type="text" id="leaderboardSearch" oninput="filterLeaderboard(this.value)" placeholder="Search participant or team..." class="bg-slate-950 border border-slate-800 text-xs rounded-xl px-3 py-1.5 pl-8 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 w-48 sm:w-60">
-            <svg class="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          </div>
+          <!-- Minimal Search -->
+          <input type="text" id="leaderboardSearch" oninput="filterLeaderboard(this.value)" placeholder="Filter name/team..." class="bg-neutral-950 wf-border px-3 py-1.5 text-xs text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-neutral-400 w-44 font-mono">
         </div>
       </div>
 
-      <!-- TOP 3 PODIUM DISPLAY -->
-      <div id="podiumContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+      <!-- Bare-bones Podium Blocks -->
+      <div id="podiumContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs">
         
-        <!-- Rank #2: Silver Podium -->
-        <div class="order-2 md:order-1 bg-slate-900/70 border border-slate-800 rounded-2xl p-5 flex flex-col items-center text-center relative overflow-hidden shadow-lg mt-0 md:mt-6">
-          <div class="w-full h-1 bg-slate-400 absolute top-0 left-0"></div>
-          <span class="w-8 h-8 rounded-full bg-slate-700/60 border border-slate-500/40 text-slate-200 font-black text-sm flex items-center justify-center mb-3">2</span>
-          <div class="relative mb-2">
-            <img id="podium-2-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80" class="w-16 h-16 rounded-full object-cover ring-4 ring-slate-400/40">
-            <span class="absolute -bottom-1 -right-1 bg-slate-800 text-[11px] px-1.5 py-0.5 rounded-full border border-slate-600 font-mono">🥈 2nd</span>
+        <!-- #2 Silver -->
+        <div class="wf-border p-4 bg-[#121215] flex flex-col justify-between">
+          <div class="flex items-center justify-between text-neutral-400">
+            <span>[RANK_02]</span>
+            <span>SILVER</span>
           </div>
-          <h3 id="podium-2-name" class="font-bold text-white text-base">Vector Grinders</h3>
-          <p id="podium-2-members" class="text-xs text-slate-400 mb-3">Arjun Patel & Ananya Sen</p>
-          <div class="bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-2 w-full">
-            <div id="podium-2-hours" class="text-xl font-black text-slate-200 font-mono">58.3 hrs</div>
-            <div class="text-[11px] text-slate-400">🔥 12 Days Streak</div>
+          <div class="my-3">
+            <h3 id="podium-2-name" class="font-bold text-neutral-100 text-sm">VECTOR GRINDERS</h3>
+            <div id="podium-2-members" class="text-neutral-400 text-[11px] mt-0.5">Arjun Patel & Ananya Sen</div>
+            <div id="podium-2-hours" class="text-xl font-bold text-neutral-200 num mt-2">58.3h</div>
           </div>
-        </div>
-
-        <!-- Rank #1: Gold Podium -->
-        <div class="order-1 md:order-2 bg-gradient-to-b from-amber-950/40 to-slate-900 border-2 border-amber-500/50 rounded-2xl p-6 flex flex-col items-center text-center relative overflow-hidden shadow-2xl scale-105 z-10">
-          <div class="w-full h-1.5 bg-gradient-to-r from-amber-500 via-yellow-300 to-amber-500 absolute top-0 left-0"></div>
-          <span class="w-9 h-9 rounded-full bg-amber-500/30 border border-amber-400/60 text-amber-300 font-black text-base flex items-center justify-center mb-3">👑 1</span>
-          <div class="relative mb-2">
-            <img id="podium-1-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" class="w-20 h-20 rounded-full object-cover ring-4 ring-amber-400 shadow-xl shadow-amber-500/20">
-            <span class="absolute -bottom-1 -right-1 bg-amber-900 text-[11px] px-2 py-0.5 rounded-full border border-amber-400 font-mono font-bold text-amber-200">🥇 1st</span>
-          </div>
-          <h3 id="podium-1-name" class="font-black text-white text-lg">Quantum Leap</h3>
-          <p id="podium-1-members" class="text-xs text-amber-200/80 mb-3">Rohan Sharma & Priya Verma</p>
-          <div class="bg-slate-950/90 border border-amber-500/40 rounded-xl px-5 py-2.5 w-full">
-            <div id="podium-1-hours" class="text-2xl font-black text-amber-300 font-mono">64.5 hrs</div>
-            <div class="text-[11px] text-amber-200/90 font-medium">🔥 14 Days Streak · Leaders</div>
+          <div class="text-[11px] text-neutral-400 pt-2 border-t border-neutral-800">
+            STREAK: 12 DAYS
           </div>
         </div>
 
-        <!-- Rank #3: Bronze Podium -->
-        <div class="order-3 md:order-3 bg-slate-900/70 border border-slate-800 rounded-2xl p-5 flex flex-col items-center text-center relative overflow-hidden shadow-lg mt-0 md:mt-8">
-          <div class="w-full h-1 bg-amber-700 absolute top-0 left-0"></div>
-          <span class="w-8 h-8 rounded-full bg-amber-900/40 border border-amber-700/50 text-amber-400 font-black text-sm flex items-center justify-center mb-3">3</span>
-          <div class="relative mb-2">
-            <img id="podium-3-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" class="w-16 h-16 rounded-full object-cover ring-4 ring-amber-700/40">
-            <span class="absolute -bottom-1 -right-1 bg-slate-800 text-[11px] px-1.5 py-0.5 rounded-full border border-amber-700 font-mono">🥉 3rd</span>
+        <!-- #1 Gold -->
+        <div class="wf-border-strong p-4 bg-[#16161a] flex flex-col justify-between">
+          <div class="flex items-center justify-between text-neutral-200 font-bold">
+            <span>[RANK_01]</span>
+            <span>GOLD / LEADER</span>
           </div>
-          <h3 id="podium-3-name" class="font-bold text-white text-base">Entropy Zero</h3>
-          <p id="podium-3-members" class="text-xs text-slate-400 mb-3">Vikram Singh & Neha Gupta</p>
-          <div class="bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-2 w-full">
-            <div id="podium-3-hours" class="text-xl font-black text-amber-400 font-mono">54.0 hrs</div>
-            <div class="text-[11px] text-slate-400">🔥 9 Days Streak</div>
+          <div class="my-3">
+            <h3 id="podium-1-name" class="font-bold text-white text-base">QUANTUM LEAP</h3>
+            <div id="podium-1-members" class="text-neutral-300 text-[11px] mt-0.5">Rohan Sharma & Priya Verma</div>
+            <div id="podium-1-hours" class="text-2xl font-bold text-white num mt-2">64.5h</div>
+          </div>
+          <div class="text-[11px] text-neutral-300 pt-2 border-t border-neutral-700">
+            STREAK: 14 DAYS (PEAK)
+          </div>
+        </div>
+
+        <!-- #3 Bronze -->
+        <div class="wf-border p-4 bg-[#121215] flex flex-col justify-between">
+          <div class="flex items-center justify-between text-neutral-400">
+            <span>[RANK_03]</span>
+            <span>BRONZE</span>
+          </div>
+          <div class="my-3">
+            <h3 id="podium-3-name" class="font-bold text-neutral-100 text-sm">ENTROPY ZERO</h3>
+            <div id="podium-3-members" class="text-neutral-400 text-[11px] mt-0.5">Vikram Singh & Neha Gupta</div>
+            <div id="podium-3-hours" class="text-xl font-bold text-neutral-200 num mt-2">54.0h</div>
+          </div>
+          <div class="text-[11px] text-neutral-400 pt-2 border-t border-neutral-800">
+            STREAK: 9 DAYS
           </div>
         </div>
 
       </div>
 
-      <!-- MAIN RANKINGS TABLE -->
-      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
-        <div class="p-4 border-b border-slate-800 flex items-center justify-between">
-          <h2 class="text-sm font-bold text-white uppercase tracking-wider">Full Leaderboard Standings</h2>
-          <span id="rankingsRowCount" class="text-xs text-slate-400 font-mono">Showing 5 Teams</span>
+      <!-- Bare-bones Table Structure -->
+      <div class="wf-border bg-[#121215]">
+        <div class="p-3 border-b border-neutral-800 flex justify-between font-mono text-xs">
+          <span class="text-neutral-300 font-bold uppercase">Standings Grid</span>
+          <span id="rankingsRowCount" class="text-neutral-400">5 Teams</span>
         </div>
-        
+
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+          <table class="w-full text-left font-mono text-xs border-collapse">
             <thead>
-              <tr class="border-b border-slate-800 bg-slate-950/60 text-slate-400 uppercase text-[11px] font-semibold">
-                <th class="py-3.5 px-4">Rank</th>
-                <th class="py-3.5 px-4">Team / Grinder</th>
-                <th class="py-3.5 px-4 text-center">Streak</th>
-                <th class="py-3.5 px-4 text-right">Daily Avg</th>
-                <th class="py-3.5 px-4 text-right">Total Hours</th>
-                <th class="py-3.5 px-4 text-right">Target Delta</th>
-                <th class="py-3.5 px-4 text-center">Status</th>
+              <tr class="border-b border-neutral-800 bg-[#0c0c0e] text-neutral-400 text-[11px]">
+                <th class="py-2.5 px-3">RANK</th>
+                <th class="py-2.5 px-3">TEAM / PARTICIPANT</th>
+                <th class="py-2.5 px-3 text-center">STREAK</th>
+                <th class="py-2.5 px-3 text-right">DAILY_AVG</th>
+                <th class="py-2.5 px-3 text-right">TOTAL_HOURS</th>
+                <th class="py-2.5 px-3 text-right">TARGET_DELTA</th>
+                <th class="py-2.5 px-3 text-center">STATUS</th>
               </tr>
             </thead>
-            <tbody id="rankingsTableBody" class="divide-y divide-slate-800/60 text-slate-300">
-              <!-- Dynamically populated rows -->
+            <tbody id="rankingsTableBody" class="divide-y divide-neutral-800/80 text-neutral-300">
+              <!-- Dynamically populated -->
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- THE ACCOUNTABILITY LEDGER (WALL OF FLAGGED PENALTIES) -->
-      <div class="bg-gradient-to-br from-rose-950/30 to-slate-900 border border-rose-900/40 rounded-2xl p-6 shadow-sm">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+      <!-- Accountability Watchlist (Zero-Pass Breaches) -->
+      <div class="wf-border p-5 bg-[#121215] space-y-3 font-mono">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-neutral-800 pb-3">
           <div>
-            <h2 class="text-base font-bold text-rose-300 flex items-center gap-2">
-              <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-              <span>The Wall of Accountability (Penalty Watchlist)</span>
-            </h2>
-            <p class="text-xs text-slate-400 mt-0.5">
-              Participants who breached weekly minimum thresholds with 0 Grace Passes remaining.
+            <h2 class="text-xs font-bold uppercase tracking-wider text-neutral-200">[ACCOUNTABILITY_LEDGER]</h2>
+            <p class="text-[11px] text-neutral-400 font-sans mt-0.5">
+              Participants below target threshold with 0 grace passes remaining. Requires proof resolution.
             </p>
           </div>
-          <span class="text-xs font-semibold px-2.5 py-1 rounded bg-rose-950 border border-rose-800 text-rose-300">
-            Forgiving Gamification Active
+          <span class="text-[10px] text-neutral-400 wf-border px-2 py-0.5 self-start sm:self-auto">
+            FORGIVING_SYSTEM_ACTIVE
           </span>
         </div>
 
-        <!-- Ledger Entries Table -->
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs sm:text-sm">
+          <table class="w-full text-left text-xs">
             <thead>
-              <tr class="border-b border-rose-900/30 text-slate-400 uppercase text-[11px]">
-                <th class="py-2.5 px-3">Participant</th>
-                <th class="py-2.5 px-3">Team</th>
-                <th class="py-2.5 px-3 text-right">Deficit</th>
-                <th class="py-2.5 px-3">Assigned Penalty</th>
-                <th class="py-2.5 px-3 text-center">Status</th>
-                <th class="py-2.5 px-3 text-right">Action</th>
+              <tr class="border-b border-neutral-800 text-neutral-400 text-[11px]">
+                <th class="py-2 px-3">MEMBER</th>
+                <th class="py-2 px-3">TEAM</th>
+                <th class="py-2 px-3 text-right">DEFICIT</th>
+                <th class="py-2 px-3">ASSIGNED_PENALTY</th>
+                <th class="py-2 px-3 text-center">STATE</th>
+                <th class="py-2 px-3 text-right">ACTION</th>
               </tr>
             </thead>
-            <tbody id="penaltyTableBody" class="divide-y divide-slate-800 text-slate-300">
-              <!-- Dynamically populated penalties -->
+            <tbody id="penaltyTableBody" class="divide-y divide-neutral-800/80 text-neutral-300">
+              <!-- Dynamically populated -->
             </tbody>
           </table>
         </div>
@@ -582,96 +496,82 @@
     </section>
 
     <!-- ============================================================= -->
-    <!-- VIEW 3: ADMIN BULK CSV INGESTION (/admin/challenges/:id/import)-->
+    <!-- VIEW 3: ADMIN CSV INGESTION (/admin/challenges/:id/import)    -->
     <!-- ============================================================= -->
     <section id="view-admin-import" class="hidden space-y-6">
       
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/90 border border-slate-800 p-5 rounded-2xl">
+      <div class="wf-border p-4 bg-[#121215] flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono">
         <div>
-          <div class="flex items-center gap-2 mb-1">
-            <span class="text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold uppercase">Host Console</span>
-            <span class="text-xs text-slate-400 font-mono">Slice 3 · Bulk Ingestion</span>
-          </div>
-          <h1 class="text-2xl font-black text-white">YPT CSV Bulk Ingestion Engine</h1>
-          <p class="text-xs text-slate-400 mt-0.5">Eliminates manual typing. Drop your Yeolpumta study export to preview sanity checks, map users, and commit in &lt;1.5s.</p>
+          <div class="text-[11px] text-neutral-400 uppercase tracking-wider mb-0.5">HOST_CONSOLE / INGESTION</div>
+          <h1 class="text-base sm:text-lg font-bold text-neutral-100">YPT Bulk CSV Ingestion</h1>
+          <p class="text-xs text-neutral-400 font-sans mt-0.5">Parse student study exports, resolve unrecognized handles, and commit batch in &lt;1.5s.</p>
         </div>
 
-        <div class="flex items-center gap-2">
-          <button onclick="loadSampleCSV()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold flex items-center gap-2 transition">
-            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-            Load Sample YPT CSV (Edge Cases)
+        <div>
+          <button onclick="loadSampleCSV()" class="px-3 py-1.5 bg-neutral-200 hover:bg-white text-neutral-900 font-mono text-xs font-bold transition">
+            [LOAD_SAMPLE_YPT_CSV]
           </button>
         </div>
       </div>
 
-      <!-- Drag & Drop Zone -->
-      <div id="dropzone" onclick="triggerFileInput()" class="border-2 border-dashed border-slate-700 hover:border-indigo-500 transition rounded-2xl p-8 text-center bg-slate-900/40 cursor-pointer group">
+      <!-- Wireframe Dropzone -->
+      <div id="dropzone" onclick="triggerFileInput()" class="border border-dashed border-neutral-700 hover:border-neutral-400 transition p-8 text-center bg-neutral-950 cursor-pointer font-mono">
         <input type="file" id="fileInput" accept=".csv" class="hidden" onchange="handleFileUpload(event)">
-        <div class="w-14 h-14 mx-auto rounded-2xl bg-indigo-500/10 group-hover:bg-indigo-500/20 text-indigo-400 flex items-center justify-center mb-3 transition">
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-        </div>
-        <h3 class="font-bold text-white text-base">Drop your .CSV study export here, or browse files</h3>
-        <p class="text-xs text-slate-400 mt-1 max-w-md mx-auto">Supports YPT (Yeolpumta) export format or custom community rosters (Participant Name, Date, Duration Hours, Subject).</p>
+        <div class="text-xs text-neutral-300 font-bold mb-1">[DROP_CSV_FILE_OR_CLICK_TO_BROWSE]</div>
+        <div class="text-[11px] text-neutral-400">Accepted formats: Yeolpumta CSV export or custom 4-column roster</div>
       </div>
 
-      <!-- Ingestion Sanity Preview Container (Visible after CSV loaded) -->
-      <div id="csvPreviewContainer" class="hidden space-y-4">
+      <!-- Preview Grid Section -->
+      <div id="csvPreviewContainer" class="hidden space-y-4 font-mono">
         
-        <!-- Summary Stats Banner -->
+        <!-- Batch stats summary -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-          <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
-            <span class="text-slate-400">Total Rows Detected</span>
-            <div id="csvStatTotal" class="text-lg font-bold text-white font-mono mt-0.5">12</div>
+          <div class="wf-border p-3 bg-[#121215]">
+            <span class="text-neutral-400 text-[10px]">TOTAL_RECORDS</span>
+            <div id="csvStatTotal" class="text-base font-bold text-neutral-200 num mt-0.5">12</div>
           </div>
-          <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
-            <span class="text-slate-400">Recognized Participants</span>
-            <div id="csvStatValid" class="text-lg font-bold text-emerald-400 font-mono mt-0.5">10</div>
+          <div class="wf-border p-3 bg-[#121215]">
+            <span class="text-neutral-400 text-[10px]">MATCHED_PARTICIPANTS</span>
+            <div id="csvStatValid" class="text-base font-bold text-neutral-200 num mt-0.5">10</div>
           </div>
-          <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
-            <span class="text-slate-400">Unrecognized Handles</span>
-            <div id="csvStatUnmapped" class="text-lg font-bold text-amber-400 font-mono mt-0.5">1 (Needs Mapping)</div>
+          <div class="wf-border p-3 bg-[#121215]">
+            <span class="text-neutral-400 text-[10px]">UNMAPPED_HANDLES</span>
+            <div id="csvStatUnmapped" class="text-base font-bold text-neutral-200 num mt-0.5">1</div>
           </div>
-          <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
-            <span class="text-slate-400">Extreme Anomalies</span>
-            <div id="csvStatAnomalies" class="text-lg font-bold text-rose-400 font-mono mt-0.5">1 (>18h Alert)</div>
+          <div class="wf-border p-3 bg-[#121215]">
+            <span class="text-neutral-400 text-[10px]">ANOMALIES (>18h)</span>
+            <div id="csvStatAnomalies" class="text-base font-bold text-neutral-200 num mt-0.5">1</div>
           </div>
         </div>
 
-        <!-- Sanity Preview Table -->
-        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden">
-          <div class="p-4 border-b border-slate-800 flex items-center justify-between">
-            <h3 class="text-sm font-bold text-white">Pre-Commit Sanity & Mapping Grid</h3>
-            <div class="flex items-center gap-2">
-              <span class="text-xs text-slate-400">Resolve any warning dropdowns before committing</span>
-            </div>
+        <div class="wf-border bg-[#121215]">
+          <div class="p-3 border-b border-neutral-800 flex justify-between text-xs">
+            <span class="font-bold text-neutral-200 uppercase">Pre-Commit Sanity Inspection</span>
+            <span class="text-neutral-400 text-[11px]">Audit before committing</span>
           </div>
 
           <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs sm:text-sm">
+            <table class="w-full text-left text-xs border-collapse">
               <thead>
-                <tr class="border-b border-slate-800 bg-slate-950/60 text-slate-400 uppercase text-[11px]">
-                  <th class="py-3 px-4">CSV Identifier</th>
-                  <th class="py-3 px-4">Date</th>
-                  <th class="py-3 px-4 text-right">Logged Hours</th>
-                  <th class="py-3 px-4">Subject / Note</th>
-                  <th class="py-3 px-4">System Identity Match</th>
-                  <th class="py-3 px-4 text-center">Anomaly Flag</th>
+                <tr class="border-b border-neutral-800 bg-[#0c0c0e] text-neutral-400 text-[11px]">
+                  <th class="py-2.5 px-3">CSV_IDENTIFIER</th>
+                  <th class="py-2.5 px-3">DATE</th>
+                  <th class="py-2.5 px-3 text-right">HOURS</th>
+                  <th class="py-2.5 px-3">SUBJECT</th>
+                  <th class="py-2.5 px-3">SYSTEM_MATCH</th>
+                  <th class="py-2.5 px-3 text-center">FLAG</th>
                 </tr>
               </thead>
-              <tbody id="csvPreviewTableBody" class="divide-y divide-slate-800 text-slate-300">
-                <!-- Dynamically populated preview rows -->
+              <tbody id="csvPreviewTableBody" class="divide-y divide-neutral-800 text-neutral-300">
+                <!-- Dynamically populated -->
               </tbody>
             </table>
           </div>
 
-          <!-- Commit Action Footer -->
-          <div class="p-4 bg-slate-950/80 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div class="text-xs text-slate-400">
-              ⚡ Committing will execute an atomic batch insert into <code class="text-indigo-300 font-mono">StudyLog</code> and recalculate leaderboard standings instantly.
-            </div>
-            <button onclick="commitCSVBatch()" class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white rounded-xl text-xs sm:text-sm font-bold shadow-lg shadow-emerald-600/20 transition flex items-center justify-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-              Commit 12 Logs to Database
+          <div class="p-3 bg-neutral-950 border-t border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <span class="text-neutral-400 text-[11px]">Transactional insert: rollback on any relational failure.</span>
+            <button onclick="commitCSVBatch()" class="px-4 py-2 bg-neutral-200 hover:bg-white text-neutral-950 font-bold transition">
+              COMMIT_12_RECORDS_TO_DATABASE
             </button>
           </div>
         </div>
@@ -681,49 +581,42 @@
     </section>
 
     <!-- ============================================================= -->
-    <!-- VIEW 4: ADMIN MANUAL OVERRIDE GRID & CLEARANCE MODAL          -->
+    <!-- VIEW 4: ADMIN OVERRIDE GRID & PARDONS (/admin/roster)         -->
     <!-- ============================================================= -->
-    <section id="view-admin-roster" class="hidden space-y-6">
+    <section id="view-admin-roster" class="hidden space-y-6 font-mono">
       
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/90 border border-slate-800 p-5 rounded-2xl">
+      <div class="wf-border p-4 bg-[#121215] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div class="flex items-center gap-2 mb-1">
-            <span class="text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold uppercase">Admin Override</span>
-            <span class="text-xs text-slate-400 font-mono">Law L5: Admin Override Absolute</span>
-          </div>
-          <h1 class="text-2xl font-black text-white">Manual Hours Override & Clearance Desk</h1>
-          <p class="text-xs text-slate-400 mt-0.5">Directly edit logged hours to compensate for app crashes or typos, and review member penalty clearance proofs.</p>
+          <div class="text-[11px] text-neutral-400 uppercase tracking-wider mb-0.5">ADMIN_OVERRIDE_DESK</div>
+          <h1 class="text-base sm:text-lg font-bold text-neutral-100">Manual Hours Correction & Audit</h1>
+          <p class="text-xs text-neutral-400 font-sans mt-0.5">Resolve timer crashes or discrepancy disputes inline with full audit trail (Law L5).</p>
         </div>
 
-        <div class="flex items-center gap-2">
-          <button onclick="openDiscordModal()" class="px-4 py-2 bg-discord-blurple hover:bg-indigo-600 text-white rounded-xl text-xs font-semibold flex items-center gap-2 transition shadow-md shadow-indigo-600/20">
-            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-            Broadcast Standings to Discord
-          </button>
-        </div>
+        <button onclick="openDiscordModal()" class="px-3 py-1.5 wf-border text-neutral-200 hover:bg-neutral-900 text-xs">
+          [BROADCAST_DISCORD_EMBED]
+        </button>
       </div>
 
-      <!-- Inline Override Grid Table -->
-      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden">
-        <div class="p-4 border-b border-slate-800 flex items-center justify-between">
-          <h2 class="text-sm font-bold text-white">Live Enrolled Participants (Inline Editable)</h2>
-          <span class="text-xs text-slate-400">Click any hours value to edit and instant-recalculate</span>
+      <div class="wf-border bg-[#121215]">
+        <div class="p-3 border-b border-neutral-800 flex justify-between text-xs">
+          <span class="font-bold text-neutral-200 uppercase">Participant Hours Master Grid</span>
+          <span class="text-neutral-400 text-[11px]">Click value to edit</span>
         </div>
 
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs sm:text-sm">
+          <table class="w-full text-left text-xs border-collapse">
             <thead>
-              <tr class="border-b border-slate-800 bg-slate-950/60 text-slate-400 uppercase text-[11px]">
-                <th class="py-3 px-4">Participant</th>
-                <th class="py-3 px-4">Discord ID</th>
-                <th class="py-3 px-4">Assigned Team</th>
-                <th class="py-3 px-4 text-center">Grace Passes</th>
-                <th class="py-3 px-4 text-right">Cumulative Hours</th>
-                <th class="py-3 px-4 text-center">Actions / Clearances</th>
+              <tr class="border-b border-neutral-800 bg-[#0c0c0e] text-neutral-400 text-[11px]">
+                <th class="py-2.5 px-3">PARTICIPANT</th>
+                <th class="py-2.5 px-3">DISCORD_TAG</th>
+                <th class="py-2.5 px-3">ASSIGNED_TEAM</th>
+                <th class="py-2.5 px-3 text-center">GRACE_PASSES</th>
+                <th class="py-2.5 px-3 text-right">CUMULATIVE_HOURS</th>
+                <th class="py-2.5 px-3 text-center">OVERRIDE_ACTION</th>
               </tr>
             </thead>
-            <tbody id="overrideTableBody" class="divide-y divide-slate-800 text-slate-300">
-              <!-- Dynamically populated override rows -->
+            <tbody id="overrideTableBody" class="divide-y divide-neutral-800 text-neutral-300">
+              <!-- Dynamically populated -->
             </tbody>
           </table>
         </div>
@@ -732,111 +625,88 @@
     </section>
 
     <!-- ============================================================= -->
-    <!-- VIEW 5: ADMIN CHALLENGE CREATOR WIZARD (/admin/challenges/new)-->
+    <!-- VIEW 5: ADMIN CHALLENGE WIZARD (/admin/challenges/new)        -->
     <!-- ============================================================= -->
-    <section id="view-admin-wizard" class="hidden space-y-6">
+    <section id="view-admin-wizard" class="hidden space-y-6 font-mono text-xs">
       
-      <div class="bg-slate-900/90 border border-slate-800 p-6 rounded-2xl">
-        <div class="max-w-2xl">
-          <div class="flex items-center gap-2 mb-1">
-            <span class="text-xs px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-semibold uppercase">Challenge Engine</span>
-            <span class="text-xs text-slate-400 font-mono">Slice 2 · Creator Wizard</span>
-          </div>
-          <h1 class="text-2xl font-black text-white">Configure New Challenge Season</h1>
-          <p class="text-xs text-slate-400 mt-1">
-            Set up seasons in under 3 minutes. The Single Entity Team Architecture unifies Solos, Duos, and Squad battles under a single schema.
-          </p>
+      <div class="wf-border p-6 bg-[#121215] max-w-3xl">
+        <div class="mb-4">
+          <div class="text-[11px] text-neutral-400 uppercase tracking-wider mb-0.5">CHALLENGE_ENGINE / WIZARD</div>
+          <h1 class="text-base font-bold text-neutral-100">Create New Challenge Season</h1>
+          <p class="text-neutral-400 font-sans mt-0.5">Single Entity architecture handles Solo ($N=1$), Duo ($N=2$), and Squad ($N\ge 3$) battles identically.</p>
         </div>
 
-        <!-- Wizard Stepper Indicator -->
-        <div class="grid grid-cols-4 gap-2 my-6 text-xs">
-          <div class="p-2.5 rounded-xl bg-indigo-600/20 border border-indigo-500 text-indigo-300 font-semibold">1. Basics</div>
-          <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-400">2. Battle Mode ($N$)</div>
-          <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-400">3. Targets & Grace</div>
-          <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-400">4. Discord Webhook</div>
+        <!-- Stepper -->
+        <div class="grid grid-cols-4 gap-2 mb-6 text-[11px] text-center">
+          <div class="p-2 bg-neutral-200 text-neutral-900 font-bold">1. BASICS</div>
+          <div class="p-2 wf-border text-neutral-400">2. MODE (N)</div>
+          <div class="p-2 wf-border text-neutral-400">3. RULES</div>
+          <div class="p-2 wf-border text-neutral-400">4. DISCORD</div>
         </div>
 
-        <!-- Form Body -->
-        <form onsubmit="handleCreateChallenge(event)" class="space-y-6">
-          
-          <!-- Step 1: Basics -->
-          <div class="space-y-4">
-            <h3 class="text-sm font-bold text-white uppercase tracking-wider text-slate-300">Season Identity</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <form onsubmit="handleCreateChallenge(event)" class="space-y-5">
+          <div class="space-y-3">
+            <div class="font-bold text-neutral-300 uppercase">Season Parameters</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label class="block text-xs font-medium text-slate-400 mb-1">Challenge Title</label>
-                <input type="text" id="wizardTitle" value="Gate CSE Grinders 2026 Season 2" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+                <label class="block text-neutral-400 text-[11px] mb-1">CHALLENGE_TITLE</label>
+                <input type="text" id="wizardTitle" value="Gate CSE 2026 Season 2" class="w-full bg-neutral-950 wf-border p-2 text-neutral-200">
               </div>
               <div>
-                <label class="block text-xs font-medium text-slate-400 mb-1">Duration & Cycle</label>
-                <select class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
-                  <option>2-Week Sprint (14 Days)</option>
-                  <option>1-Month Marathon (30 Days)</option>
-                  <option>7-Day Rapid Duel</option>
+                <label class="block text-neutral-400 text-[11px] mb-1">DURATION</label>
+                <select class="w-full bg-neutral-950 wf-border p-2 text-neutral-200">
+                  <option>14 DAYS (2-WEEK SPRINT)</option>
+                  <option>30 DAYS (1-MONTH)</option>
+                  <option>7 DAYS (RAPID)</option>
                 </select>
               </div>
             </div>
           </div>
 
-          <!-- Step 2: Battle Mode Selector (Single Entity Law L1) -->
-          <div class="space-y-3 pt-4 border-t border-slate-800">
-            <h3 class="text-sm font-bold text-white uppercase tracking-wider text-slate-300">Battle Mode (Single Entity Unity)</h3>
+          <div class="space-y-3 pt-4 border-t border-neutral-800">
+            <div class="font-bold text-neutral-300 uppercase">Entity Mode (Single Entity Model)</div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11px]">
+              <label class="wf-border p-3 bg-neutral-950 block cursor-pointer">
+                <input type="radio" name="battleMode" value="SOLO">
+                <span class="font-bold text-neutral-200 ml-1">SOLO (N=1)</span>
+                <p class="text-neutral-400 font-sans mt-1">Individual grinders. Pure MVP standings.</p>
+              </label>
+              <label class="wf-border-strong p-3 bg-neutral-900 block cursor-pointer">
+                <input type="radio" name="battleMode" value="DUO" checked>
+                <span class="font-bold text-neutral-100 ml-1">DUO (N=2)</span>
+                <p class="text-neutral-400 font-sans mt-1">Paired partners. Combined team average.</p>
+              </label>
+              <label class="wf-border p-3 bg-neutral-950 block cursor-pointer">
+                <input type="radio" name="battleMode" value="SQUAD">
+                <span class="font-bold text-neutral-200 ml-1">SQUAD (N=4-8)</span>
+                <p class="text-neutral-400 font-sans mt-1">Guild battles with squad rosters.</p>
+              </label>
+            </div>
+          </div>
+
+          <div class="space-y-3 pt-4 border-t border-neutral-800">
+            <div class="font-bold text-neutral-300 uppercase">Thresholds & Forgiving Gamification</div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <label class="cursor-pointer border-2 border-slate-800 hover:border-slate-700 p-4 rounded-xl flex flex-col justify-between bg-slate-950/60 transition">
-                <input type="radio" name="battleMode" value="SOLO" class="hidden">
-                <div class="font-bold text-white text-sm">Solo Battle</div>
-                <div class="text-[11px] text-slate-400 mt-1">Individual grinders ($N=1$). Pure personal MVP rankings.</div>
-              </label>
-              <label class="cursor-pointer border-2 border-indigo-500 bg-indigo-950/30 p-4 rounded-xl flex flex-col justify-between transition">
-                <input type="radio" name="battleMode" value="DUO" checked class="hidden">
-                <div class="font-bold text-indigo-300 text-sm">Duo Battle ($N=2$)</div>
-                <div class="text-[11px] text-slate-300 mt-1">Pair up with a partner. Shared accountability & combined team hours.</div>
-              </label>
-              <label class="cursor-pointer border-2 border-slate-800 hover:border-slate-700 p-4 rounded-xl flex flex-col justify-between bg-slate-950/60 transition">
-                <input type="radio" name="battleMode" value="SQUAD" class="hidden">
-                <div class="font-bold text-white text-sm">Squad Wars ($N=4\text{–}8$)</div>
-                <div class="text-[11px] text-slate-400 mt-1">Guild battles with team average hours and squad captains.</div>
-              </label>
-            </div>
-          </div>
-
-          <!-- Step 3: Targets & Grace Buffer -->
-          <div class="space-y-4 pt-4 border-t border-slate-800">
-            <h3 class="text-sm font-bold text-white uppercase tracking-wider text-slate-300">Targets & Forgiving Rules</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label class="block text-xs font-medium text-slate-400 mb-1">Weekly Target Hours / Member</label>
-                <input type="number" value="35" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                <label class="block text-neutral-400 text-[11px] mb-1">WEEKLY_HOURS</label>
+                <input type="number" value="35" class="w-full bg-neutral-950 wf-border p-2 text-neutral-200 num">
               </div>
               <div>
-                <label class="block text-xs font-medium text-slate-400 mb-1">Grace Passes / Cycle</label>
-                <input type="number" value="2" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
-                <span class="text-[10px] text-cyan-400 mt-0.5 block">Forgives up to 2 missed study days</span>
+                <label class="block text-neutral-400 text-[11px] mb-1">GRACE_PASSES</label>
+                <input type="number" value="2" class="w-full bg-neutral-950 wf-border p-2 text-neutral-200 num">
               </div>
               <div>
-                <label class="block text-xs font-medium text-slate-400 mb-1">Penalized Deficit Action</label>
-                <input type="text" value="Post 1-hr study timelapse to Discord" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                <label class="block text-neutral-400 text-[11px] mb-1">PENALTY_TEXT</label>
+                <input type="text" value="Post 1-hr study timelapse" class="w-full bg-neutral-950 wf-border p-2 text-neutral-200">
               </div>
             </div>
           </div>
 
-          <!-- Step 4: Discord Webhook -->
-          <div class="space-y-4 pt-4 border-t border-slate-800">
-            <h3 class="text-sm font-bold text-white uppercase tracking-wider text-slate-300">Discord Community Integration</h3>
-            <div>
-              <label class="block text-xs font-medium text-slate-400 mb-1">Discord Webhook URL</label>
-              <input type="url" value="https://discord.com/api/webhooks/128394857291/StudyArenaBotSecret" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-indigo-300 font-mono">
-              <span class="text-[10px] text-slate-500 mt-1 block">Used for one-click standings broadcast embeds. No custom bot token needed.</span>
-            </div>
-          </div>
-
-          <!-- Submit Button -->
-          <div class="pt-4 border-t border-slate-800 flex justify-end">
-            <button type="submit" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold shadow-lg shadow-indigo-600/30 transition">
-              Create & Launch Challenge Season
+          <div class="pt-4 border-t border-neutral-800 flex justify-end">
+            <button type="submit" class="px-4 py-2 bg-neutral-200 hover:bg-white text-neutral-950 font-bold transition">
+              LAUNCH_CHALLENGE_SEASON
             </button>
           </div>
-
         </form>
       </div>
 
@@ -844,162 +714,105 @@
 
   </main>
 
-  <!-- ================= DISCORD WEBHOOK RICH EMBED PREVIEW MODAL ================= -->
-  <div id="discordModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-    <div class="bg-discord-dark border border-slate-700 w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl">
+  <!-- ================= RAW DISCORD PAYLOAD MODAL ================= -->
+  <div id="discordModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 font-mono text-xs">
+    <div class="bg-[#121215] wf-border max-w-lg w-full p-5 space-y-4">
+      <div class="flex justify-between items-center border-b border-neutral-800 pb-2">
+        <span class="font-bold text-neutral-200">[DISCORD_WEBHOOK_EMBED_SPEC]</span>
+        <button onclick="closeDiscordModal()" class="text-neutral-400 hover:text-white">✕</button>
+      </div>
       
-      <!-- Modal Header -->
-      <div class="bg-discord-darkest px-4 py-3 border-b border-slate-800 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <div class="w-6 h-6 rounded bg-discord-blurple flex items-center justify-center text-white text-xs font-bold">#</div>
-          <span class="text-xs font-bold text-white font-mono">study-announcements</span>
-          <span class="text-[10px] text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded">Discord Webhook Preview</span>
-        </div>
-        <button onclick="closeDiscordModal()" class="text-slate-400 hover:text-white text-base">✕</button>
+      <p class="text-neutral-400 font-sans text-xs">
+        Standardized JSON Rich Embed payload dispatched via HTTP POST to channel webhook:
+      </p>
+
+      <div class="bg-black p-3 wf-border overflow-x-auto text-[11px] text-neutral-300 num leading-relaxed">
+{
+  "username": "HoldMeToIt Bot",
+  "embeds": [{
+    "title": "DAILY STANDINGS BROADCAST · DAY 5/14",
+    "description": "JEE/NEET Grinders Season 1 (Duo Battle)",
+    "fields": [
+      { "name": "TOP 3 PODIUM", "value": "1st: Quantum Leap (64.5h)\n2nd: Vector Grinders (58.3h)\n3rd: Entropy Zero (54.0h)" },
+      { "name": "GRINDER OF THE DAY", "value": "Arjun Patel (8.2h logged)" },
+      { "name": "ACCOUNTABILITY ALERT", "value": "Tanvi Joshi flagged for 16.8h deficit (0 grace passes)" }
+    ],
+    "footer": { "text": "HoldMeToIt Automated Challenge Engine" }
+  }]
+}
       </div>
 
-      <!-- Discord Message Body -->
-      <div class="p-5 text-xs text-slate-300 space-y-3">
-        <div class="flex items-start gap-3">
-          <div class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-amber-500 flex items-center justify-center text-white font-bold shrink-0">
-            ⚡
-          </div>
-          <div class="space-y-1.5 w-full">
-            <div class="flex items-center gap-2">
-              <span class="font-bold text-white text-sm">HoldMeToIt Bot</span>
-              <span class="text-[10px] bg-discord-blurple text-white px-1 rounded uppercase font-bold">BOT</span>
-              <span class="text-[10px] text-slate-500">Today at 12:00 AM</span>
-            </div>
-
-            <!-- The Rich Embed Card -->
-            <div class="bg-discord-darker border-l-4 border-amber-400 rounded-r-lg p-4 space-y-3 w-full shadow-md">
-              <div class="text-[11px] uppercase tracking-wider font-bold text-amber-400">🔥 Daily Standings Broadcast · Day 5/14</div>
-              <h4 class="text-sm font-bold text-white">JEE/NEET Grinders Season 1 (Duo Battle)</h4>
-              
-              <div class="space-y-2 border-t border-slate-700/60 pt-2 text-xs">
-                <div>
-                  <span class="text-slate-400 font-medium">🏆 Top 3 Podium (Duos):</span>
-                  <div class="font-mono text-slate-200 mt-1">
-                    🥇 1st: <strong class="text-amber-300">Quantum Leap</strong> (Rohan & Priya) — 64.5 hrs<br>
-                    🥈 2nd: <strong class="text-slate-300">Vector Grinders</strong> (Arjun & Ananya) — 58.3 hrs<br>
-                    🥉 3rd: <strong class="text-amber-600">Entropy Zero</strong> (Vikram & Neha) — 54.0 hrs
-                  </div>
-                </div>
-
-                <div class="pt-2 border-t border-slate-700/60">
-                  <span class="text-slate-400 font-medium">🌟 Grinder of the Day:</span>
-                  <div class="text-slate-200"><strong class="text-amber-300">Arjun Patel</strong> logged an incredible <strong class="text-white">8.2 hours</strong> today!</div>
-                </div>
-
-                <div class="pt-2 border-t border-slate-700/60 text-rose-300">
-                  <span class="text-rose-400 font-bold">⚠️ Wall of Accountability:</span>
-                  <div>Tanvi Joshi is flagged for missed target (18.2 / 35h). Penalty: <em>Post 1-hr study timelapse to #accountability</em>.</div>
-                </div>
-              </div>
-
-              <!-- Embed Footer -->
-              <div class="text-[10px] text-slate-500 pt-2 border-t border-slate-700/40 flex items-center justify-between">
-                <span>HoldMeToIt Challenge Engine</span>
-                <span class="text-indigo-400 underline cursor-pointer">Open Web Dashboard →</span>
-              </div>
-            </div>
-
-          </div>
-        </div>
+      <div class="flex justify-end gap-2 pt-2 border-t border-neutral-800">
+        <button onclick="closeDiscordModal()" class="px-3 py-1.5 wf-border text-neutral-400 hover:text-white">CLOSE</button>
+        <button onclick="triggerSimulatedBroadcast()" class="px-3 py-1.5 bg-neutral-200 text-neutral-900 font-bold">TEST_POST</button>
       </div>
-
-      <!-- Modal Footer -->
-      <div class="bg-discord-darkest px-4 py-3 border-t border-slate-800 flex justify-between items-center text-xs">
-        <span class="text-slate-400">Ready to broadcast via Discord Webhook</span>
-        <button onclick="triggerSimulatedBroadcast()" class="px-3 py-1.5 bg-discord-blurple hover:bg-indigo-600 text-white rounded-lg font-semibold flex items-center gap-1.5 transition">
-          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-          Send Real Test Ping
-        </button>
-      </div>
-
     </div>
   </div>
 
   <!-- ================= SUBMIT PROOF MODAL ================= -->
-  <div id="proofModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-    <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-6 space-y-4 shadow-2xl">
-      <div class="flex items-center justify-between">
-        <h3 class="text-base font-bold text-white">Submit Penalty Resolution Proof</h3>
-        <button onclick="closeProofModal()" class="text-slate-400 hover:text-white">✕</button>
+  <div id="proofModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 font-mono text-xs">
+    <div class="bg-[#121215] wf-border max-w-md w-full p-5 space-y-3">
+      <div class="flex justify-between items-center border-b border-neutral-800 pb-2">
+        <span class="font-bold text-neutral-200">[CLEARANCE_PROOF_SUBMISSION]</span>
+        <button onclick="closeProofModal()" class="text-neutral-400 hover:text-white">✕</button>
       </div>
-      <p class="text-xs text-slate-400">
-        You are clearing your penalty for falling short on weekly hours. Provide your timelapse link or host note.
-      </p>
-      <div class="space-y-3">
-        <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1">Proof Link (YouTube, Drive, Discord attachment)</label>
-          <input type="url" id="proofLinkInput" placeholder="https://discord.com/channels/.../1293847" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1">Notes / Message for Host</label>
-          <textarea id="proofNotesInput" rows="2" placeholder="Uploaded 1h study timelapse to #accountability channel..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500"></textarea>
-        </div>
+      <p class="text-neutral-400 font-sans text-xs">Submit proof link for host verification to resolve your deficit status.</p>
+      <div class="space-y-2">
+        <label class="block text-neutral-400 text-[11px]">PROOF_URL</label>
+        <input type="url" id="proofLinkInput" placeholder="https://..." class="w-full bg-neutral-950 wf-border p-2 text-neutral-200">
       </div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button onclick="closeProofModal()" class="px-3 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white">Cancel</button>
-        <button onclick="submitProofAction()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition">Submit for Clearance</button>
+      <div class="flex justify-end gap-2 pt-2 border-t border-neutral-800">
+        <button onclick="closeProofModal()" class="px-3 py-1 text-neutral-400 hover:text-white">CANCEL</button>
+        <button onclick="submitProofAction()" class="px-3 py-1 bg-neutral-200 text-neutral-900 font-bold">SUBMIT_PROOF</button>
       </div>
     </div>
   </div>
 
-  <!-- ================= TOAST NOTIFICATION CONTAINER ================= -->
-  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 space-y-2 font-mono text-xs pointer-events-none"></div>
 
-  <!-- ================= APPLICATION SCRIPT & REACTIVE STATE ================= -->
+  <!-- Wireframe Reactive Logic -->
   <script>
-    // Initial Reactive Mock State
     const defaultState = {
-      persona: 'participant', // 'participant' or 'admin'
-      currentTab: 'dashboard', // 'dashboard' or 'leaderboard'
-      adminTab: 'import',      // 'import', 'roster', 'wizard'
-      leaderboardMode: 'teams', // 'teams' or 'solo'
-      
-      // Enrolled Participants (Single Entity Unity Model)
+      persona: 'participant',
+      currentTab: 'dashboard',
+      adminTab: 'import',
+      leaderboardMode: 'teams',
       participants: [
-        { id: 101, name: 'Rohan Sharma', discord: 'Rohan#0421', teamId: 1, teamName: 'Quantum Leap', hours: 28.5, streak: 12, graceLeft: 1, target: 35.0, avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80' },
-        { id: 102, name: 'Priya Verma', discord: 'Priya#9124', teamId: 1, teamName: 'Quantum Leap', hours: 36.0, streak: 14, graceLeft: 2, target: 35.0, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80' },
-        { id: 103, name: 'Arjun Patel', discord: 'Arjun#3321', teamId: 2, teamName: 'Vector Grinders', hours: 31.0, streak: 12, graceLeft: 2, target: 35.0, avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80' },
-        { id: 104, name: 'Ananya Sen', discord: 'Ananya#8712', teamId: 2, teamName: 'Vector Grinders', hours: 27.3, streak: 10, graceLeft: 1, target: 35.0, avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&auto=format&fit=crop&q=80' },
-        { id: 105, name: 'Vikram Singh', discord: 'Vikram#4412', teamId: 3, teamName: 'Entropy Zero', hours: 28.0, streak: 9, graceLeft: 1, target: 35.0, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80' },
-        { id: 106, name: 'Neha Gupta', discord: 'Neha#1189', teamId: 3, teamName: 'Entropy Zero', hours: 26.0, streak: 9, graceLeft: 2, target: 35.0, avatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&auto=format&fit=crop&q=80' },
-        { id: 107, name: 'Kabir Mehta', discord: 'Kabir#7710', teamId: 4, teamName: 'Apex Duo', hours: 24.5, streak: 7, graceLeft: 1, target: 35.0, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80' },
-        { id: 108, name: 'Dev Malhotra', discord: 'Dev#5541', teamId: 4, teamName: 'Apex Duo', hours: 23.0, streak: 6, graceLeft: 0, target: 35.0, avatar: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=100&auto=format&fit=crop&q=80' },
-        { id: 109, name: 'Tanvi Joshi', discord: 'Tanvi#0032', teamId: 5, teamName: 'Focus Guild', hours: 18.2, streak: 2, graceLeft: 0, target: 35.0, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80' },
-        { id: 110, name: 'Sneha Rao', discord: 'Sneha#9981', teamId: 5, teamName: 'Focus Guild', hours: 21.0, streak: 4, graceLeft: 0, target: 35.0, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80' }
+        { id: 101, name: 'Rohan Sharma', discord: 'rohan#0421', teamId: 1, teamName: 'Quantum Leap', hours: 28.5, streak: 12, graceLeft: 1, target: 35.0 },
+        { id: 102, name: 'Priya Verma', discord: 'priya#9124', teamId: 1, teamName: 'Quantum Leap', hours: 36.0, streak: 14, graceLeft: 2, target: 35.0 },
+        { id: 103, name: 'Arjun Patel', discord: 'arjun#3321', teamId: 2, teamName: 'Vector Grinders', hours: 31.0, streak: 12, graceLeft: 2, target: 35.0 },
+        { id: 104, name: 'Ananya Sen', discord: 'ananya#8712', teamId: 2, teamName: 'Vector Grinders', hours: 27.3, streak: 10, graceLeft: 1, target: 35.0 },
+        { id: 105, name: 'Vikram Singh', discord: 'vikram#4412', teamId: 3, teamName: 'Entropy Zero', hours: 28.0, streak: 9, graceLeft: 1, target: 35.0 },
+        { id: 106, name: 'Neha Gupta', discord: 'neha#1189', teamId: 3, teamName: 'Entropy Zero', hours: 26.0, streak: 9, graceLeft: 2, target: 35.0 },
+        { id: 107, name: 'Kabir Mehta', discord: 'kabir#7710', teamId: 4, teamName: 'Apex Duo', hours: 24.5, streak: 7, graceLeft: 1, target: 35.0 },
+        { id: 108, name: 'Dev Malhotra', discord: 'dev#5541', teamId: 4, teamName: 'Apex Duo', hours: 23.0, streak: 6, graceLeft: 0, target: 35.0 },
+        { id: 109, name: 'Tanvi Joshi', discord: 'tanvi#0032', teamId: 5, teamName: 'Focus Guild', hours: 18.2, streak: 2, graceLeft: 0, target: 35.0 },
+        { id: 110, name: 'Sneha Rao', discord: 'sneha#9981', teamId: 5, teamName: 'Focus Guild', hours: 21.0, streak: 4, graceLeft: 0, target: 35.0 }
       ],
-
-      // Punishments / Wall of Accountability
       penalties: [
-        { id: 1, participantId: 109, name: 'Tanvi Joshi', teamName: 'Focus Guild', deficit: '16.8 hrs', penaltyText: 'Post 1-hr study timelapse to #accountability', status: 'FLAGGED' },
-        { id: 2, participantId: 110, name: 'Sneha Rao', teamName: 'Focus Guild', deficit: '14.0 hrs', penaltyText: 'Post 1-hr study timelapse to #accountability', status: 'PROOF_SUBMITTED' }
+        { id: 1, participantId: 109, name: 'Tanvi Joshi', teamName: 'Focus Guild', deficit: '16.8h', penaltyText: 'Post 1-hr study timelapse', status: 'FLAGGED' },
+        { id: 2, participantId: 110, name: 'Sneha Rao', teamName: 'Focus Guild', deficit: '14.0h', penaltyText: 'Post 1-hr study timelapse', status: 'PROOF_SUBMITTED' }
       ]
     };
 
-    // Clone state
     let state = JSON.parse(JSON.stringify(defaultState));
 
-    // Sample parsed CSV logs for demonstration
     const sampleCSVRows = [
-      { name: 'Rohan Sharma', date: '2026-09-02', hours: 6.5, note: 'Physics - Rotational Mechanics', matchedId: 101, isAnomaly: false },
-      { name: 'Priya Verma', date: '2026-09-02', hours: 7.0, note: 'Organic Chemistry - Mechanisms', matchedId: 102, isAnomaly: false },
-      { name: 'Arjun Patel', date: '2026-09-02', hours: 8.2, note: 'Calculus - Definite Integrals', matchedId: 103, isAnomaly: false },
-      { name: 'Ananya Sen', date: '2026-09-02', hours: 5.5, note: 'Biology - Genetics & Evolution', matchedId: 104, isAnomaly: false },
-      { name: 'Vikram Singh', date: '2026-09-02', hours: 6.0, note: 'Thermodynamics PYQs', matchedId: 105, isAnomaly: false },
-      { name: 'Neha Gupta', date: '2026-09-02', hours: 6.5, note: 'Vectors & 3D Geometry', matchedId: 106, isAnomaly: false },
+      { name: 'Rohan Sharma', date: '2026-09-02', hours: 6.5, note: 'Physics - Rotational PYQs', matchedId: 101, isAnomaly: false },
+      { name: 'Priya Verma', date: '2026-09-02', hours: 7.0, note: 'Organic Chem Mechanisms', matchedId: 102, isAnomaly: false },
+      { name: 'Arjun Patel', date: '2026-09-02', hours: 8.2, note: 'Calculus Definite Integrals', matchedId: 103, isAnomaly: false },
+      { name: 'Ananya Sen', date: '2026-09-02', hours: 5.5, note: 'Genetics Revision', matchedId: 104, isAnomaly: false },
+      { name: 'Vikram Singh', date: '2026-09-02', hours: 6.0, note: 'Thermodynamics Problem Sets', matchedId: 105, isAnomaly: false },
+      { name: 'Neha Gupta', date: '2026-09-02', hours: 6.5, note: 'Vectors & 3D Math', matchedId: 106, isAnomaly: false },
       { name: 'Dev Malhotra', date: '2026-09-02', hours: 4.0, note: 'Modern Physics', matchedId: 108, isAnomaly: false },
-      { name: 'Sneha Rao', date: '2026-09-02', hours: 7.5, note: 'Coordination Compounds', matchedId: 110, isAnomaly: false },
-      { name: 'Kabir Mehta', date: '2026-09-02', hours: 5.0, note: 'Mock Test Revision', matchedId: 107, isAnomaly: false },
-      { name: 'Tanvi Joshi', date: '2026-09-02', hours: 2.0, note: 'Daily Problem Sets (Low)', matchedId: 109, isAnomaly: false },
-      { name: 'Siddharth V', date: '2026-09-02', hours: 5.8, note: 'General Chemistry (Unrecognized)', matchedId: null, isAnomaly: false },
-      { name: 'Rohan Sharma', date: '2026-09-01', hours: 19.2, note: 'Extreme Marathon (Anomaly >18h)', matchedId: 101, isAnomaly: true }
+      { name: 'Sneha Rao', date: '2026-09-02', hours: 7.5, note: 'Inorganic Chemistry', matchedId: 110, isAnomaly: false },
+      { name: 'Kabir Mehta', date: '2026-09-02', hours: 5.0, note: 'Mock Test Review', matchedId: 107, isAnomaly: false },
+      { name: 'Tanvi Joshi', date: '2026-09-02', hours: 2.0, note: 'Problem Sets (Deficit)', matchedId: 109, isAnomaly: false },
+      { name: 'Siddharth V', date: '2026-09-02', hours: 5.8, note: 'General Chemistry (Unmapped)', matchedId: null, isAnomaly: false },
+      { name: 'Rohan Sharma', date: '2026-09-01', hours: 19.2, note: 'Anomaly Marathon (>18h)', matchedId: 101, isAnomaly: true }
     ];
 
-    // ================= PERSONA SWITCHER =================
     function setPersona(persona) {
       state.persona = persona;
       const btnP = document.getElementById('btnParticipantMode');
@@ -1009,27 +822,24 @@
       const roleBadge = document.getElementById('userRoleBadge');
 
       if (persona === 'participant') {
-        btnP.className = 'px-2.5 py-1 rounded-lg font-semibold transition-all bg-indigo-600 text-white shadow-sm flex items-center gap-1.5';
-        btnA.className = 'px-2.5 py-1 rounded-lg font-semibold transition-all text-slate-400 hover:text-white flex items-center gap-1.5';
+        btnP.className = 'px-2 py-1 text-[11px] bg-neutral-800 text-white font-medium';
+        btnA.className = 'px-2 py-1 text-[11px] text-neutral-400 hover:text-white';
         pNav.classList.remove('hidden');
         aNav.classList.add('hidden');
-        roleBadge.textContent = 'Grinder (Team Duo #1)';
-        roleBadge.className = 'text-[10px] text-indigo-400 font-medium';
+        roleBadge.textContent = '@rohan · Team 01';
         switchMainTab(state.currentTab);
-        showToast('Switched to Grinder (Participant) Mode', 'info');
+        showToast('[PERSONA] Switched to Grinder view');
       } else {
-        btnA.className = 'px-2.5 py-1 rounded-lg font-semibold transition-all bg-amber-600 text-white shadow-sm flex items-center gap-1.5';
-        btnP.className = 'px-2.5 py-1 rounded-lg font-semibold transition-all text-slate-400 hover:text-white flex items-center gap-1.5';
+        btnA.className = 'px-2 py-1 text-[11px] bg-neutral-800 text-white font-medium';
+        btnP.className = 'px-2 py-1 text-[11px] text-neutral-400 hover:text-white';
         aNav.classList.remove('hidden');
         pNav.classList.add('hidden');
-        roleBadge.textContent = 'Challenge Host (Admin)';
-        roleBadge.className = 'text-[10px] text-amber-400 font-medium';
+        roleBadge.textContent = 'HOST (ADMIN)';
         switchAdminTab(state.adminTab);
-        showToast('Switched to Host / Organizer Console', 'warning');
+        showToast('[PERSONA] Switched to Host console');
       }
     }
 
-    // ================= MAIN TABS =================
     function switchMainTab(tab) {
       state.currentTab = tab;
       document.getElementById('view-dashboard').classList.toggle('hidden', tab !== 'dashboard');
@@ -1041,15 +851,14 @@
       const btnDash = document.getElementById('nav-dashboard');
       const btnLead = document.getElementById('nav-leaderboard');
       if (tab === 'dashboard') {
-        btnDash.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all bg-indigo-600 text-white shadow-sm shadow-indigo-600/30';
-        btnLead.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800';
+        btnDash.className = 'px-3 py-1.5 bg-neutral-200 text-neutral-900 font-semibold wf-border';
+        btnLead.className = 'px-3 py-1.5 text-neutral-400 hover:text-neutral-200 wf-border border-l-0';
       } else {
-        btnLead.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all bg-indigo-600 text-white shadow-sm shadow-indigo-600/30';
-        btnDash.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800';
+        btnLead.className = 'px-3 py-1.5 bg-neutral-200 text-neutral-900 font-semibold wf-border';
+        btnDash.className = 'px-3 py-1.5 text-neutral-400 hover:text-neutral-200 wf-border border-l-0';
       }
     }
 
-    // ================= ADMIN TABS =================
     function switchAdminTab(tab) {
       state.adminTab = tab;
       document.getElementById('view-dashboard').classList.add('hidden');
@@ -1062,14 +871,13 @@
       tabs.forEach(t => {
         const btn = document.getElementById(`admin-nav-${t}`);
         if (t === tab) {
-          btn.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all bg-amber-600 text-white shadow-sm shadow-amber-600/30';
+          btn.className = 'px-3 py-1.5 bg-neutral-200 text-neutral-900 font-semibold wf-border';
         } else {
-          btn.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800';
+          btn.className = 'px-3 py-1.5 text-neutral-400 hover:text-neutral-200 wf-border border-l-0';
         }
       });
     }
 
-    // ================= LEADERBOARD COMPUTATION =================
     function renderLeaderboard() {
       const isTeams = state.leaderboardMode === 'teams';
       const tbody = document.getElementById('rankingsTableBody');
@@ -1077,7 +885,6 @@
       tbody.innerHTML = '';
 
       if (isTeams) {
-        // Aggregate by team
         const teamsMap = {};
         state.participants.forEach(p => {
           if (!teamsMap[p.teamId]) {
@@ -1086,8 +893,7 @@
               name: p.teamName,
               members: [],
               totalHours: 0,
-              streak: 0,
-              graceUsed: 0
+              streak: 0
             };
           }
           teamsMap[p.teamId].members.push(p);
@@ -1096,99 +902,74 @@
         });
 
         const teamsList = Object.values(teamsMap).sort((a, b) => b.totalHours - a.totalHours);
-        countLabel.textContent = `Showing ${teamsList.length} Teams (Duos)`;
+        countLabel.textContent = `${teamsList.length} Teams`;
 
-        // Update Podium
         if (teamsList[0]) {
-          document.getElementById('podium-1-name').textContent = teamsList[0].name;
+          document.getElementById('podium-1-name').textContent = teamsList[0].name.toUpperCase();
           document.getElementById('podium-1-members').textContent = teamsList[0].members.map(m => m.name).join(' & ');
-          document.getElementById('podium-1-hours').textContent = `${teamsList[0].totalHours.toFixed(1)} hrs`;
-          document.getElementById('podium-1-avatar').src = teamsList[0].members[0].avatar;
+          document.getElementById('podium-1-hours').textContent = `${teamsList[0].totalHours.toFixed(1)}h`;
         }
         if (teamsList[1]) {
-          document.getElementById('podium-2-name').textContent = teamsList[1].name;
+          document.getElementById('podium-2-name').textContent = teamsList[1].name.toUpperCase();
           document.getElementById('podium-2-members').textContent = teamsList[1].members.map(m => m.name).join(' & ');
-          document.getElementById('podium-2-hours').textContent = `${teamsList[1].totalHours.toFixed(1)} hrs`;
-          document.getElementById('podium-2-avatar').src = teamsList[1].members[0].avatar;
+          document.getElementById('podium-2-hours').textContent = `${teamsList[1].totalHours.toFixed(1)}h`;
         }
         if (teamsList[2]) {
-          document.getElementById('podium-3-name').textContent = teamsList[2].name;
+          document.getElementById('podium-3-name').textContent = teamsList[2].name.toUpperCase();
           document.getElementById('podium-3-members').textContent = teamsList[2].members.map(m => m.name).join(' & ');
-          document.getElementById('podium-3-hours').textContent = `${teamsList[2].totalHours.toFixed(1)} hrs`;
-          document.getElementById('podium-3-avatar').src = teamsList[2].members[0].avatar;
+          document.getElementById('podium-3-hours').textContent = `${teamsList[2].totalHours.toFixed(1)}h`;
         }
 
-        // Populate Table
         teamsList.forEach((team, idx) => {
           const rank = idx + 1;
-          const target = 70.0; // Duo target (35h * 2)
+          const target = 70.0;
           const delta = team.totalHours - target;
-          const deltaClass = delta >= 0 ? 'text-emerald-400' : 'text-rose-400';
           const deltaSign = delta >= 0 ? `+${delta.toFixed(1)}h` : `${delta.toFixed(1)}h`;
-          const avgDaily = (team.totalHours / 5).toFixed(1); // 5 days so far
+          const avgDaily = (team.totalHours / 5).toFixed(1);
 
-          let statusBadge = '';
-          if (delta >= 0) {
-            statusBadge = '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold">On Track</span>';
-          } else if (delta > -10) {
-            statusBadge = '<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-semibold">Grace Used</span>';
-          } else {
-            statusBadge = '<span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold">In Danger</span>';
-          }
+          let statusBadge = delta >= 0 ? '[ON_TRACK]' : delta > -10 ? '[GRACE_ACTIVE]' : '[DEFICIT]';
 
           const tr = document.createElement('tr');
-          tr.className = rank <= 3 ? 'bg-slate-900/60 font-medium hover:bg-slate-850' : 'hover:bg-slate-800/40';
+          tr.className = rank <= 3 ? 'bg-neutral-900/40 hover:bg-neutral-900/80' : 'hover:bg-neutral-900/40';
           tr.innerHTML = `
-            <td class="py-3.5 px-4 font-mono font-bold ${rank === 1 ? 'text-amber-400' : rank === 2 ? 'text-slate-300' : rank === 3 ? 'text-amber-600' : 'text-slate-400'}">#${rank}</td>
-            <td class="py-3.5 px-4">
-              <div class="font-bold text-white">${team.name}</div>
-              <div class="text-[11px] text-slate-400">${team.members.map(m => m.name).join(' & ')}</div>
+            <td class="py-2.5 px-3 num font-bold text-neutral-200">#${String(rank).padStart(2, '0')}</td>
+            <td class="py-2.5 px-3">
+              <div class="font-bold text-neutral-200">${team.name}</div>
+              <div class="text-[10px] text-neutral-400">${team.members.map(m => m.name).join(' & ')}</div>
             </td>
-            <td class="py-3.5 px-4 text-center font-mono text-amber-400">🔥 ${team.streak}d</td>
-            <td class="py-3.5 px-4 text-right font-mono text-slate-300">${avgDaily}h/d</td>
-            <td class="py-3.5 px-4 text-right font-mono font-bold text-white">${team.totalHours.toFixed(1)} hrs</td>
-            <td class="py-3.5 px-4 text-right font-mono font-semibold ${deltaClass}">${deltaSign}</td>
-            <td class="py-3.5 px-4 text-center">${statusBadge}</td>
+            <td class="py-2.5 px-3 text-center num">${team.streak}d</td>
+            <td class="py-2.5 px-3 text-right num text-neutral-400">${avgDaily}h</td>
+            <td class="py-2.5 px-3 text-right num font-bold text-neutral-100">${team.totalHours.toFixed(1)}h</td>
+            <td class="py-2.5 px-3 text-right num ${delta >= 0 ? 'text-neutral-200' : 'text-neutral-400'}">${deltaSign}</td>
+            <td class="py-2.5 px-3 text-center text-[10px] text-neutral-400 font-bold">${statusBadge}</td>
           `;
           tbody.appendChild(tr);
         });
 
       } else {
-        // Individual Solo MVP View
         const soloList = [...state.participants].sort((a, b) => b.hours - a.hours);
-        countLabel.textContent = `Showing ${soloList.length} Individual MVPs`;
+        countLabel.textContent = `${soloList.length} MVPs`;
 
         soloList.forEach((p, idx) => {
           const rank = idx + 1;
           const delta = p.hours - p.target;
-          const deltaClass = delta >= 0 ? 'text-emerald-400' : 'text-rose-400';
           const deltaSign = delta >= 0 ? `+${delta.toFixed(1)}h` : `${delta.toFixed(1)}h`;
           const avgDaily = (p.hours / 5).toFixed(1);
-
-          let statusBadge = p.hours >= p.target
-            ? '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold">Crushed</span>'
-            : p.graceLeft > 0
-            ? '<span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[11px] font-semibold">Protected</span>'
-            : '<span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold">Deficit</span>';
+          let statusBadge = p.hours >= p.target ? '[CRUSHED]' : p.graceLeft > 0 ? '[BUFFERED]' : '[BREACHED]';
 
           const tr = document.createElement('tr');
-          tr.className = 'hover:bg-slate-800/40';
+          tr.className = 'hover:bg-neutral-900/40';
           tr.innerHTML = `
-            <td class="py-3.5 px-4 font-mono font-bold ${rank <= 3 ? 'text-amber-400' : 'text-slate-400'}">#${rank}</td>
-            <td class="py-3.5 px-4">
-              <div class="flex items-center gap-2">
-                <img src="${p.avatar}" class="w-6 h-6 rounded-full object-cover">
-                <div>
-                  <div class="font-bold text-white">${p.name}</div>
-                  <div class="text-[10px] text-slate-400">${p.teamName} · ${p.discord}</div>
-                </div>
-              </div>
+            <td class="py-2.5 px-3 num font-bold text-neutral-200">#${String(rank).padStart(2, '0')}</td>
+            <td class="py-2.5 px-3">
+              <span class="font-bold text-neutral-200">${p.name}</span>
+              <span class="text-[10px] text-neutral-400 ml-1">(${p.teamName})</span>
             </td>
-            <td class="py-3.5 px-4 text-center font-mono text-amber-400">🔥 ${p.streak}d</td>
-            <td class="py-3.5 px-4 text-right font-mono text-slate-300">${avgDaily}h/d</td>
-            <td class="py-3.5 px-4 text-right font-mono font-bold text-white">${p.hours.toFixed(1)} hrs</td>
-            <td class="py-3.5 px-4 text-right font-mono font-semibold ${deltaClass}">${deltaSign}</td>
-            <td class="py-3.5 px-4 text-center">${statusBadge}</td>
+            <td class="py-2.5 px-3 text-center num">${p.streak}d</td>
+            <td class="py-2.5 px-3 text-right num text-neutral-400">${avgDaily}h</td>
+            <td class="py-2.5 px-3 text-right num font-bold text-neutral-100">${p.hours.toFixed(1)}h</td>
+            <td class="py-2.5 px-3 text-right num text-neutral-400">${deltaSign}</td>
+            <td class="py-2.5 px-3 text-center text-[10px] text-neutral-400">${statusBadge}</td>
           `;
           tbody.appendChild(tr);
         });
@@ -1199,96 +980,79 @@
       updateCockpitKPIs();
     }
 
-    // ================= LEADERBOARD TOGGLE =================
     function setLeaderboardMode(mode) {
       state.leaderboardMode = mode;
       const btnT = document.getElementById('btnToggleTeams');
       const btnS = document.getElementById('btnToggleSolo');
       if (mode === 'teams') {
-        btnT.className = 'px-3 py-1.5 rounded-lg font-semibold bg-indigo-600 text-white shadow-sm transition';
-        btnS.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition';
+        btnT.className = 'px-3 py-1.5 bg-neutral-200 text-neutral-900 font-semibold';
+        btnS.className = 'px-3 py-1.5 text-neutral-400 hover:text-neutral-200 border-l border-neutral-800';
       } else {
-        btnS.className = 'px-3 py-1.5 rounded-lg font-semibold bg-indigo-600 text-white shadow-sm transition';
-        btnT.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-white transition';
+        btnS.className = 'px-3 py-1.5 bg-neutral-200 text-neutral-900 font-semibold';
+        btnT.className = 'px-3 py-1.5 text-neutral-400 hover:text-neutral-200 border-l border-neutral-800';
       }
       renderLeaderboard();
     }
 
-    // ================= ACCOUNTABILITY PENALTY TABLE =================
     function renderPenalties() {
       const tbody = document.getElementById('penaltyTableBody');
       tbody.innerHTML = '';
 
       state.penalties.forEach(pen => {
-        let badge = '';
         let actionBtn = '';
-
         if (pen.status === 'FLAGGED') {
-          badge = '<span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 font-semibold text-[10px]">FLAGGED</span>';
-          actionBtn = `<button onclick="openProofModal(${pen.id})" class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded text-[11px] font-semibold">Submit Proof</button>`;
+          actionBtn = `<button onclick="openProofModal(${pen.id})" class="px-2 py-0.5 wf-border text-neutral-200 hover:bg-neutral-800 text-[11px]">[SUBMIT_PROOF]</button>`;
         } else if (pen.status === 'PROOF_SUBMITTED') {
-          badge = '<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold text-[10px]">PROOF PENDING</span>';
-          actionBtn = `<span class="text-[11px] text-amber-300">Under Host Review</span>`;
+          actionBtn = `<span class="text-[10px] text-neutral-400">[PENDING_HOST_AUDIT]</span>`;
         } else if (pen.status === 'RESOLVED') {
-          badge = '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold text-[10px]">RESOLVED</span>';
-          actionBtn = `<span class="text-[11px] text-emerald-400">✓ Cleared</span>`;
+          actionBtn = `<span class="text-[10px] text-neutral-300">[RESOLVED]</span>`;
         }
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td class="py-3 px-3 font-semibold text-white">${pen.name}</td>
-          <td class="py-3 px-3 text-slate-400">${pen.teamName}</td>
-          <td class="py-3 px-3 text-right font-mono font-bold text-rose-400">-${pen.deficit}</td>
-          <td class="py-3 px-3 text-slate-300">${pen.penaltyText}</td>
-          <td class="py-3 px-3 text-center">${badge}</td>
-          <td class="py-3 px-3 text-right">${actionBtn}</td>
+          <td class="py-2.5 px-3 font-bold text-neutral-200">${pen.name}</td>
+          <td class="py-2.5 px-3 text-neutral-400">${pen.teamName}</td>
+          <td class="py-2.5 px-3 text-right num text-neutral-300">-${pen.deficit}</td>
+          <td class="py-2.5 px-3 text-neutral-400">${pen.penaltyText}</td>
+          <td class="py-2.5 px-3 text-center text-[10px] text-neutral-400 font-bold">[${pen.status}]</td>
+          <td class="py-2.5 px-3 text-right">${actionBtn}</td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    // ================= ADMIN OVERRIDE TABLE =================
     function renderOverrideGrid() {
       const tbody = document.getElementById('overrideTableBody');
       tbody.innerHTML = '';
 
       state.participants.forEach(p => {
         const tr = document.createElement('tr');
-        tr.className = 'hover:bg-slate-800/40';
+        tr.className = 'hover:bg-neutral-900/40';
         tr.innerHTML = `
-          <td class="py-3 px-4 font-bold text-white flex items-center gap-2">
-            <img src="${p.avatar}" class="w-6 h-6 rounded-full object-cover">
-            <span>${p.name}</span>
+          <td class="py-2.5 px-3 font-bold text-neutral-200">${p.name}</td>
+          <td class="py-2.5 px-3 text-neutral-400">${p.discord}</td>
+          <td class="py-2.5 px-3 text-neutral-300">${p.teamName}</td>
+          <td class="py-2.5 px-3 text-center num text-neutral-300">${p.graceLeft} / 2</td>
+          <td class="py-2.5 px-3 text-right">
+            <input type="number" step="0.5" value="${p.hours.toFixed(1)}" onchange="updateParticipantHours(${p.id}, this.value)" class="w-16 bg-neutral-950 wf-border text-right px-1.5 py-0.5 text-xs text-neutral-100 num focus:outline-none focus:border-neutral-300">
           </td>
-          <td class="py-3 px-4 text-slate-400 font-mono text-xs">${p.discord}</td>
-          <td class="py-3 px-4 text-indigo-300 font-medium">${p.teamName}</td>
-          <td class="py-3 px-4 text-center font-mono">
-            <span class="px-2 py-0.5 rounded ${p.graceLeft > 0 ? 'bg-cyan-500/20 text-cyan-300' : 'bg-rose-500/20 text-rose-400'}">${p.graceLeft} / 2</span>
-          </td>
-          <td class="py-3 px-4 text-right">
-            <input type="number" step="0.5" value="${p.hours.toFixed(1)}" onchange="updateParticipantHours(${p.id}, this.value)" class="w-20 bg-slate-950 border border-slate-700 text-right px-2 py-1 rounded text-xs text-amber-300 font-mono font-bold focus:outline-none focus:border-indigo-500">
-          </td>
-          <td class="py-3 px-4 text-center">
-            <div class="flex items-center justify-center gap-1.5 text-xs">
-              <button onclick="overrideExcuse(${p.id})" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px]" title="Pardon due to exam or medical issue">Pardon</button>
-              <button onclick="triggerPenaltyCheck(${p.id})" class="px-2 py-1 bg-rose-950 hover:bg-rose-900 border border-rose-800 text-rose-300 rounded text-[11px]">Audit</button>
-            </div>
+          <td class="py-2.5 px-3 text-center">
+            <button onclick="overrideExcuse(${p.id})" class="px-2 py-0.5 wf-border hover:bg-neutral-800 text-[10px] mr-1">[PARDON]</button>
+            <button onclick="triggerPenaltyCheck(${p.id})" class="px-2 py-0.5 wf-border hover:bg-neutral-800 text-[10px]">[AUDIT]</button>
           </td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    // Update participant hours manually inline
     function updateParticipantHours(id, newHours) {
       const parsed = parseFloat(newHours);
       if (isNaN(parsed) || parsed < 0) return;
       const p = state.participants.find(item => item.id === id);
       if (p) {
-        const old = p.hours;
         p.hours = parsed;
         renderLeaderboard();
-        showToast(`Updated ${p.name}: ${old.toFixed(1)}h → ${parsed.toFixed(1)}h`, 'success');
+        showToast(`[OVERRIDE] ${p.name} hours updated to ${parsed.toFixed(1)}h`);
       }
     }
 
@@ -1297,7 +1061,7 @@
       if (p) {
         p.graceLeft = Math.min(2, p.graceLeft + 1);
         renderLeaderboard();
-        showToast(`Granted 1 Bonus Grace Pass to ${p.name}`, 'info');
+        showToast(`[PARDON] Granted buffer pass to ${p.name}`);
       }
     }
 
@@ -1312,43 +1076,37 @@
             participantId: p.id,
             name: p.name,
             teamName: p.teamName,
-            deficit: `${deficit} hrs`,
-            penaltyText: 'Post 1-hr study timelapse to #accountability',
+            deficit: `${deficit}h`,
+            penaltyText: 'Post 1-hr study timelapse',
             status: 'FLAGGED'
           });
           renderLeaderboard();
-          showToast(`${p.name} flagged on Wall of Accountability!`, 'warning');
-        } else {
-          showToast(`${p.name} is already flagged on Wall.`, 'info');
+          showToast(`[AUDIT] ${p.name} flagged on Accountability Ledger`);
         }
       } else {
-        showToast(`${p.name} has sufficient hours (${p.hours}h) or grace passes remaining.`, 'info');
+        showToast(`[AUDIT] ${p.name} has sufficient hours or active grace passes.`);
       }
     }
 
-    // ================= COCKPIT KPIS UPDATE =================
     function updateCockpitKPIs() {
-      const user = state.participants[0]; // Rohan Sharma (Logged-in demo user)
+      const user = state.participants[0];
       if (user) {
         document.getElementById('kpi-logged-hours').textContent = user.hours.toFixed(1);
         const pct = Math.min(100, (user.hours / user.target) * 100);
         document.getElementById('kpi-progress-bar').style.width = `${pct}%`;
-        document.getElementById('kpi-progress-pct').textContent = `${pct.toFixed(1)}% Done`;
+        document.getElementById('kpi-progress-pct').textContent = `${pct.toFixed(1)}% COMPLETED`;
         const rem = Math.max(0, user.target - user.hours);
-        document.getElementById('kpi-hours-remaining').textContent = rem === 0 ? 'Goal Crushed! 🎉' : `${rem.toFixed(1)} hrs to goal`;
+        document.getElementById('kpi-hours-remaining').textContent = rem === 0 ? 'TARGET REACHED' : `${rem.toFixed(1)}h REMAINING`;
       }
     }
 
-    // ================= CSV INGESTION SIMULATOR =================
     function triggerFileInput() {
       document.getElementById('fileInput').click();
     }
 
     function handleFileUpload(event) {
       const file = event.target.files[0];
-      if (file) {
-        loadSampleCSV();
-      }
+      if (file) loadSampleCSV();
     }
 
     function loadSampleCSV() {
@@ -1358,62 +1116,49 @@
 
       sampleCSVRows.forEach(row => {
         const tr = document.createElement('tr');
-        tr.className = row.isAnomaly ? 'bg-rose-950/40 hover:bg-rose-950/60' : 'hover:bg-slate-850';
+        tr.className = row.isAnomaly ? 'bg-neutral-900/60' : '';
 
-        let matchBadge = '';
-        if (row.matchedId) {
-          matchBadge = `<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold">✓ Auto-Matched (${row.name})</span>`;
-        } else {
-          matchBadge = `
-            <select class="bg-slate-950 border border-amber-500/60 text-amber-300 rounded px-2 py-1 text-xs focus:outline-none">
-              <option>Map to Siddharth Verma (#111)</option>
-              <option>Map to Guest Participant</option>
-              <option>Ignore Row</option>
-            </select>
-          `;
-        }
+        let matchBadge = row.matchedId 
+          ? `<span class="text-neutral-300">[MATCHED: #${row.matchedId}]</span>`
+          : `<select class="bg-neutral-950 wf-border text-[11px] p-0.5 text-neutral-300">
+               <option>Map to Siddharth Verma (#111)</option>
+               <option>Ignore Row</option>
+             </select>`;
 
-        let anomalyBadge = row.isAnomaly
-          ? `<span class="px-2 py-0.5 rounded bg-rose-600 text-white font-bold text-[10px] animate-pulse-subtle">⚠️ >18h Daily Anomaly</span>`
-          : `<span class="text-slate-500 text-xs">Normal</span>`;
+        let flagBadge = row.isAnomaly 
+          ? `<span class="text-neutral-100 font-bold bg-neutral-800 px-1 py-0.5">[ALERT: >18H]</span>` 
+          : `<span class="text-neutral-500">-</span>`;
 
         tr.innerHTML = `
-          <td class="py-3 px-4 font-semibold text-white">${row.name}</td>
-          <td class="py-3 px-4 font-mono text-slate-400">${row.date}</td>
-          <td class="py-3 px-4 text-right font-mono font-bold ${row.isAnomaly ? 'text-rose-400 text-sm' : 'text-slate-200'}">${row.hours.toFixed(1)}h</td>
-          <td class="py-3 px-4 text-slate-300">${row.note}</td>
-          <td class="py-3 px-4">${matchBadge}</td>
-          <td class="py-3 px-4 text-center">${anomalyBadge}</td>
+          <td class="py-2 px-3 font-bold text-neutral-200">${row.name}</td>
+          <td class="py-2 px-3 text-neutral-400 num">${row.date}</td>
+          <td class="py-2 px-3 text-right num text-neutral-200">${row.hours.toFixed(1)}h</td>
+          <td class="py-2 px-3 text-neutral-400 font-sans">${row.note}</td>
+          <td class="py-2 px-3">${matchBadge}</td>
+          <td class="py-2 px-3 text-center text-[10px]">${flagBadge}</td>
         `;
         tbody.appendChild(tr);
       });
 
-      showToast('Loaded 12 study log rows from YPT CSV export.', 'info');
+      showToast('[CSV] Ingested 12 sample study records');
     }
 
     function commitCSVBatch() {
-      // Simulate committing the batch to database
       sampleCSVRows.forEach(row => {
         if (row.matchedId && !row.isAnomaly) {
           const p = state.participants.find(item => item.id === row.matchedId);
-          if (p) {
-            // Add a small increment to show real-time dynamic update
-            p.hours += 1.5;
-          }
+          if (p) p.hours += 1.5;
         }
       });
 
       renderLeaderboard();
-      showToast('✓ Atomic batch committed! Leaderboard & Streaks recalculated in 42ms.', 'success');
-      
-      // Auto-switch to leaderboard to show immediate result
+      showToast('[COMMIT] 12 logs atomic batch committed. Leaderboard updated in 38ms.');
       setTimeout(() => {
         setPersona('participant');
         switchMainTab('leaderboard');
-      }, 1200);
+      }, 1000);
     }
 
-    // ================= STUDY NOTE POSTING =================
     function saveDailyNote() {
       const input = document.getElementById('studyNotesInput');
       const val = input.value.trim();
@@ -1421,48 +1166,42 @@
 
       const feed = document.getElementById('notesFeed');
       const div = document.createElement('div');
-      div.className = 'p-2.5 rounded-lg bg-indigo-950/40 border border-indigo-800 text-xs animate-pulse-subtle';
+      div.className = 'p-2 wf-border bg-neutral-950 font-mono text-[11px]';
       div.innerHTML = `
-        <div class="flex items-center justify-between text-[11px] text-indigo-300 mb-1">
-          <span class="font-bold">Rohan Sharma (You)</span>
-          <span class="font-mono text-slate-400">Just now</span>
+        <div class="flex justify-between text-neutral-400 mb-0.5">
+          <span class="text-neutral-200 font-bold">@rohan.sharma</span>
+          <span>Just now</span>
         </div>
-        <p class="text-slate-200">"${val}"</p>
+        <p class="text-neutral-300 font-sans">"${val}"</p>
       `;
       feed.prepend(div);
       input.value = '';
-      showToast('Daily study note posted to team feed!', 'success');
+      showToast('[LOG] Study note saved');
     }
 
-    // ================= DISCORD MODAL =================
     function openDiscordModal() {
       document.getElementById('discordModal').classList.remove('hidden');
     }
-
     function closeDiscordModal() {
       document.getElementById('discordModal').classList.add('hidden');
     }
-
     function triggerSimulatedBroadcast() {
       closeDiscordModal();
-      showToast('✓ Rich Embed broadcasted to Discord webhook #study-announcements!', 'success');
+      showToast('[WEBHOOK] Embed payload sent to #study-announcements');
     }
 
-    // ================= PROOF CLEARANCE MODAL =================
     let activePenaltyId = null;
     function openProofModal(id) {
       activePenaltyId = id;
       document.getElementById('proofModal').classList.remove('hidden');
     }
-
     function closeProofModal() {
       document.getElementById('proofModal').classList.add('hidden');
     }
-
     function submitProofAction() {
       const link = document.getElementById('proofLinkInput').value.trim();
       if (!link) {
-        alert('Please provide a proof link or timelapse URL.');
+        alert('Please enter proof link');
         return;
       }
       const pen = state.penalties.find(p => p.id === activePenaltyId);
@@ -1470,53 +1209,49 @@
         pen.status = 'PROOF_SUBMITTED';
         renderPenalties();
         closeProofModal();
-        showToast('Proof submitted for host review!', 'info');
+        showToast('[PROOF] Submitted for clearance review');
       }
     }
 
-    // ================= CREATE CHALLENGE WIZARD =================
     function handleCreateChallenge(event) {
       event.preventDefault();
       const title = document.getElementById('wizardTitle').value;
-      showToast(`✓ Challenge "${title}" created and scheduled!`, 'success');
+      showToast(`[CHALLENGE] Created: "${title}"`);
       setPersona('participant');
       switchMainTab('dashboard');
     }
 
-    // ================= RESET STATE =================
     function resetDemoData() {
       state = JSON.parse(JSON.stringify(defaultState));
       renderLeaderboard();
-      showToast('Demo state reset to original defaults.', 'info');
+      showToast('[STATE] Reset to baseline wireframe data');
     }
 
-    // ================= TOAST SYSTEM =================
-    function showToast(msg, type = 'info') {
+    function filterLeaderboard(query) {
+      const q = query.toLowerCase().trim();
+      const rows = document.querySelectorAll('#rankingsTableBody tr');
+      rows.forEach(tr => {
+        const text = tr.innerText.toLowerCase();
+        tr.style.display = text.includes(q) ? '' : 'none';
+      });
+    }
+
+    function showToast(msg) {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
-      
-      let borderClass = 'border-indigo-500 bg-slate-900 text-white';
-      if (type === 'success') borderClass = 'border-emerald-500 bg-slate-900 text-white';
-      if (type === 'warning') borderClass = 'border-amber-500 bg-slate-900 text-white';
-
-      toast.className = `p-3 rounded-xl border ${borderClass} shadow-xl text-xs flex items-center gap-2 transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto`;
-      toast.innerHTML = `
-        <span class="w-2 h-2 rounded-full ${type === 'success' ? 'bg-emerald-400' : type === 'warning' ? 'bg-amber-400' : 'bg-indigo-400'}"></span>
-        <span>${msg}</span>
-      `;
+      toast.className = 'p-2.5 bg-neutral-900 text-neutral-100 wf-border shadow-lg transition-all transform translate-y-2 opacity-0 pointer-events-auto';
+      toast.textContent = msg;
       container.appendChild(toast);
 
       setTimeout(() => {
         toast.classList.remove('translate-y-2', 'opacity-0');
       }, 10);
-
       setTimeout(() => {
         toast.classList.add('opacity-0', 'translate-y-2');
-        setTimeout(() => toast.remove(), 300);
-      }, 3500);
+        setTimeout(() => toast.remove(), 250);
+      }, 2500);
     }
 
-    // Initialize on page load
     window.addEventListener('DOMContentLoaded', () => {
       renderLeaderboard();
     });
