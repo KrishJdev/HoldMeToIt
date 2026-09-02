@@ -1,0 +1,30 @@
+# HoldMeToIt - Git Exclusions
+
+# Agent & Operational Skills
+.agents/
+
+# Internal Multi-Agent Documentation & Specifications
+AGENTS.md
+ARCHITECTURE.md
+EXECUTION_PLAN.md
+FEATURES.md
+HANDOFF.md
+
+# Dependencies & Build
+node_modules/
+dist/
+build/
+.next/
+out/
+
+# Environment Variables
+.env
+.env*.local
+.env.production
+
+# IDE & OS Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
