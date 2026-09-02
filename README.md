@@ -7,15 +7,15 @@
 
 ## 🎯 Overview & Mission
 
-Study challenges in competitive student communities (preparing for JEE, NEET, UPSC, GATE, university exams, or coding bootcamps) suffer from severe **Admin Burnout**. Challenge hosts spend 5–10 hours every week manually building spreadsheets, verifying study logs, calculating team scores, and nagging participants about penalties.
+Study challenges in Discord communities (running weekly team accountability duels, productivity sprints, and study seasons) suffer from severe **Admin Burnout**. Community moderators spend 5–10 hours every week manually building complex spreadsheets, copy-pasting YPT daily timestamps across 20+ columns, calculating team hour differences, verifying individual to-do goals, and enforcing server Punishment PFPs.
 
-**HoldMeToIt** automates the entire lifecycle of competitive study seasons:
-- **Instant Challenge Setup:** Hosts configure target hours, durations, and teams in minutes.
-- **Bulk CSV Ingestion:** Ingest study logs exported from Yeolpumta (YPT) or community rosters in seconds with instant preview and anomaly flags.
-- **Single Entity Engine:** Supports Solo, Duo, and Squad battles natively through a unified team architecture.
-- **Automated Leaderboards & Streaks:** Real-time podium rankings, daily study distribution charts, and streak counters.
-- **Forgiving Accountability:** Built-in Grace Passes (buffer days) and a structured punishment clearance pipeline.
-- **Discord Integration:** Frictionless Discord OAuth login and one-click Webhook standings broadcasts.
+**HoldMeToIt** automates the entire lifecycle of Discord study battles:
+- **Instant Challenge Setup:** Hosts configure battle cycles (e.g. Tuesday–Monday), team rosters, and punishment rules in minutes.
+- **Declared Individual Targets & Weekly Goals:** Each participant declares their own weekly study-hour target (e.g. 20h, 35h, 50h, 70h) and weekly to-do list goals.
+- **Bulk CSV Ingestion:** Ingest study logs exported from Yeolpumta (YPT) in seconds, auto-populating daily hours (HH:MM:SS) and calculating decimal totals.
+- **Team vs Team Battle Standings:** Real-time team totals (e.g. Bees vs Butterflies), current leader, hour difference, and completion percentages.
+- **Server Accountability & Punishment PFP:** Automated tracking of weekly goal and target completion with an accountability workflow for the community's Punishment PFP.
+- **Discord Integration:** Frictionless Discord OAuth login and one-click Webhook standings broadcasts to `#study-announcements`.
 
 ---
 
