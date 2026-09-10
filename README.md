@@ -11,61 +11,56 @@ Study challenges in Discord communities (running weekly team accountability duel
 
 **HoldMeToIt** automates the entire lifecycle of Discord study battles:
 - **Instant Challenge Setup:** Hosts configure battle cycles (e.g. Tuesday–Monday), team rosters, and punishment rules in minutes.
-- **Declared Individual Targets & Weekly Goals:** Each participant declares their own weekly study-hour target (e.g. 20h, 35h, 50h, 70h) and weekly to-do list goals.
-- **Bulk CSV Ingestion:** Ingest study logs exported from Yeolpumta (YPT) in seconds, auto-populating daily hours (HH:MM:SS) and calculating decimal totals.
-- **Team vs Team Battle Standings:** Real-time team totals (e.g. Bees vs Butterflies), current leader, hour difference, and completion percentages.
-- **Server Accountability & Punishment PFP:** Automated tracking of weekly goal and target completion with an accountability workflow for the community's Punishment PFP.
-- **Discord Integration:** Frictionless Discord OAuth login and one-click Webhook standings broadcasts to `#study-announcements`.
+- **Declared Individual Targets & Weekly Goals:** Each participant declares their own weekly study-hour target (e.g. 20h, 35h, 50h, 70h) and mandatory weekly goals in the pre-kickoff phase.
+- **Clock-Time Self-Logging (`HH:MM:SS`):** Instant daily logging matching Yeolpumta (YPT) clock displays down to the second with a 24-hour daily safety limit.
+- **The Catch-Up Deficit Engine:** Zero grace days. Missed hours dynamically roll over into remaining challenge days with real-time pace guidance.
+- **Team vs Team Match Scoreboard:** Live head-to-head banner (e.g., *Bees vs Butterflies*), lead delta (`+Xh Ym Zs ahead`), and unified standings table.
+- **Dual-Failure Accountability & Punishment PFP:** Automatic flagging if hours or goals fail, paired with a direct 1-click **Download Punishment PFP** button.
+- **Discord Integration:** Frictionless Discord OAuth login with public read-only spectator mode and a 1-click formatted markdown summary copy generator for hosts.
 
 ---
 
-## 🛠️ Proposed Tech Stack Candidates (Pending Group Consensus)
+## 🛠️ Ratified Technology Stack
 
-> **Decision Status:** Open for group review and vote. The team will ratify one of the following candidate stacks based on members' collective background before scaffolding code:
+The technology stack is locked to guarantee high velocity, zero CORS overhead, and strict end-to-end type safety:
 
-### Candidate Comparison
-
-| Dimension | Candidate A: Fullstack Next.js (Default Reference) | Candidate B: Decoupled PERN (React + Express) | Candidate C: Decoupled React + FastAPI (Python) |
-| :--- | :--- | :--- | :--- |
-| **Frontend** | Next.js 14+ (App Router) + Tailwind CSS | React (Vite) + Tailwind CSS | React (Vite) + Tailwind CSS |
-| **Backend / API** | Next.js Server Actions & Route Handlers | Node.js (Express) REST API | Python (FastAPI) REST API |
-| **Database & Auth** | Supabase (PostgreSQL + Discord OAuth) | PostgreSQL + Passport / Supabase | PostgreSQL + Supabase / Authlib |
-| **ORM / Querying** | Prisma ORM | Prisma ORM / Drizzle | SQLAlchemy / SQLModel |
-| **Best Fit For** | Speed of delivery, single repo, zero CORS, free Vercel hosting. | Clear division between Frontend & Backend teammates. | Teams with strong Python backgrounds for CSV data processing. |
+| Layer / Role | Ratified Technology | Architectural Purpose |
+| :--- | :--- | :--- |
+| **Framework** | Next.js 14+ (App Router) | Unified fullstack SSR/Client architecture, zero CORS, edge-ready |
+| **Language** | TypeScript 5.x (`strict: true`) | End-to-end type safety across DB, API, and UI |
+| **Styling & Theme** | Tailwind CSS + shadcn/ui | Cozy Study Café theme (`DESIGN.md`), responsive down to 360px |
+| **Database Engine** | PostgreSQL (Supabase / Neon) | Relational integrity for challenges, teams, and daily logs |
+| **ORM & Migrations** | Prisma ORM 5.x | Declarative schemas, type-safe queries, migration control |
+| **Authentication** | Auth.js (NextAuth.js v5) | Discord OAuth 2.0 (`identify` scope), spectator fallback |
+| **Testing & Math** | Vitest | Fast ESM runner for pure domain time math and deficit logic |
+| **Validation** | Zod 3.x | Strict runtime payload validation at API boundaries |
 
 ---
 
+## 📚 Core Documentation Suite (Sources of Truth)
 
-## 📚 Multi-Agent Documentation Suite (Sources of Truth)
-
-This project strictly adheres to the **Five Pillars of Multi-Agent Documentation**:
+The project maintains a lean, highly focused 5-document suite:
 
 | Document | Primary Authority & Purpose |
 | :--- | :--- |
-| **[FEATURES.md](FEATURES.md)** | Absolute source of truth for **product behavior, screen layouts, UX intent, and phase tags** (`[P0]` to `[V2]`). |
-| **[AGENTS.md](AGENTS.md)** | Absolute source of truth for **agent protocols, stack laws, git safety rules, and E2E quality matrix**. |
-| **[ARCHITECTURE.md](ARCHITECTURE.md)** | Absolute source of truth for **Feature-First Clean Architecture, layer contracts, and database schema**. |
-| **[EXECUTION_PLAN.md](EXECUTION_PLAN.md)** | Absolute source of truth for **work unit breakdown, Mermaid DAG, and verification gates**. |
-| **[HANDOFF.md](HANDOFF.md)** | Single persistent file for **session memory, milestone status, and the immediate next step**. |
+| **[FEATURES.md](FEATURES.md)** | Absolute source of truth for **product behavior, screen layouts, UX flows, and phase tags** (`[P0]` to `[V2]`). |
+| **[DESIGN.md](DESIGN.md)** | Absolute source of truth for **visual identity, cozy theme, color tokens, typography, and mobile responsive rules**. |
+| **[AGENTS.md](AGENTS.md)** | Absolute source of truth for **agent protocol, locked stack, stack laws L1–L9, git safety, and quality matrix**. |
+| **[ROADMAP.md](ROADMAP.md)** | Product and technical evolution trajectory across phases (`[P0]` MVP $\rightarrow$ `[P1]` $\rightarrow$ `[V1]` $\rightarrow$ `[V2]`). |
+| **[README.md](README.md)** | Developer onboarding, mission overview, locked stack matrix, and local dev setup. |
+
+*(Historical background specifications and legacy plans are safely preserved under [`.archive/`](.archive/)).*
 
 ---
 
-## 👥 Recommended Group Project Role Division
+## 👥 Engineering Roles & Responsibilities
 
-To prevent team members from colliding or encountering merge conflicts:
-
-1. **Member 1 (Data & Ingestion Lead):**
-   - Focus: `core/db/`, `prisma/schema.prisma`, `features/study-logs/data/`.
-   - Deliverables: Database schema, CSV parser service, batch ingestion transactions.
-2. **Member 2 (Challenge & Calculation Engine):**
-   - Focus: `features/challenges/domain/`, `features/leaderboard/domain/`, `features/accountability/`.
-   - Deliverables: Scoring math, streak rules, grace pass logic, Discord Webhook embed generator.
-3. **Member 3 (Participant Experience UI):**
-   - Focus: `app/(dashboard)/`, `features/leaderboard/presentation/`.
-   - Deliverables: Personal cockpit dashboard, podium rankings, 7-day hours chart, streak badges.
-4. **Member 4 (Admin Operations UI):**
-   - Focus: `app/(admin)/`, `features/challenges/presentation/`, `features/study-logs/presentation/`.
-   - Deliverables: Challenge creation wizard, CSV dropzone preview modal, manual override roster grid.
+| Role | Primary Layer Responsibilities |
+| :--- | :--- |
+| **Data & Identity** | Database schema, Prisma migrations, Auth.js Discord OAuth, session hydration, and repositories. |
+| **Scoring & Engine** | Pure domain math, `HH:MM:SS` duration converters, team score aggregations, catch-up deficit calculator, Vitest suite. |
+| **Participant UI** | Student cockpit views, `HH:MM:SS` duration self-logging input, interactive weekly goal checklist, mobile responsiveness (360px+). |
+| **Admin Operations** | Host wizard, team balancer & roster editor, admin inline hours override grid, challenge lock controls, 1-click Discord summary generator. |
 
 ---
 
@@ -73,8 +68,8 @@ To prevent team members from colliding or encountering merge conflicts:
 
 ### 1. Prerequisites
 - Node.js 18.17+ or 20.x
-- A free [Supabase](https://supabase.com/) account
-- A [Discord Developer Portal](https://discord.com/developers/applications) application for OAuth
+- A free [Supabase](https://supabase.com/) or Neon PostgreSQL database
+- A [Discord Developer Portal](https://discord.com/developers/applications) application for OAuth 2.0
 
 ### 2. Environment Setup
 ```bash

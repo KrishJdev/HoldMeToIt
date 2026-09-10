@@ -3,58 +3,69 @@
 > **Project:** HoldMeToIt (Gamified Study Accountability & Challenge Management Platform)  
 > **Repository:** Absolute source of truth. All contributing human engineers and AI agents are equal peers.  
 > **Rule:** No single agent owns the codebase. Quality gates and stack laws apply unconditionally.  
-> **Last updated:** 2026-09-03  
+> **Last Updated:** 2026-09-05  
 
 ---
 
 ## 1. Agents & Responsibilities
 
+HoldMeToIt is developed collaboratively by autonomous agents and human developers organized into four specialized functional roles:
+
 | Role / Agent ID | Scope / Focus | Primary Layer Responsibilities |
 | :--- | :--- | :--- |
-| **Data & Ingestion Agent** | Database schema, CSV parsing engine, atomic ingestion transactions | Prisma schemas, Supabase migrations, CSV parser service, validation DTOs |
-| **Scoring & Engine Agent** | Leaderboard calculations, streaks, grace days, punishment triggers | Domain math services, aggregation queries, Discord webhook payloads |
-| **Participant UI Agent** | Student-facing views, responsive dashboards, streak gauges | Next.js Server & Client components, Tailwind UI, chart visualizations |
-| **Admin Operations Agent** | Host wizards, CSV dropzone, manual adjustment grids, clearance modals | Admin consoles, data grids, modal dialogs, form mutations |
+| **Data & Identity Agent** | Database schema, Prisma migrations, Auth.js Discord OAuth, User/Challenge/Team/Task repositories, session hydration | `prisma/`, `core/db/`, `core/auth/`, `features/auth/`, `features/challenges/data/` |
+| **Scoring & Engine Agent** | Domain business math, `HH:MM:SS` duration converters, cumulative team aggregations, dynamic catch-up deficit engine, dual-failure punishment validator, Vitest test suite | `features/leaderboard/domain/`, `features/study-logs/domain/`, `features/accountability/domain/`, domain unit tests |
+| **Participant UI Agent** | Student cockpit views, `HH:MM:SS` duration self-logging input, interactive weekly goal checklist, progress meters, mobile viewport responsiveness (360px+) | `features/study-logs/presentation/`, `features/declarations/presentation/`, `app/(dashboard)/`, Tailwind components |
+| **Admin Operations & Broadcaster Agent** | Host wizard, team balancer & roster editor, admin inline hours override grid, challenge lock/freeze controls, 1-click Discord summary generator, Punishment PFP hub | `features/challenges/presentation/`, `features/notifications/`, `features/accountability/presentation/`, `app/(admin)/` |
 
 ### 1.1 Equality & Collaboration Posture
 - All agents and human contributors possess equal authority.
 - No agent shall unilaterally overwrite another agent's work without running pre-checks and verifying behavioral regression.
 - Work is broken down into parallel-safe vertical slices to minimize file collisions.
+- Autonomous agents must strictly adhere to the Document Authority Hierarchy:
+  1. `FEATURES.md` has absolute override authority on **product behavior, screen layouts, and roadmap phases**.
+  2. `DESIGN.md` has absolute override authority on **visual identity, cozy theme, color palette, typography, and component styling**.
+  3. `AGENTS.md` (this file) has absolute override authority on **agent behavior, stack laws, git safety, and quality gates**.
+  4. `ROADMAP.md` defines **phased milestones (`[P0]` to `[V2]`) and technical evolution gates**.
+  5. `README.md` provides **developer onboarding, repository structure, and local environment setup**.
+  *(Note: `HANDOFF.md` will be instantiated at repository root once active codebase implementation begins).*
 
 ---
 
-## 2. Development Strategy (Vertical Slices)
+## 2. Development Strategy (Feature-First Vertical Slices)
 
 We adhere strictly to **Feature-First Vertical Slices**. Work units are sliced through all necessary layers for a specific capability rather than horizontally across all files.
 
 ### 2.1 Anatomy of a Feature Slice
 ```text
 features/<feature_name>/
-├── domain/            # Pure business entities, calculation math, zero framework imports
-├── data/              # Prisma models, repository implementations, CSV parsers, queries
-├── presentation/      # UI components, state hooks, responsive views
+├── domain/            # Pure business entities, calculation math, zero framework/ORM imports
+├── data/              # Prisma repositories, database queries, external API clients
+├── presentation/      # React UI components, client hooks, forms, responsive views
 └── api/               # Next.js Route Handlers / Server Actions
 ```
 
 ### 2.2 Definition of Done (DoD) per Slice
-A vertical slice is only complete when:
-1. **Typesafe:** Zero TypeScript compiler errors (`tsc --noEmit` passes).
-2. **Tested:** Unit tests for domain logic and math pass with 100% green exit.
-3. **Designed States Handled:** Loading skeleton, Empty state, and Error fallback screens are fully implemented (Product Law L6).
-4. **Mobile Verified:** Layout renders cleanly without overflow on a 360px viewport.
-5. **Documented:** Session changes recorded in `HANDOFF.md`.
+A vertical slice or work unit is only complete when:
+1. **Typesafe:** Zero TypeScript compiler errors (`npm run typecheck` or `tsc --noEmit` exits with 0).
+2. **Tested:** Unit tests for domain logic and math pass with 100% green exit (`npm run test`).
+3. **Designed States Handled (Law L9):** Loading skeleton, Empty state, and Error fallback screens are fully implemented.
+4. **Mobile Verified:** Layout renders cleanly without horizontal overflow or clipped buttons on a 360px viewport.
+5. **Documented:** Session changes, status transitions, and the exact next step are recorded in `HANDOFF.md`.
 
 ---
 
 ## 3. Baseline Pre-Checks (Before Every Task)
 
 Every agent or developer beginning a task must follow this exact sequential checklist:
-1. Read `AGENTS.md` (this file) to re-align on stack laws and git safety rules.
-2. Read `HANDOFF.md` to identify the active milestone and the exact **NEXT STEP**.
-3. Read `FEATURES.md` to review the authoritative UX and product intent for the targeted feature.
-4. Run `git status` and `git log -n 3` to verify workspace cleanliness.
-5. Inspect the specific feature directory before writing code; never assume what exists.
-6. **No Redundant Implementation Plans:** If the task is already scoped in `EXECUTION_PLAN.md`, do not generate a duplicate design document. Proceed immediately to execution.
+1. **Read `AGENTS.md` (this file):** Re-align on stack laws, locked technologies, git safety, and quality gates.
+2. **Read `FEATURES.md`:** Review authoritative UX, phase tags (`[P0]`, `[P1]`, `[V1]`, `[V2]`), and product intent for the targeted feature.
+3. **Read `DESIGN.md`:** Review cozy color tokens, typography, component blueprints, and mobile responsive rules.
+4. **Read `ROADMAP.md`:** Review the active phase milestone, non-goals, and evolution trajectory.
+5. **Run Git Pre-Checks:** Execute `git status` and `git log -n 3` to verify working tree cleanliness.
+6. **Inspect Target Directory:** Inspect existing code in the target feature folder before writing code; never assume file contents.
+7. **Strict Archive Quarantine Policy:** All legacy and background specifications in `.archive/` (`SRS.md`, `MVP.md`, `ARCHITECTURE.md`, `EXECUTION_PLAN.md`, etc.) are historical references only. Autonomous agents must never modify files in `.archive/` or introduce deprecated mechanics.
+8. **Implementation Plans Rule:** Follow planning mode for architectural changes, but do not generate duplicate design documents for items already specified in `FEATURES.md`. Proceed directly to execution.
 
 ---
 
@@ -65,14 +76,15 @@ Every agent or developer beginning a task must follow this exact sequential chec
 | :--- | :--- | :--- |
 | `main` | Production-ready, deployable release code | Peer review + all E2E journeys green |
 | `dev` | Shared integration branch for active sprint | All unit/integration tests passing |
-| `feature/<name>` | Vertical slice development branch | Slice DoD satisfied |
-| `fix/<name>` | Hotfixes and defect resolutions | Targeted regression test passing |
+| `feature/<slice>` | Vertical slice development branch | Slice Definition of Done satisfied |
+| `fix/<slice>` | Hotfixes and defect resolutions | Targeted regression test passing |
+| `prototyping` | Early exploratory mockups and wireframes | Team review / visual alignment |
 
 ### 4.2 Conventional Commits
 All commits must follow the conventional commit format:
-- `feat(scope): ...` (New capability or feature)
-- `fix(scope): ...` (Defect resolution)
-- `docs(scope): ...` (Documentation changes)
+- `feat(scope): ...` (New user-facing capability or domain feature)
+- `fix(scope): ...` (Defect resolution or bugfix)
+- `docs(scope): ...` (Documentation changes or updates)
 - `refactor(scope): ...` (Code changes without behavior changes)
 - `test(scope): ...` (Adding or updating tests)
 - `chore(scope): ...` (Dependency updates, tooling configs)
@@ -81,7 +93,7 @@ All commits must follow the conventional commit format:
 The following commands are **strictly prohibited** in all environments:
 - `git reset --hard` (Data loss hazard)
 - `git clean -fd` (Unrecoverable file deletion)
-- `git push --force` or `git push -f` (Overwriting shared history)
+- `git push --force` or `git push -f` (Overwriting shared remote history)
 - Rebasing shared public branches (`dev` or `main`)
 
 ---
@@ -91,98 +103,186 @@ The following commands are **strictly prohibited** in all environments:
 When encountering conflicting code or architectural divergence:
 1. **STOP:** Halt automated code generation immediately.
 2. **INSPECT:** Read git blame and recent commit logs to understand the original author's intent.
-3. **UNDERSTAND:** Evaluate which approach adheres more strictly to `FEATURES.md` and the Stack Laws.
+3. **UNDERSTAND:** Evaluate which approach adheres more strictly to `FEATURES.md` and the Foundational Stack Laws.
 4. **EVALUATE:** If the existing code functions and satisfies tests, preserve it. Improve incrementally rather than replacing wholesale.
 5. **DECIDE & LOG:** Document any forced deviations in `HANDOFF.md` under session notes.
 
 ---
 
-## 6. Technology Stack (Pending Group Consensus)
+## 6. Technology Stack (Locked vs Explicitly Rejected)
 
-> **Status:** **UNLOCKED / PENDING GROUP RATIFICATION**  
-> The team will review candidate architectures and vote on the final stack based on member familiarity and project velocity. Once the group reaches consensus, this section will be locked.
+To eliminate architectural drift, the core technology stack is permanently locked. Any agent introducing dependencies outside this matrix will fail review.
 
-### 6.1 Candidate Stack Architectures Under Evaluation
-
-| Dimension | Candidate A: Fullstack Next.js (Default Reference) | Candidate B: Decoupled PERN (React + Express) | Candidate C: Decoupled React + Python (FastAPI) |
+### 6.1 Locked Reference Stack
+| Layer / Dimension | Ratified Choice | Version / Tooling | Architectural Purpose |
 | :--- | :--- | :--- | :--- |
-| **Frontend** | Next.js 14+ (App Router) + Tailwind CSS | React (Vite) + Tailwind CSS | React (Vite) + Tailwind CSS |
-| **Backend / API** | Next.js Server Actions & Route Handlers | Node.js (Express.js) REST API | Python (FastAPI) REST API |
-| **Database & Auth** | Supabase (PostgreSQL + Discord OAuth) | PostgreSQL + Passport.js / Supabase Auth | PostgreSQL + Supabase / Authlib |
-| **ORM / Querying** | Prisma ORM | Prisma ORM / Drizzle | SQLAlchemy / SQLModel |
-| **Pros** | Single repo, zero CORS, built-in Discord auth, free Vercel hosting. | Traditional separation of frontend/backend developers; easy mental model. | Great if team has Python members comfortable with pandas for CSV data. |
-| **Cons** | Next.js App Router learning curve for React beginners. | Requires managing two separate servers, CORS, and auth middleware. | Managing two repos and Python virtualenvs across team machines. |
+| **Framework & Runtime** | Next.js (App Router) | 14+ | Unified fullstack SSR/Client architecture, zero CORS, zero multi-repo overhead |
+| **Language** | TypeScript | 5.x | Strict end-to-end type safety (`strict: true`) across UI, API, and DB layers |
+| **Styling & Components** | Tailwind CSS + shadcn/ui | Latest | Atomic utilities, responsive layouts (360px+), accessible Radix UI primitives |
+| **Database Engine** | PostgreSQL (Supabase / Neon) | 15+ | Relational data integrity, ACID transactions for batch logging, Discord Snowflake keys |
+| **ORM & Migrations** | Prisma ORM | 5.x | Declarative schemas, type-safe queries, migration control |
+| **Authentication** | Auth.js (NextAuth.js v5) | Latest | Discord OAuth 2.0 (`identify` scope), session cookie management, spectator fallback |
+| **Schema Validation** | Zod | 3.x | Strict runtime payload validation at API boundaries and form inputs |
+| **Unit & Math Testing** | Vitest | Latest | Fast ESM test runner for pure domain math and time calculations |
+| **Hosting & Deployment** | Vercel | Production | Native Next.js edge and serverless runtime support |
 
-### 6.2 Architectural Non-Negotiables (Regardless of Stack Selected)
-Whatever candidate the team ratifies, the following architectural principles remain mandatory:
-- **Relational Integrity:** The database must be relational (PostgreSQL preferred). No document stores (like MongoDB) for relational challenge/team standings logic.
-- **Discord OAuth Primacy (Law L4):** Avoid custom password/email registration for MVP. Leverage Discord OAuth so users authenticate seamlessly.
-- **Type Safety & Validation:** Input payloads (especially CSV ingestion and score overrides) must be strictly validated at the API boundary (e.g. Zod in TypeScript, Pydantic in Python).
-- **Lean P0 Notifications:** Use Discord Webhooks (HTTP POST) for standings broadcasts in Phase 1 rather than hosting a 24/7 bot daemon.
+### 6.2 Explicitly Rejected Technologies
+The following technologies were evaluated and are **strictly banned** from the codebase:
+- ❌ **No Document Stores (MongoDB, CouchDB, Firebase Firestore):** Challenge leaderboards, team standings, and user logs are relational by nature. No non-relational stores.
+- ❌ **No Custom Password / Email Authentication:** Local passwords, JWT email login, Auth0, or Firebase Auth are rejected. The community lives on Discord; Discord OAuth 2.0 is the sole identity mechanism.
+- ❌ **No Heavy Client-Side State Managers (Redux, MobX):** Unnecessary boilerplate. Leverage React Server Components, server actions, and local UI state.
+- ❌ **No GraphQL:** REST endpoints and Next.js Server Actions provide direct, type-safe RPC without GraphQL schema overhead.
+- ❌ **No 24/7 Discord Bot Daemons in Phase 0 (P0):** A permanent bot service increases hosting costs and operational failure modes. P0 uses a 1-click clipboard markdown copy generator and webhooks. The full `@HoldMeToItBot` daemon is reserved for Phase 1 (P1).
+- ❌ **No In-Browser Stopwatch / Pomodoro Timers:** Study community members use Yeolpumta (YPT) or physical timers on phones. In-browser web timers distract and invite anti-cheat complications.
+- ❌ **No Grace Passes / Freeze Days:** Formally rejected. Deficits must be recovered dynamically via the Catch-Up model.
 
 ---
 
-## 7. E2E Quality Matrix & User Journeys (J1–J6)
+## 7. Foundational Product & Stack Laws (Non-Negotiables)
 
-Every release candidate must pass these concrete user journeys:
+These nine foundational laws govern all implementation choices. They apply unconditionally to every agent:
+
+### Law L1: Single Entity & Mathematical Unity
+- **Rule:** Solos, Duos, and Squad battles are mathematically identical. A "Solo" is a `Team` where `maxMembers = 1`. A "Duo" has `maxMembers = 2`. All scoreboard aggregation queries group over `Team` entities.
+- **Rationale:** Prevents fragmented codebases and duplicate calculation logic for different battle modes.
+- **Forbidden Anti-Pattern:** Creating separate `SoloLeaderboard` and `TeamLeaderboard` tables or calculation services.
+
+### Law L2: Spreadsheet Exorcism & Zero Manual Arithmetic
+- **Rule:** If a community host has to open Google Sheets, perform manual addition, or calculate catch-up deficits by hand, the platform has failed.
+- **Rationale:** The core mission is curing moderator burnout by automating event setup, tracking, standings, and punishment enforcement.
+- **Forbidden Anti-Pattern:** Exporting raw unaggregated data that forces the host to calculate totals outside the application.
+
+### Law L3: The Catch-Up Deficit Model (Zero Grace Passes)
+- **Rule:** Grace passes and freeze days do not exist. If a participant logs fewer hours than their daily requirement, the deficit accumulates into their remaining days:
+  $$\text{Remaining Deficit} = \max(0, \text{Target Seconds} - \text{Logged Seconds})$$
+  $$\text{Required Daily Pace} = \frac{\text{Remaining Deficit}}{\text{Days Remaining}}$$
+- **Rationale:** Community study battles reward sustained weekly effort and allow redemption without arbitrary pass mechanics.
+- **Forbidden Anti-Pattern:** Decrementing "pass tokens" or pausing tracking on specific days.
+
+### Law L4: Discord Identity Primacy
+- **Rule:** Users authenticate exclusively via Discord OAuth 2.0. Display names, Discord Snowflakes, and avatar URLs are synchronized on login. Spectators can view all public challenge data without logging in.
+- **Rationale:** Zero onboarding friction for Discord community members; eliminates password reset flows and credential security burdens.
+- **Forbidden Anti-Pattern:** Adding username/password registration forms or requiring login to view the public scoreboard.
+
+### Law L5: Admin Override Absolute
+- **Rule:** Community hosts possess unconditional authority to manually adjust any participant's logged hours, edit goal descriptions, pardon punishments, or finalize results. Every manual edit is flagged with `is_override = true` and the host's `adminId`.
+- **Rationale:** In real-world challenges, timers crash, apps bug out, and real-life emergencies happen. The host is the ultimate referee.
+- **Forbidden Anti-Pattern:** Creating immutable participant records that cannot be corrected by an administrator.
+
+### Law L6: Dual-Failure Accountability Invariant
+- **Rule:** At event conclusion, a participant is automatically flagged for punishment (`PUNISHED`) if **either** condition fails:
+  $$\text{Is Punished} = (\text{Logged Seconds} < \text{Target Seconds}) \lor (\text{Incomplete Goals} > 0)$$
+- **Rationale:** Studying without clear goals is aimless; declaring goals without studying is hollow. Accountability demands meeting both commitments.
+- **Forbidden Anti-Pattern:** Granting a pass when hours are met but declared goals are ignored, or vice versa.
+
+### Law L7: Pure Domain Isolation (Inward Dependency Rule)
+- **Rule:** All calculation math (hours-to-seconds conversions, deficit rates, standings rankings, punishment checks) must reside in pure TypeScript functions inside `domain/` with zero imports from Next.js, React, Prisma, or external UI libraries.
+- **Rationale:** Enables instant, isolated Vitest unit testing without database spinning or framework mock overhead.
+- **Forbidden Anti-Pattern:** Embedding score calculations or deficit math directly inside React UI components or database route handlers.
+
+### Law L8: Second-Level Clock Precision
+- **Rule:** All study times are stored internally as integer total seconds and formatted in UI views as standard clock format (`HH:MM:SS` or `Xh Ym Zs`).
+- **Rationale:** Yeolpumta (YPT) logs down to the second. Floating-point hours (e.g. `4.33h`) introduce rounding discrepancies that erode participant trust.
+- **Forbidden Anti-Pattern:** Storing durations as `Float` numbers in PostgreSQL or displaying raw unformatted seconds to participants.
+
+### Law L9: Zero-State & Error Resilience
+- **Rule:** Every UI view, data card, and table must provide polished visual designs for all three transient states: Loading (skeleton animation), Empty (helpful call-to-action), and Error (clear recovery prompt).
+- **Rationale:** Prevents layout shifting, blank white screens, and unhandled promise rejections.
+- **Forbidden Anti-Pattern:** Leaving data grids blank or displaying unstyled browser errors when data is missing or loading.
+
+---
+
+## 8. E2E Quality Matrix & User Journeys (J1–J6)
+
+Every release candidate must pass these six automated end-to-end user journeys:
 
 ```mermaid
 journey
-    title HoldMeToIt E2E Quality Matrix
-    section J1: Auth
-      Login via Discord: 5: Participant
-      Profile Created in DB: 5: System
-    section J2: Setup
-      Admin Creates Challenge: 5: Admin
-      Assigns Teams (N=1,2,Squad): 5: Admin
-    section J3: Ingestion
-      Admin Uploads YPT CSV: 5: Admin
-      Leaderboard Updates Instantly: 5: System
-    section J4: Corrections
-      Admin Edits Hours Inline: 4: Admin
-      Delta Reflected in Streak: 5: System
-    section J5: Accountability
-      Missed Target Triggers Grace Pass: 5: System
-      Depleted Passes Flag Punishment: 5: System
-    section J6: Broadcast
-      Admin Clicks Discord Webhook: 5: Admin
-      Rich Embed Appears in Channel: 5: Discord
+    title HoldMeToIt E2E Quality Matrix (J1–J6)
+    section J1: Auth & Public Spectator
+      Visit /challenge/:id as Guest: 5: Spectator
+      Scoreboard & Standings Visible: 5: System
+      Click Login with Discord: 5: Participant
+      User Record Upserted in DB: 5: System
+    section J2: Challenge Operations
+      Admin Creates Duo/Team Challenge: 5: Admin
+      Assigns Balanced Rosters: 5: Admin
+      Status Becomes UPCOMING: 5: System
+    section J3: Pre-Kickoff Declarations
+      Participant Enters Target (HH:MM:SS): 5: Participant
+      Participant Adds Weekly Goals: 5: Participant
+      Host Triggers Kickoff: 5: Admin
+      Declarations Permanently Locked: 5: System
+    section J4: Daily Logging & Catch-Up
+      Participant Logs 04:30:00: 5: Participant
+      Deficit Pace Recalculates: 5: System
+      Scoreboard Margin Updates: 5: System
+    section J5: Host Manual Override
+      Admin Edits Glitched Log Entry: 5: Admin
+      Log Flagged is_override=true: 5: System
+      Team Total Recalculates Instantly: 5: System
+    section J6: Event Lock & Accountability
+      Admin Locks Final Results: 5: Admin
+      Dual-Failure Flags Punishments: 5: System
+      Punishment PFP Download Enabled: 5: System
+      1-Click Discord Summary Copied: 5: Admin
 ```
 
 ### J1: Discord OAuth Login & Profile Provisioning
-- **Trigger:** Guest navigates to `/` and clicks "Login with Discord".
-- **Action:** Authenticates with Discord OAuth; redirected to `/dashboard`.
-- **Database Assertion:** Record exists in `User` with matching `discordId`, `username`, and `avatarUrl`.
-- **Laws Gated:** L4 (Discord Identity Primacy).
+- **Trigger:** Unauthenticated guest opens `/challenge/:id` (Spectator mode active, read-only). Guest clicks "Login with Discord".
+- **Action:** Authenticates via Discord OAuth 2.0 (`identify` scope); redirected to `/dashboard`.
+- **Database Assertion:** Record upserted in `User` table matching Discord `id`, `username`, `displayName`, and `avatar`.
+- **Laws Gated:** Law L4 (Discord Identity Primacy), Law L9 (Zero-State & Error Resilience).
 
 ### J2: Admin Challenge Creation & Team Rostering
-- **Trigger:** Authenticated Admin opens `/admin/challenges/new`.
-- **Action:** Submits 2-week challenge with target of 28 hrs/week, 1 grace day, Duo mode ($N=2$).
-- **Database Assertion:** `Challenge` record created with status `UPCOMING`, team size $2$, target hours $28$.
-- **Laws Gated:** L1 (Single Entity Unity), L2 (Spreadsheet Exorcism).
+- **Trigger:** Authenticated Admin navigates to `/admin/challenges/new`.
+- **Action:** Enters challenge title, start/end timestamps, selects `TEAM_VS_TEAM` (e.g. *Bees vs Butterflies*), names teams, and assigns participants.
+- **Database Assertion:** `Challenge` created with status `UPCOMING`; `Team` records created with assigned `TeamMember` rows.
+- **Laws Gated:** Law L1 (Single Entity Unity), Law L2 (Spreadsheet Exorcism).
 
-### J3: CSV Bulk Ingestion & Immediate Leaderboard Propagation
-- **Trigger:** Admin uploads a 100-row YPT export `.csv` via `/admin/challenges/:id/import`.
-- **Action:** Reviews mapped columns and clicks "Commit Ingestion".
-- **Database Assertion:** `StudyLog` table populated with 100 entries; leaderboard query reflects new ranking in $<400\text{ms}$.
-- **Laws Gated:** L2 (Spreadsheet Exorcism), L6 (Zero-State & Error Handling).
+### J3: Participant Pre-Kickoff Declaration & Goal Locking
+- **Trigger:** Enrolled participant visits challenge page during `UPCOMING` phase.
+- **Action:** Submits declared target hours (`35:00:00`) and 3 weekly goals (e.g., *"Finish Physics Ch 1–3"*). Admin clicks "Start Event Now".
+- **Database Assertion:** `ChallengeParticipant` records updated; challenge transitions to `ACTIVE`. All target hours and task text become read-only (`disabled`).
+- **Laws Gated:** Law L6 (Dual-Failure Invariant), Law L8 (Second-Level Precision).
 
-### J4: Manual Hours Override & Audit Logging
-- **Trigger:** Host clicks an hours cell in `/admin/challenges/:id/roster` to resolve a participant's timer crash.
-- **Action:** Edits value from `0.0` to `4.5` hours; hits enter.
-- **Database Assertion:** `StudyLog` updated or inserted with `source = 'ADMIN_OVERRIDE'`; streak recalculates.
-- **Laws Gated:** L5 (Admin Override Absolute).
+### J4: Daily Study Logging & Dynamic Catch-Up Recalculation
+- **Trigger:** Participant logs daily study time (`04:30:00`) for the current date via `/dashboard`.
+- **Action:** Form validates duration $\le 86,400\text{ s}$ and submits server action.
+- **Database Assertion:** `DailyStudyLog` inserted/upserted; team cumulative score increases by $16,200\text{ s}$; required daily deficit pace updates dynamically.
+- **Laws Gated:** Law L2 (Spreadsheet Exorcism), Law L3 (Catch-Up Deficit Model), Law L7 (Pure Domain Isolation).
 
-### J5: Grace Pass & Punishment Trigger Assertion
-- **Trigger:** End of calculation cycle reached.
-- **Action:** Engine evaluates members whose study hours fell below target.
-- **Assertion:** 
-  - If member has remaining grace passes $\rightarrow$ `gracePasses` decremented by 1, status remains `ON_TRACK`.
-  - If grace passes exhausted $\rightarrow$ record inserted in `PunishmentLedger` with status `FLAGGED`.
-- **Laws Gated:** L3 (Forgiving Gamification).
+### J5: Admin Inline Hours Override & Audit Logging
+- **Trigger:** Host opens `/admin/challenges/:id/roster` to correct a member's crashed timer.
+- **Action:** Edits participant daily study log from `00:00:00` to `03:45:00` in the admin grid and saves.
+- **Database Assertion:** `DailyStudyLog` updated with `durationSeconds = 13500`, `is_override = true`, `overrideBy = adminUserId`; leaderboard re-aggregates.
+- **Laws Gated:** Law L5 (Admin Override Absolute).
 
-### J6: Discord Webhook Broadcast Trigger
-- **Trigger:** Admin clicks "Broadcast Standings" on active challenge page.
-- **Action:** Server formats JSON embed payload and POSTs to Discord Webhook URL.
-- **Assertion:** HTTP 204 received from Discord; podium and punishment watchlist visible in target channel.
-- **Laws Gated:** L2 (Spreadsheet Exorcism).
+### J6: Event Lock, Dual-Failure Auto-Punishment & Discord Summary
+- **Trigger:** Challenge duration reaches end time; Host clicks "Lock Final Results".
+- **Action:** System evaluates all enrolled members against declared hours and goals. Host clicks "Copy Discord Summary".
+- **Database Assertion:** Challenge transitions to `COMPLETED`; members with $(\text{Logged} < \text{Target}) \lor (\text{Incomplete Goals} > 0)$ flagged as `PUNISHED`. Punishment Wall displays **"Download Punishment PFP"** asset button. Clipboard receives formatted markdown embed.
+- **Laws Gated:** Law L2 (Spreadsheet Exorcism), Law L6 (Dual-Failure Accountability Invariant).
+
+---
+
+## 9. Agent Toolchain & Verification Protocol
+
+### 9.1 Verification Commands
+Before concluding any session or merging any pull request, agents must execute and verify:
+```bash
+# 1. Type Safety (Zero Errors)
+npm run typecheck
+
+# 2. Domain Unit Tests & Math Verification (100% Green)
+npm run test
+
+# 3. Production Build Validation
+npm run build
+```
+
+### 9.2 Session Documentation Mandate
+Once active codebase implementation begins and `HANDOFF.md` is instantiated at repository root, the active agent must update `HANDOFF.md` at the conclusion of each engineering session:
+- Record session date and concise summary of changes.
+- Update milestone progress table.
+- Declare the exact, unambiguous **NEXT STEP** for the incoming agent.

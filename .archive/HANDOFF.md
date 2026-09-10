@@ -8,10 +8,10 @@
 ## Active Project & Stack
 
 - **Project:** HoldMeToIt (Gamified Study Accountability & Challenge Management Platform)
-- **Stack Status:** **UNLOCKED — Pending Group Consensus**
-  - *Candidate A (Default Reference):* Next.js 14+ (App Router), TypeScript, Tailwind CSS, Supabase (PostgreSQL), Prisma ORM
-  - *Candidate B (Decoupled PERN):* React (Vite), Node.js (Express), PostgreSQL, Prisma
-  - *Candidate C (Decoupled Python):* React (Vite), FastAPI (Python), PostgreSQL, SQLAlchemy
+- **Stack Status:** **LOCKED — Next.js 14+ Reference Architecture**
+  - *Frontend & Fullstack:* Next.js 14+ (App Router), TypeScript 5.x, Tailwind CSS, shadcn/ui
+  - *Database & Auth:* PostgreSQL (Supabase / Neon), Prisma ORM, Auth.js (Discord OAuth 2.0 Provider)
+  - *Testing & Validation:* Vitest (domain math unit tests), Zod (boundary schema validation)
 - **Database & Auth Requirement:** Relational PostgreSQL + Discord OAuth (non-negotiable core invariants)
 - **Archive Policy:** Clean repo. No legacy codebase or quarantined archives present.
 
@@ -19,14 +19,14 @@
 
 ## Session Notes
 
-- **2026-09-03 (Session 3 — Real Spreadsheet Alignment, Extreme Simplification & Git Deployment):**
-  - Scrubbed all entrance exam references (JEE/NEET/UPSC) across docs and wireframe to focus purely on general Discord community study battles.
-  - Analyzed the community's exported Google Spreadsheet (`BEES` vs `BUTTERFLIES` team battle, individual declared study targets, Tuesday-to-Monday daily YPT logs, mandatory weekly to-do goals, and community Punishment PFP).
-  - Radically simplified the user interface for extreme clarity: Big match scoreboard, dedicated "Log Your Study Hours" card (Select Day $\rightarrow$ Enter Hours $\rightarrow$ Add), interactive Weekly Goals checklist, clean 6-column Community Standings table, and discreet Mod / Host controls.
-  - Generated full-page high-resolution PNG mockups (`wireframe/preview_member_full.png`, `wireframe/preview_mod_full.png`) for instant Figma drag-and-drop.
-  - Placed root `index.html` and synchronized branches `prototyping`, `prototype`, and `gh-pages` with remote `origin` on GitHub.
-  - Un-ignored and committed core documentation specifications (`AGENTS.md`, `ARCHITECTURE.md`, `EXECUTION_PLAN.md`, `FEATURES.md`, `HANDOFF.md`) and `.agents/` operational skills to git for seamless cross-device synchronization.
-  - **NEXT STEP (exact):** Await team review of the prototype on Figma or GitHub Pages. Once candidate tech stack consensus is locked, proceed to **Phase 2 / Slice 1 (WU-1.1)** repository scaffolding.
+- **2026-09-05 (Session 4 — Comprehensive AGENTS.md Production & Protocol Harmonization):**
+  - Applied the `project-documentation` engineering skill to author the production-grade [AGENTS.md](file:///e:/Projects/HoldMeToIt/AGENTS.md).
+  - Defined the 4-agent vertical roles: Data & Identity, Scoring & Engine, Participant UI, and Admin Operations & Broadcaster.
+  - Formally locked Candidate A (Next.js 14+ App Router, Prisma, PostgreSQL, Auth.js, Tailwind, Vitest) as the authoritative reference stack.
+  - Enumerated explicit technology rejections: banned NoSQL/MongoDB, custom password/email auth, Redux, GraphQL, in-browser web timers, and 24/7 bot daemons in P0.
+  - Ratified Foundational Stack & Product Laws L1–L9, embedding the Cumulative Catch-Up Deficit Model, Second-Level Clock Precision (`HH:MM:SS`), Dual-Failure Accountability Invariant, and Pure Domain Isolation.
+  - Specified the end-to-end automated quality matrix covering User Journeys J1–J6.
+  - **NEXT STEP (exact):** Proceed with repository scaffolding for **Slice 1 (WU-1.1)**: Next.js 14 App Router, Tailwind CSS theme, and design system primitives.
 
 ---
 

@@ -1,257 +1,258 @@
-# HoldMeToIt — Comprehensive Feature Specification
+# HoldMeToIt — Master Feature Specification
 
-> **Purpose:** The complete product feature specification — every feature, screen, and workflow across the full product vision (MVP → V2).  
-> **Source of Truth:** Repository root. Absolute override authority on product behavior, screen layouts, and roadmap phases.  
-> **Rule:** Replicate behavior and UX intent, not legacy spreadsheets.  
-> **Last updated:** 2026-09-03  
-
----
-
-## 1. Product Overview & Quality Bar
-
-### 1.1 Mission & Unique Value Proposition
-**HoldMeToIt** is a gamified study accountability and challenge management platform engineered to eradicate "Admin Burnout" and fragmented tracking across Discord study communities.
-
-It replaces the chaotic loop of manual Google Sheets calculations, Yeolpumta (YPT) screenshot reviews, and unstructured Discord message dumps with a single, automated, web-native challenge engine. Organizers configure challenges in minutes, ingest study data via CSV or manual logs, and let the system calculate standings, streaks, winners, and punishment statuses automatically.
-
-### 1.2 Target Persona & Community Constraints
-- **Primary Persona (The Host / Admin):** Community moderators running weekly competitive study battles for 10–100+ server members. Currently spending 5–10 hours/week manually copy-pasting YPT daily times into spreadsheets, calculating differences, and enforcing server accountability punishments.
-- **Secondary Persona (The Grinder / Participant):** Discord community members taking part in weekly team study duels and accountability sprints. Each participant declares their own weekly study-hour target and weekly to-do list goals before the battle. They track hours via YPT/stopwatches, cheer on their team, and must meet their declared goals to avoid the community's Punishment PFP.
-- **Ecosystem Constraints:**
-  - Users already coordinate on **Discord**; any non-Discord identity mechanism introduces friction.
-  - Primary timer tool is **YPT (Yeolpumta)** or native stopwatches.
-  - Participants access the web app on desktop monitors and mobile devices during study breaks.
-
-### 1.3 Non-Negotiable Quality Bar
-| Metric | Budget / Target | Rationale |
-| :--- | :--- | :--- |
-| **Authentication Latency** | < 1.5s (Discord OAuth) | Zero password setup friction for Discord community members |
-| **Leaderboard Render** | < 400ms (P95) | Competitive tension requires instant, snappy page loads |
-| **CSV Import Processing** | < 3.0s for 500 rows | Hosts should never wait or see timeout screens during bulk uploads |
-| **Mobile Responsiveness** | 100% viewport compliance (360px–1440px) | Grinders check standings on mobile phones during breaks |
-| **Adherence Feedback** | Zero-shame accountability | Emphasize streaks and redemption over public humiliation |
+> **Document Version:** 2.0  
+> **Source of Truth:** Repository Root — Authoritative Product Feature Catalog  
+> **Rule:** Every screen, user flow, and functional capability across all product phases is detailed here.  
+> **Last Updated:** 2026-09-05  
 
 ---
 
-## 2. Product Laws & Competitive Positioning
+## 1. Phase Legend & Delivery Roadmap
 
-### 2.1 Foundational Product Laws
-- **Law L1 (Single Entity Unity):** Solo, Duo, and Squad battles share the exact same underlying team data model ($N=1$, $N=2$, $N \ge 3$). Never create disjoint systems for different game modes.
-- **Law L2 (The Spreadsheet Exorcism):** If an admin ever has to open Google Sheets or calculate a formula manually to determine a winner, loser, or punishment, the platform has failed.
-- **Law L3 (Forgiving Gamification):** Pure punitive systems cause high churn (60%+ dropouts after week 1). The system must incorporate Grace Passes (buffer days) and clear redemption flows.
-- **Law L4 (Discord Identity Primacy):** The user's Discord handle, avatar, and server identity are first-class citizens. No local passwords, no email verification emails.
-- **Law L5 (Admin Override Absolute):** Real-world study logs are messy (typos, forgotten timers, app crashes). Admins must have frictionless inline edit power to override any logged record.
-- **Law L6 (Explicit Zero-State & Error Design):** Every screen must explicitly define its Loading, Empty, and Error states before any presentation code is signed off.
+All features are strictly tagged with their planned deployment phase:
 
-### 2.2 Competitive Positioning ("Why We Win")
-| Competitor / Current System | Competitor Failure Mode | HoldMeToIt Specific Moat |
-| :--- | :--- | :--- |
-| **Google Sheets + Discord** | Formula breakages, high manual labor, accidental sheet overwrites, detached chat. | Instant automated calculation, Discord OAuth, one-click Webhook broadcast. |
-| **YPT (Yeolpumta) In-App Groups** | No team vs team duels, no custom punishment lifecycle, rigid group rules, poor desktop UI. | Multi-mode battles (Duos, Squads), punishment resolution pipelines, custom target configurations. |
-| **Generic Habit Trackers (Habitica, Forest)** | Lack cohort/season structure, lack Discord server integration, lack host-driven admin panels. | Purpose-built for community admins running seasonal challenges with cohorts and rosters. |
+| Phase Tag | Phase Name | Target Window | Core Focus |
+| :--- | :--- | :---: | :--- |
+| `[P0]` | **MVP Core** | ~10 Days | Spreadsheet replacement: self-logging in `HH:MM:SS`, live scoreboard, mandatory goals, auto-punishments, PFP download, 1-click Discord summary. |
+| `[P1]` | **Automation & Integrations** | 2 Weeks | YPT API Bot automated ingestion, 24/7 `@HoldMeToItBot` Discord bot, auto-expiring countdown timers. |
+| `[V1]` | **Gamification & Fair Math** | 2–3 Weeks | Overflow diminishing returns ($\alpha=0.5$), Auto-balancer snake draft (15h cap), daily challenge streaks, achievement badges, member profiles. |
+| `[V2]` | **Spontaneous Duels & Scale** | 2 Weeks | Peer-to-peer 1v1 sprint duels (mutual consent, zero mod overhead), multi-guild schema readiness. |
 
 ---
 
-## 3. Phase Legend & Promotion Rule
+## 2. Master Feature Catalog (Quick Matrix)
 
-### 3.1 Phase Tags
-- `[P0]`: **MVP Core (Spreadsheet Killer)** — Non-negotiable scope for release 1.0. Must ship.
-- `[P1]`: **Operational Polish & Automation** — Matchmaking, interactive Discord Bot, to-do board, recurring cycles.
-- `[V1.1]`: **Post-Launch Delight** — Custom badges, streak saver freeze mechanics, PDF/Image export of summary cards.
-- `[V2]`: **Ecosystem Independence** — Native web Pomodoro study timer with tab-blur anti-cheat, live 1v1 study arenas.
-- `[PROPOSED]`: Feature under consideration; requires group consensus and specification before inclusion.
-
-### 3.2 Promotion Rule
-A feature marked `[PROPOSED]` cannot enter active development until:
-1. It is documented in the Proposals Ledger (§10).
-2. It receives user sign-off and phase re-tagging (`[P0]` or `[P1]`).
-3. Its schema and route impacts are reflected in `ARCHITECTURE.md` and `EXECUTION_PLAN.md`.
-
----
-
-## 4. Complete Screen Map
-
-```text
-HoldMeToIt Web Platform
-├── 1. Public & Auth
-│   ├── Landing Page / Welcome [P0]
-│   ├── Discord OAuth Callback (`/auth/callback`) [P0]
-│   └── Access Denied / Not Whitelisted [P0]
-│
-├── 2. Participant Experience (`/dashboard`)
-│   ├── Personal Overview Dashboard [P0]
-│   │   ├── Target Hours Progress Ring [P0]
-│   │   ├── Daily Study Hours Bar Chart [P0]
-│   │   ├── Streak Counter & Grace Pass Status [P0]
-│   │   └── Daily Study Log Notes Input [P0]
-│   ├── Challenge Hub (`/challenge/:id`) [P0]
-│   │   ├── Challenge Status & Rules Header [P0]
-│   │   ├── Global Leaderboard (Solo / Team Tabs) [P0]
-│   │   ├── Team Roster & Teammate Breakdown [P0]
-│   │   └── Punishment Ledger & Wall of Accountability [P0]
-│   ├── Daily Goal & To-Do Board (`/challenge/:id/todos`) [P1]
-│   └── Profile & Past Seasons Archive (`/profile`) [P1]
-│
-├── 3. Admin / Organizer Suite (`/admin`)
-│   ├── Admin Overview & Active Challenges (`/admin`) [P0]
-│   ├── Challenge Creator Wizard (`/admin/challenges/new`) [P0]
-│   │   ├── Mode Selector (Solo, Duo, Squad) [P0]
-│   │   ├── Targets & Cycle Configuration [P0]
-│   │   └── Roster Upload / Roster Builder [P0]
-│   ├── Challenge Management Console (`/admin/challenges/:id`) [P0]
-│   │   ├── Bulk CSV Ingestion Modal (`/admin/challenges/:id/import`) [P0]
-│   │   │   ├── File Dropzone & Column Mapper [P0]
-│   │   │   ├── Ingestion Preview & Sanity Check Table [P0]
-│   │   │   └── Commit Ingestion Action [P0]
-│   │   ├── Roster & Team Editor (Drag-and-drop or manual assign) [P0]
-│   │   ├── Automated Matchmaking & Balancing Modal [P1]
-│   │   ├── Manual Hours Override Table [P0]
-│   │   ├── Punishment Status & Clearance Modal [P0]
-│   │   └── Discord Webhook Broadcast Trigger [P0]
-│   └── Recurring Cycle Scheduler (`/admin/cycles`) [P1]
-```
+| Feature ID | Feature Name | Module | Phase | Target Persona |
+| :--- | :--- | :--- | :---: | :--- |
+| `FEAT-AUTH-01` | Discord OAuth 2.0 Authentication | Auth & Identity | `[P0]` | Participant, Admin |
+| `FEAT-AUTH-02` | Public Read-Only Spectator Mode | Auth & Identity | `[P0]` | Spectator / Public |
+| `FEAT-AUTH-03` | Multi-Guild Tenant Isolation | Auth & Identity | `[V2]` | System |
+| `FEAT-CHAL-01` | Multi-Format Challenge Creator (Team, Duo, Solo) | Challenge Ops | `[P0]` | Admin |
+| `FEAT-CHAL-02` | Host Manual Event Kickoff Trigger | Challenge Ops | `[P0]` | Admin |
+| `FEAT-CHAL-03` | Automated Countdown Timer & Expiration | Challenge Ops | `[P1]` | System |
+| `FEAT-CHAL-04` | Auto-Balancer Snake Draft & 15h Cap | Challenge Ops | `[V1]` | Admin |
+| `FEAT-CHAL-05` | Event Lock & Freeze Final Results | Challenge Ops | `[P0]` | Admin |
+| `FEAT-DECL-01` | Declared Target Hours (`HH:MM:SS`) | Declarations | `[P0]` | Participant |
+| `FEAT-DECL-02` | Mandatory Weekly Goals Checklist | Declarations | `[P0]` | Participant |
+| `FEAT-DECL-03` | Pre-Kickoff Declaration Lock | Declarations | `[P0]` | System |
+| `FEAT-DECL-04` | Host Goal Unlock & Mid-Event Edit | Declarations | `[P0]` | Admin |
+| `FEAT-LOG-01` | Daily Clock-Time Self-Logging (`HH:MM:SS`) | Study Logging | `[P0]` | Participant |
+| `FEAT-LOG-02` | 24-Hour Single-Day Limit Validation | Study Logging | `[P0]` | System |
+| `FEAT-LOG-03` | Direct YPT API Bot Ingestion Endpoint | Study Logging | `[P1]` | System / Teammate Bot |
+| `FEAT-LOG-04` | Admin Inline Hours Override Grid | Study Logging | `[P0]` | Admin |
+| `FEAT-LEAD-01` | Head-to-Head Live Match Scoreboard | Standings & Math | `[P0]` | All Users |
+| `FEAT-LEAD-02` | Unified Roster Standings Table | Standings & Math | `[P0]` | All Users |
+| `FEAT-LEAD-03` | Dynamic Daily Catch-Up Deficit Engine | Standings & Math | `[P0]` | Participant |
+| `FEAT-LEAD-04` | Overflow Diminishing Returns Scoring Engine | Standings & Math | `[V1]` | System |
+| `FEAT-PUN-01` | Dual-Failure Auto-Flagging Engine | Accountability | `[P0]` | System |
+| `FEAT-PUN-02` | Punishment Wall & Deficit Roster | Accountability | `[P0]` | All Users |
+| `FEAT-PUN-03` | Direct Punishment PFP Asset Download | Accountability | `[P0]` | Flagged Member |
+| `FEAT-PUN-04` | Host Pardon / Excuse Override | Accountability | `[P0]` | Admin |
+| `FEAT-PUN-05` | Hall of Accountability Historical Archive | Accountability | `[V1]` | All Users |
+| `FEAT-DISC-01` | 1-Click Formatted Markdown Summary Copy | Discord Broadcaster | `[P0]` | Admin |
+| `FEAT-DISC-02` | 24/7 `@HoldMeToItBot` Slash Commands | Discord Broadcaster | `[P1]` | Discord Users |
+| `FEAT-DISC-03` | Automated Daily & Final Results Embeds | Discord Broadcaster | `[P1]` | Discord Channel |
+| `FEAT-GAME-01` | Daily Challenge Streaks | Gamification | `[V1]` | Participant |
+| `FEAT-GAME-02` | Condition-Based Achievement Badges (5 Types) | Gamification | `[V1]` | Participant |
+| `FEAT-GAME-03` | Member Profile Cockpit (`/profile/[id]`) | Gamification | `[V1]` | All Users |
+| `FEAT-DUEL-01` | Spontaneous 1v1 Mutual Study Sprint Duels | P2P Battles | `[V2]` | Discord Members |
 
 ---
 
-## 5. Detailed Feature Specifications: Public & Authentication
+## 3. Module Specifications: Authentication & Identity
 
-### §5.1 Discord OAuth Flow `[P0]`
-- **Route:** `/api/auth/signin/discord` $\rightarrow$ `/auth/callback`
-- **Purpose:** Frictionless single-click login using existing Discord credentials.
-- **Entry Points:** Top navigation bar "Login with Discord" CTA, or landing page hero button.
-- **Data & Invariants:**
-  - Queries user's Discord ID, Discord username, global display name, and avatar hash.
-  - Automatically associates or provisions user in the local `User` table.
-  - Assigns default role (`PARTICIPANT`) or promotes to (`ADMIN`) based on server configuration.
-- **Designed States:**
-  - **Loading:** Discord animated spinner with copy: *"Connecting to Discord..."*
-  - **Error:** Clean alert modal: *"Authentication cancelled or failed. Please try again."*
+### §3.1 Discord OAuth 2.0 Authentication `[P0]`
+- **User Flow:** User visits landing page $\rightarrow$ clicks "Login with Discord" $\rightarrow$ grants `identify` scope $\rightarrow$ redirected back with session.
+- **Data Captured:** Discord Snowflake ID, username, global display name, avatar URL hash.
+- **Persistence:** Upserts record into `User` table; synchronizes avatar and display name on every login.
+- **Access Roles:** Default role `PARTICIPANT`. First user or server admin flagged as `ADMIN`.
 
----
+### §3.2 Public Read-Only Spectator Mode `[P0]`
+- **User Flow:** Anyone visiting `/challenge/:id` without an active session can view the live match scoreboard, participant hours, and download the punishment PFP.
+- **Security Invariant:** Write actions (logging hours, checking goals, editing rosters) are disabled and hidden for unauthenticated guests.
 
-## 6. Detailed Feature Specifications: Participant Experience
-
-### §6.1 Personal Overview Dashboard `[P0]`
-- **Route:** `/dashboard`
-- **Purpose:** Grinder's personal cockpit showing daily/weekly target progress, remaining hours, active streaks, and quick study notes.
-- **Layout & Visual Hierarchy:**
-  - **Hero Stats Ribbon:** 
-    - Active Challenge Name + Days Remaining.
-    - Weekly Target Hours Gauge (e.g. `28.5 / 35.0 hrs · 81%`).
-    - Current Active Streak (Flame icon + streak days) + Grace Passes remaining (e.g. `1 / 2 Freezes left`).
-  - **Visual Chart:** 7-day study hour distribution bar chart comparing actuals vs daily baseline target.
-  - **Daily Notes / Quick Log Box:** Lightweight input allowing participant to attach daily subject notes (e.g. *"Completed 4 chapters of Organic Chem"*).
-  - **Teammate Glance Widget (Duo/Team mode):** Mini avatar cards showing duo partner's or teammates' hours for the day.
-- **Designed States:**
-  - **Loading:** Glass-morphism skeleton cards.
-  - **Empty:** *"You are not enrolled in an active challenge. View open challenges or contact your server host."*
-
-### §6.2 Challenge Hub & Leaderboard `[P0]`
-- **Route:** `/challenge/:id`
-- **Purpose:** Real-time competitive leaderboard, team standings, and punishment visibility.
-- **Layout & Visual Hierarchy:**
-  - **Leaderboard Header:** Toggle between **Team Standings** and **Individual MVPs**.
-  - **Podium Display:** Top 3 spots rendered in gold/silver/bronze highlight cards with team badges and cumulative hours.
-  - **Rankings Table:** Ranked list with Rank, Member/Team Name, Daily Average, Total Hours Logged, Target Delta (+/- hours), and Status Badge (`On Track`, `In Danger`, `Grace Used`).
-  - **The Accountability Ledger (Wall of Flagged Penalties):** Filterable bottom panel listing participants who missed weekly targets or breached minimum thresholds, their assigned punishment, and current status (`FLAGGED`, `PROOF_SUBMITTED`, `RESOLVED`).
-- **Data Invariants:**
-  - Read-optimized cached leaderboard queries recalculated on every CSV ingestion or manual override.
-- **Designed States:**
-  - **Empty:** *"Challenge has just begun! Log your hours to claim the #1 spot."*
+### §3.3 Multi-Guild Tenant Isolation `[V2]`
+- **Description:** Adds optional `guild_id` to `Challenge` and `User` models, preparing the codebase to be installed across multiple independent Discord communities without data leakage.
 
 ---
 
-## 7. Detailed Feature Specifications: Admin / Organizer Suite
+## 4. Module Specifications: Challenge Operations & Lifecycle
 
-### §7.1 Challenge Creator Wizard `[P0]`
+### §4.1 Multi-Format Challenge Creator `[P0]`
 - **Route:** `/admin/challenges/new`
-- **Purpose:** Allow host to launch a new challenge season in under 3 minutes.
-- **Form Steps (Wizard):**
-  1. **Basics:** Challenge Title, Start Date, End Date, Description.
-  2. **Mode & Structure:**
-     - Select Mode: Solo ($N=1$), Duos ($N=2$), or Squad Battles ($N=4\text{–}8$).
-     - Grace Days: Number of allowed missed/buffer days per cycle (default: 1/week).
-  3. **Targets & Rules:**
-     - Target Hours per Week (e.g., 35 hrs/week) or Daily Minimum (e.g., 4 hrs/day).
-     - Punishment Rules: Define text description of penalty (e.g., *"Post 1-hour study timelapse to Discord"*).
-  4. **Discord Webhook Configuration:**
-     - Input server webhook URL for automated standings broadcasts.
-- **Persistence:** Creates record in `Challenge` table with status `UPCOMING` or `ACTIVE`.
+- **Supported Formats:**
+  1. `TEAM_VS_TEAM`: Two named rosters (e.g. *Bees vs Butterflies*).
+  2. `DUOS`: Pairs of $N=2$ accountability partners.
+  3. `SOLOS`: Free-for-all individual leaderboard ($N=1$).
+- **Configuration Fields:** Title, Start Date/Time, End Date/Time, Format, Team Names/Colors, Participant Assignment, Punishment PFP image URL/asset.
 
-### §7.2 Bulk CSV Ingestion Console `[P0]`
-- **Route:** `/admin/challenges/:id/import`
-- **Purpose:** Ingest study logs exported from YPT or logged rosters in bulk without manual typing.
-- **Workflow:**
-  1. **Upload:** Drag-and-drop `.csv` file.
-  2. **Parsing & Auto-Mapping:** System parses columns: Participant Name/Identifier, Date, Duration (hours/minutes).
-  3. **Sanity Preview Table:**
-     - Rows with recognized users are marked with green badges.
-     - Unrecognized or misspelled names show a yellow warning dropdown to map to existing enrolled users.
-     - Extreme anomalies (>18 hrs/day) flagged with caution badges.
-  4. **Commit Button:** Atomic batch insert into `StudyLog` table; recalculates streaks and leaderboards immediately.
-- **Designed States:**
-  - **Error:** *"Malformed CSV. Expected headers: Username/Email, Date, Hours/Minutes. Download template here."*
+### §4.2 Host Manual Event Kickoff Trigger `[P0]`
+- **Mechanism:** Even after the scheduled start time arrives, the host retains a "Start Event Now" button to verify all rosters and declared goals before locking inputs.
+- **State Transition:** Moves challenge from `UPCOMING` to `ACTIVE`. Locks all target hours and goal descriptions.
 
-### §7.3 Manual Hours Override Table `[P0]`
+### §4.3 Automated Countdown Timer & Expiration `[P1]`
+- **Mechanism:** Background scheduler checks active challenge end timestamps.
+- **Automated Transition:** When the countdown hits `00:00:00`, challenge automatically transitions to `COMPLETED`, freezes logging forms, and executes the punishment calculation routine.
+
+### §4.4 Auto-Balancer Snake Draft & 15-Hour Cap `[V1]`
+- **15-Hour Sanity Cap:** System rejects any declared target $>15\text{ hours/day}$ ($>105\text{ hours/week}$).
+- **Draft Algorithm:**
+  - Calculates composite rating: $R_i = 0.6 \times \text{DeclaredTarget} + 0.4 \times \text{HistoricalDailyAverage}$.
+  - Sorts participants and runs a snake draft ($A, B, B, A, A, B\dots$) to produce evenly matched teams.
+  - **Host Override:** Drag-and-drop roster editor lets mods swap participants before launching.
+
+### §4.5 Event Lock & Finalize Results `[P0]`
+- **Route:** `/admin/challenges/:id`
+- **Action:** Host clicks "Lock Final Results". Freezes all participant data rows and triggers the final punishment evaluation.
+
+---
+
+## 5. Module Specifications: Pre-Challenge Declarations
+
+### §5.1 Declared Weekly Target Hours `[P0]`
+- **Requirement:** Every enrolled participant enters their target hours in `HH:MM:SS` (e.g., `35h 00m 00s`) during the `UPCOMING` phase.
+- **Constraint:** Minimum $1\text{ hour}$, maximum $105\text{ hours}$ per week.
+
+### §5.2 Mandatory Weekly Goals Checklist `[P0]`
+- **Requirement:** Each participant must submit between $1$ and $10$ concrete text tasks (e.g., *"Finish Organic Chemistry ch 4–6"*).
+- **Hard Condition:** Every declared task must be checked off before the challenge concludes to avoid punishment.
+
+### §5.3 Pre-Kickoff Declaration Lock `[P0]`
+- **Invariant:** When the event status becomes `ACTIVE`, all targets and task descriptions become read-only for participants.
+
+### §5.4 Host Goal Unlock & Mid-Event Edit `[P0]`
+- **Purpose:** Accommodate real-life syllabus shifts or illness.
+- **Action:** Admins can open any participant's goal sheet to add, edit, or unlock a task mid-challenge.
+
+---
+
+## 6. Module Specifications: Study Hour Ingestion & Logging
+
+### §6.1 Daily Clock-Time Self-Logging (`HH:MM:SS`) `[P0]`
+- **Route:** `/dashboard`
+- **Input Fields:** Date selector + three numeric inputs: `Hours`, `Minutes`, `Seconds`.
+- **Display Representation:** Stored as total integer seconds, rendered formatted as `HH:MM:SS` (matching YPT display).
+
+### §6.2 24-Hour Single-Day Limit Validation `[P0]`
+- **Rule:** Total study time logged for any single participant on any single calendar date cannot exceed $86,400\text{ seconds}$ ($24\text{ hours}$).
+
+### §6.3 Direct YPT API Bot Ingestion Endpoint `[P1]`
+- **Route:** `POST /api/v1/ingest/ypt`
+- **Authentication:** Pre-shared Bearer API Token between teammate's YPT bot and web server.
+- **Payload:** `{ discordId, date, durationSeconds, yptSubject }`.
+- **Behavior:** Automatically upserts `DailyStudyLog` records and recalculates standings without human effort.
+
+### §6.4 Admin Inline Hours Override Grid `[P0]`
 - **Route:** `/admin/challenges/:id/roster`
-- **Purpose:** Admin quick-edit console to correct missed logs, app crashes, or participant disputes inline.
-- **Layout:**
-  - Paginated data grid of all participants.
-  - Inline editable hours cell with instant saving.
-  - Audit trail tooltip: Displays who edited the hours and original CSV timestamp.
-
-### §7.4 Punishment Clearance Modal `[P0]`
-- **Route:** `/admin/challenges/:id/punishments`
-- **Purpose:** Manage, verify, and resolve member punishments.
-- **Features:**
-  - List of all members currently `FLAGGED`.
-  - Actions: **Approve Proof** (sets status to `RESOLVED`), **Grant Host Pardon / Buffer** (sets status to `EXCUSED`), or **Flag for Server Punishment PFP** (triggers webhook alert).
-
-### §7.5 Discord Webhook Standings Broadcast `[P0]`
-- **Route:** `/admin/challenges/:id` (Trigger button)
-- **Purpose:** Push rich formatted Discord Embed to community server channel with a single click.
-- **Embed Content:**
-  - Challenge Name, Current Day / Total Days.
-  - Top 3 Leaderboard Podium.
-  - "Grinder of the Day" / Highest study hours.
-  - Flagged Punishment Watchlist.
-  - Direct link back to Web Dashboard.
+- **Capability:** Full table of all member logs with inline-editable hours to fix timer crashes or disputes. Logs flagged with `is_admin_override = true`.
 
 ---
 
-## 8. Detailed Feature Specifications: Phase 1 (P1) Enhancements
+## 7. Module Specifications: Standings, Scoreboard & Calculations
 
-### §8.1 Automated Matchmaking Engine `[P1]`
-- **Route:** `/admin/challenges/:id/matchmaking`
-- **Description:** Algorithmic team balancing based on target study hours or previous season performance to avoid one-sided "super-teams".
+### §7.1 Head-to-Head Live Match Scoreboard `[P0]`
+- **Layout:** High-contrast top banner displaying Team A vs Team B (e.g., *Bees vs Butterflies*).
+- **Metrics:** Total cumulative time (`HH:MM:SS`), leader crown icon, and lead margin delta (`+Xh Ym Zs ahead`).
 
-### §8.2 Interactive Discord Bot Commands `[P1]`
-- **Description:** Standalone Node/Python bot service offering `/leaderboard`, `/stats`, `/log`, and automated midnight role changes.
+### §7.2 Unified Roster Standings Table `[P0]`
+- **Columns:** Rank, Participant (Avatar + Discord Handle), Team Tag, Total Logged (`HH:MM:SS`), Target (`HH:MM:SS`), % Completed, Goals Done ($M/N$), Status Badge (`On Track` / `At Risk`).
+- **Filters:** "All", "Team A", "Team B".
 
-### §8.3 Daily Goal & To-Do Board `[P1]`
-- **Route:** `/challenge/:id/todos`
-- **Description:** Interactive task board where participants set 3 core daily priorities and check them off alongside logged study hours.
+### §7.3 Dynamic Daily Catch-Up Deficit Engine `[P0]`
+- **Formula:**
+  $$\text{Deficit} = \max(0, \text{Target Seconds} - \text{Logged Seconds})$$
+  $$\text{Required Pace / Day} = \frac{\text{Deficit}}{\text{Days Remaining}}$$
+- **UI Feedback:** Displays dynamic encouragement: *"Need 3h 45m/day over next 2 days to pass target."*
 
-### §8.4 Recurring Cycle Scheduling `[P1]`
-- **Route:** `/admin/cycles`
-- **Description:** Automated season rotation (e.g., 2-Week Duo Battle $\rightarrow$ 3-Day Break $\rightarrow$ 2-Week Squad Battle) with historical archiving.
-
----
-
-## 9. Detailed Feature Specifications: Phase 2 (V2) Future Horizon
-
-### §9.1 Native Live Study Timer (Pomodoro / Stopwatch) `[V2]`
-- In-browser study timer syncing directly with personal logs. Includes window focus/tab blur detection to discourage multitasking.
-
-### §9.2 XP, Badges & Tier Progression `[V2]`
-- Long-term gamification system granting permanent profile badges (e.g., *"Centurion: 100 Hours Logged"*, *"Iron Will: 14-Day Streak"*) surviving across seasonal wipes.
+### §7.4 Overflow Diminishing Returns Scoring Engine `[V1]`
+- **Problem Solved:** Prevents single extreme outliers from breaking team competitive balance.
+- **Dual-Credit Invariant:**
+  1. **Personal Profile / Badges:** Always awards **100% full credit** for all logged hours.
+  2. **Team Match Score:** Hours beyond daily target apply a half-weight damping factor ($\alpha = 0.5$):
+     $$\text{If } L \le T_{\text{daily}}: \quad \text{TeamScore} = L$$
+     $$\text{If } L > T_{\text{daily}}: \quad \text{TeamScore} = T_{\text{daily}} + 0.5 \times (L - T_{\text{daily}})$$
 
 ---
 
-## 10. Proposals Ledger
+## 8. Module Specifications: Accountability & Punishment
 
-| ID | Feature Name | Target Phase | Proposed By | Status | Description & Strategic Value |
-| :--- | :--- | :---: | :---: | :---: | :--- |
-| **PROP-01** | Discord Role Syncing | `[P1]` | Architecture | `PROPOSED` | Auto-assign `@On-Track` and `@In-Punishment` roles via Discord Bot. |
-| **PROP-02** | Shareable Social Cards | `[P1]` | Product | `PROPOSED` | Dynamic OG image generator rendering participant weekly stats card for Instagram/Discord sharing. |
-| **PROP-03** | Spotify Study Session Embed | `[V2]` | Product | `PROPOSED` | Embedded Lofi/Ambient study playlist inside the dashboard view. |
+### §8.1 Dual-Failure Auto-Flagging Engine `[P0]`
+- **Trigger:** Evaluated automatically upon event conclusion:
+  $$\text{Is Punished} = (\text{Logged Seconds} < \text{Target Seconds}) \lor (\text{Incomplete Goals} > 0)$$
+- **Result:** Failed participants assigned status `PUNISHED`.
+
+### §8.2 Punishment Wall & Deficit Roster `[P0]`
+- **Display:** High-visibility section showing flagged members, their missing hours deficit, and unfinished tasks.
+
+### §8.3 Direct Punishment PFP Asset Download `[P0]`
+- **Action:** Prominent **"Download Punishment PFP"** button on the Punishment Wall. Downloads the challenge PFP directly so members don't have to hunt Discord chat channels.
+
+### §8.4 Host Pardon / Excuse Override `[P0]`
+- **Action:** Admin review modal allowing hosts to grant pardon (`EXCUSED`) with an audit reason (e.g., illness).
+
+### §8.5 Hall of Accountability Historical Archive `[V1]`
+- **Description:** Permanent record tracking total punishments incurred, target completion rate, and redemption history across past challenges.
+
+---
+
+## 9. Module Specifications: Discord Broadcaster & Bot
+
+### §9.1 1-Click Formatted Markdown Summary Copy `[P0]`
+- **Location:** Admin Console.
+- **Action:** One-click button copies formatted Discord markdown to clipboard containing:
+  - Event title & dates.
+  - Final team scores & winning team announcement.
+  - Individual podium (🥇, 🥈, 🥉).
+  - Punishment Wall roster with Discord mentions.
+
+### §9.2 24/7 `@HoldMeToItBot` Slash Commands `[P1]`
+- **Commands:**
+  - `/stats [user]`: Shows daily logged time, weekly target progress, and goal status.
+  - `/standings`: Returns live team scoreboard and podium rankings.
+  - `/deficit`: Displays remaining hours and required daily catch-up pace.
+
+### §9.3 Automated Daily & Final Results Embeds `[P1]`
+- **Daily Check-in:** Bot posts a 12:00 PM mid-day standings embed to `#study-announcements`.
+- **Final Broadcast:** Bot automatically posts the final winner/punishment embed when the countdown timer expires.
+
+---
+
+## 10. Module Specifications: Gamification, Streaks & Badges
+
+### §10.1 Daily Challenge Streaks `[V1]`
+- **Rule:** Daily streak increments by 1 if a participant logs $\ge 100\%$ of their required daily target ($T_{\text{weekly}} / 7$). Resets if a challenge day ends with 0 hours.
+
+### §10.2 Condition-Based Achievement Badges `[V1]`
+| Badge Name | Icon | Trigger Condition |
+| :--- | :---: | :--- |
+| **Centurion** | 🏛️ | Log $\ge 100\text{ hours}$ of verified study time across challenges. |
+| **Night Owl** | 🦉 | Log $\ge 30\text{ hours}$ between 10:00 PM and 4:00 AM. |
+| **Flawless Grinder** | 🎯 | Complete $100\%$ of target hours AND $100\%$ of weekly goals in a challenge. |
+| **Comeback Kid** | ⚡ | Overcome a $>5\text{-hour}$ deficit in the final 48 hours to meet target. |
+| **Veteran** | ⚔️ | Participate in 5 completed community challenge events. |
+
+### §10.3 Member Profile Cockpit (`/profile/[id]`) `[V1]`
+- **Route:** `/profile/[id]`
+- **Content:** Total lifetime hours, W/L record in team battles, current daily streak, badge showcase, and Hall of Accountability record.
+
+---
+
+## 11. Module Specifications: Peer-to-Peer Real-Time Features
+
+### §11.1 Spontaneous 1v1 Mutual Study Sprint Duels `[V2]`
+- **Workflow:**
+  1. Member A initiates: `/duel @user duration:2h`.
+  2. Member B accepts via Discord button or web notification.
+  3. A temporary head-to-head sprint room is created with live countdown.
+  4. Winner declared automatically when the duration expires.
+  5. **Zero Admin Friction:** No moderator creation, review, or approval needed.
+
+---
+
+## 12. Deliberately Excluded / Rejected Features
+
+The following features were evaluated and deliberately excluded based on user feedback:
+- ❌ **Native In-Browser Study Timer (Pomodoro/Stopwatch):** Excluded because members study on diverse mobile devices where YPT is preferred.
+- ❌ **In-App Virtual Study Rooms:** Excluded because community members already study inside Discord voice/video channels.
+- ❌ **Automated Discord Role Assignments (Roles for Winners/Losers):** Excluded for now to avoid server role clutter.
+- ❌ **Grace Passes / Freeze Days:** Excluded in favor of the pure cumulative catch-up deficit model.
